@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Compiler.Parser;
 using Compiler.Parser.AST;
+using Compiler.Parser.Visitors;
 using System.IO;
 
 namespace Compiler
@@ -30,6 +31,8 @@ namespace Compiler
                 else
                 {
                     Console.WriteLine("Синтаксическое дерево построено");
+                    var avis = new AutoVisitor();
+                    parser.root.Visit(avis);
                     //foreach (var st in parser.root.StList)
                     //Console.WriteLine(st);
                 }

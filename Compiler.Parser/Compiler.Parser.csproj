@@ -46,6 +46,8 @@
     <Compile Include="ShiftReduceParserCode.cs" />
     <Compile Include="SimpleLex.cs" />
     <Compile Include="SimpleYacc.cs" />
+    <Compile Include="Visitors\AutoVisitor.cs" />
+    <Compile Include="Visitors\Visitor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

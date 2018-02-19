@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
+using Compiler.Parser.Visitors;
 
 namespace Compiler.Parser.AST
 {
     public enum AssignType { Assign, AssignPlus, AssignMinus, AssignMult, AssignDivide };
 
-    public class Node // базовый класс для всех узлов    
+    public abstract class Node // базовый класс для всех узлов    
     {
+        public abstract void Visit(Visitor v);
     }
 
-    public class ExprNode : Node // базовый класс для всех выражений
+    public abstract class ExprNode : Node // базовый класс для всех выражений
     {
     }
 
@@ -16,12 +18,20 @@ namespace Compiler.Parser.AST
     {
         public string Name { get; set; }
         public IdNode(string name) { Name = name; }
+        public override void Visit(Visitor v)
+        {
+            v.VisitIdNode(this);
+        }
     }
 
     public class IntNumNode : ExprNode
     {
         public int Num { get; set; }
         public IntNumNode(int num) { Num = num; }
+        public override void Visit(Visitor v)
+        {
+            v.VisitIntNumNode(this);
+        }
     }
 
     public class BinaryNode : ExprNode
@@ -35,6 +45,10 @@ namespace Compiler.Parser.AST
             Right = right;
             Operation = op;
         }
+        public override void Visit(Visitor v)
+        {
+            v.VisitBinaryNode(this);
+        }
     }
 
     public class UnaryNode : ExprNode
@@ -47,9 +61,13 @@ namespace Compiler.Parser.AST
             Operation = op;
         }
         public UnaryNode(int num, char op) : this(new IntNumNode(num), op) {}
+        public override void Visit(Visitor v)
+        {
+            v.VisitUnaryNode(this);
+        }
     }
 
-    public class StatementNode : Node // базовый класс для всех операторов
+    public abstract class StatementNode : Node // базовый класс для всех операторов
     {
     }
 
@@ -63,6 +81,11 @@ namespace Compiler.Parser.AST
             Label = label;
             Stat = stat;
         }
+
+        public override void Visit(Visitor v)
+        {
+            v.VisitLabelNode(this);
+        }
     }
 
     public class GoToNode : StatementNode
@@ -72,6 +95,11 @@ namespace Compiler.Parser.AST
         public GoToNode(IdNode label)
         {
             Label = label;
+        }
+
+        public override void Visit(Visitor v)
+        {
+            v.VisitGoToNode(this);
         }
     }
 
@@ -86,6 +114,10 @@ namespace Compiler.Parser.AST
             Expr = expr;
             AssOp = assop;
         }
+        public override void Visit(Visitor v)
+        {
+            v.VisitAssignNode(this);
+        }
     }
 
     public class CycleNode : StatementNode
@@ -96,6 +128,10 @@ namespace Compiler.Parser.AST
         {
             Expr = expr;
             Stat = stat;
+        }
+        public override void Visit(Visitor v)
+        {
+            v.VisitCycleNode(this);
         }
     }
 
@@ -110,6 +146,10 @@ namespace Compiler.Parser.AST
         {
             StList.Add(stat);
         }
+        public override void Visit(Visitor v)
+        {
+            v.VisitBlockNode(this);
+        }
     }
 
     public class PrintNode : StatementNode
@@ -118,6 +158,10 @@ namespace Compiler.Parser.AST
         public PrintNode(ExprListNode exprlist)
         {
             ExprList = exprlist;
+        }
+        public override void Visit(Visitor v)
+        {
+            v.VisitPrintNode(this);
         }
     }
 
@@ -131,6 +175,10 @@ namespace Compiler.Parser.AST
         public void Add(ExprNode exp)
         {
             ExpList.Add(exp);
+        }
+        public override void Visit(Visitor v)
+        {
+            v.VisitExprListNode(this);
         }
     }
 
@@ -152,6 +200,10 @@ namespace Compiler.Parser.AST
             Stat1 = stat1;
             Stat2 = null;
         }
+        public override void Visit(Visitor v)
+        {
+            v.VisitIfNode(this);
+        }
     }
 
     public class ForNode : StatementNode
@@ -169,10 +221,19 @@ namespace Compiler.Parser.AST
         }
 
         public ForNode(AssignNode assign, ExprNode cond, StatementNode stat): this(assign, cond, null, stat) {}
+
+        public override void Visit(Visitor v)
+        {
+            v.VisitForNode(this);
+        }
     }
 
     public class EmptyNode : StatementNode
     {
+        public override void Visit(Visitor v)
+        {
+            v.VisitEmptyNode(this);
+        }
     }
 
 

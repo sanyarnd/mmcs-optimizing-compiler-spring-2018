@@ -23,5 +23,6 @@ namespace Compiler.Parser.Visitors
         public virtual void VisitIfNode(IfNode iif) { }
         public virtual void VisitForNode(ForNode w) { }
         public virtual void VisitEmptyNode(EmptyNode w) { }
+        public virtual void VisitStatementNode(StatementNode s) { }
     }
 }

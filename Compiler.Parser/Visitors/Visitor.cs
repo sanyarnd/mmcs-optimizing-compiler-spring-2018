@@ -19,6 +19,7 @@ namespace Compiler.Parser.Visitors
         public virtual void VisitCycleNode(CycleNode c) { }
         public virtual void VisitBlockNode(BlockNode bl) { }
         public virtual void VisitPrintNode(PrintNode p) { }
+        public virtual void VisitExprNode(ExprNode s) { }
         public virtual void VisitExprListNode(ExprListNode el) { }
         public virtual void VisitIfNode(IfNode iif) { }
         public virtual void VisitForNode(ForNode w) { }

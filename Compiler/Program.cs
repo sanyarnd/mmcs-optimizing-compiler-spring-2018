@@ -33,6 +33,10 @@ namespace Compiler
                     Console.WriteLine("Синтаксическое дерево построено");
                     var avis = new AutoVisitor();
                     parser.root.Visit(avis);
+
+                    var prettyPrinter = new PrettyPrintVisitor();
+                    parser.root.Visit(prettyPrinter);
+                    Console.WriteLine(prettyPrinter.Text);
                     //foreach (var st in parser.root.StList)
                     //Console.WriteLine(st);
                 }

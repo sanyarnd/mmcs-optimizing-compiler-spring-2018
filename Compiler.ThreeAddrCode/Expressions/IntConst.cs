@@ -19,8 +19,13 @@
 
         public override bool Equals(object obj)
         {
-            if (obj is IntConst)
-                return Num == (obj as IntConst).Num;
+            switch (obj)
+            {
+                case IntConst ic:
+                    return Num == ic.Num;
+                case int i:
+                    return Num == i;
+            }
             return false;
         }
 

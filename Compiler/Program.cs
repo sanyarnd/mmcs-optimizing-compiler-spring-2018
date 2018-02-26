@@ -4,6 +4,7 @@ using Compiler.ThreeAddrCode;
 using Compiler.ThreeAddrCode.CFG;
 using Compiler.ThreeAddrCode.Expressions;
 using Compiler.ThreeAddrCode.Nodes;
+using Compiler.Optimizations;
 using System;
 using System.IO;
 using System.Linq;
@@ -129,6 +130,9 @@ namespace Compiler
             taCode.AddNode(ass5);
             taCode.AddNode(ass6);
 
+            var algOpt = new AlgebraicOptimization();
+            algOpt.Optimize(ta_code.Code);
+            
             Console.WriteLine($"TA Code\n: {taCode}");
 
             var bBlocks = taCode.CreateBasicBlockList();

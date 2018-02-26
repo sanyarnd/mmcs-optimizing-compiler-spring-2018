@@ -13,7 +13,7 @@ namespace Compiler.Parser.Visitors
         public virtual void VisitIntNumNode(IntNumNode num) { }
         public virtual void VisitBinaryNode(BinaryNode binop) { }
         public virtual void VisitUnaryNode(UnaryNode unop) { }
-        public virtual void VisitLabelNode(LabelNode l) { }
+        public virtual void VisitLabeledNode(LabeledNode l) { }
         public virtual void VisitGoToNode(GoToNode g) { }
         public virtual void VisitAssignNode(AssignNode a) { }
         public virtual void VisitCycleNode(CycleNode c) { }

@@ -3,15 +3,20 @@
 //  GPPG error listing for yacc source file <SimpleYacc.y>
 // ==========================================================================
 //  Version:  1.3.6
-//  Machine:  ZENBOOK
-//  DateTime: 13.02.2018 17:13:13
-//  UserName: Yana
+//  Machine:  LENOVO-PC
+//  DateTime: 25.02.2018 12:15:18
+//  UserName: Руслан
 // ==========================================================================
 
 
+ï»¿
+// Error: This character is invalid in this context
+// Error: This character is invalid in this context
+// Error: This character is invalid in this context
+// ------------------------------------------------
+
 %{
-// Ð­ÑÐ¸ Ð¾Ð±ÑÑÐ²Ð»ÐµÐ½Ð¸Ñ Ð´Ð¾Ð±Ð°Ð²Ð»ÑÑÑÑÑ Ð² ÐºÐ»Ð°ÑÑ GPPGParser, Ð¿ÑÐµÐ´ÑÑÐ°Ð²Ð»ÑÑÑÐ¸Ð¹ ÑÐ¾Ð±Ð¾Ð¹ Ð¿Ð°ÑÑÐµÑ, Ð³ÐµÐ½ÐµÑÐ¸ÑÑÐµÐ¼ÑÐ¹ ÑÐ¸ÑÑÐµÐ¼Ð¾Ð¹ gppg
-    public BlockNode root; // ÐÐ¾ÑÐ½ÐµÐ²Ð¾Ð¹ ÑÐ·ÐµÐ» ÑÐ¸Ð½ÑÐ°ÐºÑÐ¸ÑÐµÑÐºÐ¾Ð³Ð¾ Ð´ÐµÑÐµÐ²Ð° 
+    public BlockNode root; 
     public Parser(AbstractScanner<ValueType, LexLocation> scanner) : base(scanner) { }
 %}
  
@@ -30,9 +35,9 @@
 	public LabelNode lbNode;
        }
  
-%using ProgramTree;
+%using Compiler.Parser.AST;
  
-%namespace SimpleParser
+%namespace Compiler.Parser
  
 %token BEGIN END CYCLE ASSIGN SEMICOLON OPENBR CLOSEBR COMMA PRINT FOR PLUS MINUS MULT DIV IF ELSE GT LT GE LE EQ NEQ NOT GOTO COLON
 %token <iVal> INUM 
@@ -45,15 +50,8 @@
 %type <elVal> exprlist
  
 %%
-// Error: NonTerminal symbol "goto" has no productions
-// Warning: NonTerminal symbol "label" is unreachable
-// Error: There are 1 non-terminating NonTerminal Symbols
-   //  {goto}
-// Warning: Terminating goto fixes the following size-1 NonTerminal set
-   // {goto}
-// --------------------------------------------------------------------
 
-progr   : block { root = $1; }
+progr   : stlist { root = $1; }
 		;
 		
 		
@@ -68,8 +66,8 @@ stlist	: statement
 			}
 		;
 
-statement: ident COLON statement
-		| goto SEMICOLON
+statement: ident COLON statement { $$ = new LabelNode($1 as IdNode, $3); }
+		| GOTO ident SEMICOLON { $$ = new GoToNode($2 as IdNode); }
 		| assign SEMICOLON { $$ = $1; }
 		| cycle { $$ = $1; }
 		| for { $$ = $1; }
@@ -78,9 +76,6 @@ statement: ident COLON statement
 		| block  { $$ = $1; }
 		| { $$ = new EmptyNode(); }
 		;
-
-label: ident
-	;
 
 ident 	: ID { $$ = new IdNode($1); }	
 		;

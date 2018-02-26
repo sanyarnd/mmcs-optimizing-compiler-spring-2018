@@ -31,8 +31,9 @@ namespace Compiler
                 else
                 {
                     Console.WriteLine("Синтаксическое дерево построено");
-                    var avis = new AutoVisitor();
-                    parser.root.Visit(avis);
+
+                    var autoVisitor = new AutoVisitor();
+                    parser.root.Visit(autoVisitor);
 
                     var prettyPrinter = new PrettyPrintVisitor();
                     parser.root.Visit(prettyPrinter);

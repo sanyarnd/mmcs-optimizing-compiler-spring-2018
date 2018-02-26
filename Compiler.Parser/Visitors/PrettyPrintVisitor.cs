@@ -56,10 +56,10 @@ namespace Compiler.Parser.Visitors
         public override void VisitCycleNode(CycleNode c)
         {
             Text += IndentStr() + "while(";
-            c.Expr.Visit(this);
+            c.Condition.Visit(this);
             Text += ")";
             Text += Environment.NewLine;
-            c.Stat.Visit(this);
+            c.Body.Visit(this);
         }
         public override void VisitBlockNode(BlockNode bl)
         {
@@ -71,7 +71,7 @@ namespace Compiler.Parser.Visitors
                 bl.StList[i].Visit(this);
                 if (!(bl.StList[i] is EmptyNode))
                     if (!(bl.StList[i] is ForNode  || bl.StList[i] is CycleNode ||
-                          bl.StList[i] is LabelNode || bl.StList[i] is IfNode))
+                          bl.StList[i] is LabeledNode || bl.StList[i] is IfNode))
                         Text += ";" + Environment.NewLine;
             }
             IndentMinus();
@@ -88,15 +88,15 @@ namespace Compiler.Parser.Visitors
             Text += IndentStr() + "goto ";
             g.Label.Visit(this);
         }
-        public override void VisitLabelNode(LabelNode l)
+        public override void VisitLabeledNode(LabeledNode l)
         {
             l.Label.Visit(this);
             Text += ":" + Environment.NewLine;
             l.Stat.Visit(this);
         }
         public override void VisitExprListNode(ExprListNode el) {
-            var last = el.ExpList.Last();
-            el.ExpList.ForEach(expr => 
+            var last = el.ExprList.Last();
+            el.ExprList.ForEach(expr => 
                 {
                     expr.Visit(this);
                     if (expr != last)
@@ -106,13 +106,13 @@ namespace Compiler.Parser.Visitors
         public override void VisitIfNode(IfNode iif)
         {
             Text += IndentStr() + "if (";
-            iif.Expr.Visit(this);
+            iif.Conditon.Visit(this);
             Text += ")" + Environment.NewLine;
-            iif.Stat1.Visit(this);
-            if (iif.Stat2 != null)
+            iif.IfClause.Visit(this);
+            if (iif.ElseClause != null)
             {
                 Text += IndentStr()  + "else" + Environment.NewLine;
-                iif.Stat2.Visit(this);
+                iif.ElseClause.Visit(this);
             }
         }
 
@@ -121,7 +121,7 @@ namespace Compiler.Parser.Visitors
             Text += IndentStr() + "for(";
             w.Assign.Visit(this);
             Text += ",";
-            w.Cond.Visit(this);
+            w.Border.Visit(this);
             if (w.Inc != null)
             {
                 Text += ",";
@@ -129,7 +129,7 @@ namespace Compiler.Parser.Visitors
             }
             Text += ")";
             Text += Environment.NewLine;
-            w.Stat.Visit(this);
+            w.Body.Visit(this);
         }
         public override void VisitEmptyNode(EmptyNode w) {}
 

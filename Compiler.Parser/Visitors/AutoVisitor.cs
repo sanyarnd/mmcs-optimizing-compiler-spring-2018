@@ -21,7 +21,7 @@ namespace Compiler.Parser.Visitors
         {
             unop.Num.Visit(this);
         }
-        public override void VisitLabelNode(LabelNode l)
+        public override void VisitLabeledNode(LabeledNode l)
         {
             l.Label.Visit(this);
             l.Stat.Visit(this);
@@ -37,8 +37,8 @@ namespace Compiler.Parser.Visitors
         }
         public override void VisitCycleNode(CycleNode c)
         {
-            c.Expr.Visit(this);
-            c.Stat.Visit(this);
+            c.Condition.Visit(this);
+            c.Body.Visit(this);
         }
         public override void VisitBlockNode(BlockNode bl)
         {
@@ -51,21 +51,21 @@ namespace Compiler.Parser.Visitors
         }
         public override void VisitExprListNode(ExprListNode exn)
         {
-            foreach (ExprNode ex in exn.ExpList)
+            foreach (ExprNode ex in exn.ExprList)
                 ex.Visit(this);
         }
         public override void VisitIfNode(IfNode iif)
         {
-            iif.Expr.Visit(this);
-            iif.Stat1.Visit(this);
-            iif.Stat2?.Visit(this);
+            iif.Conditon.Visit(this);
+            iif.IfClause.Visit(this);
+            iif.ElseClause?.Visit(this);
         }
         public override void VisitForNode(ForNode f)
         {
             f.Assign.Visit(this);
-            f.Cond.Visit(this);
+            f.Border.Visit(this);
             f.Inc?.Visit(this);
-            f.Stat.Visit(this);
+            f.Body.Visit(this);
         }
     }
 }

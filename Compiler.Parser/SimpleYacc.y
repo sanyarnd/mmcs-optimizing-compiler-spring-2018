@@ -1,6 +1,5 @@
 %{
-// Эти объявления добавляются в класс GPPGParser, представляющий собой парсер, генерируемый системой gppg
-    public BlockNode root; // Корневой узел синтаксического дерева 
+    public BlockNode root; 
     public Parser(AbstractScanner<ValueType, LexLocation> scanner) : base(scanner) { }
 %}
  
@@ -35,7 +34,7 @@
  
 %%
 
-progr   : block { root = $1; }
+progr   : stlist { root = $1; }
 		;
 		
 		
@@ -58,7 +57,7 @@ statement: ident COLON statement { $$ = new LabelNode($1 as IdNode, $3); }
 		| print SEMICOLON { $$ = $1; }
 		| if { $$ = $1; }
 		| block  { $$ = $1; }
-		| { $$ = new EmptyNode(); }
+		| SEMICOLON { $$ = new EmptyNode(); }
 		;
 
 ident 	: ID { $$ = new IdNode($1); }	
@@ -68,43 +67,43 @@ assign 	: ident ASSIGN expr { $$ = new AssignNode($1 as IdNode, $3); }
 		;
 		
 expr : W  { $$ = $1; }
-     | expr LT W { $$ = new BinaryNode($1, $3, "<"); }
-     | expr GE W { $$ = new BinaryNode($1, $3, ">"); }
-     | expr LE W { $$ = new BinaryNode($1, $3, "<="); }
-     | expr GT W { $$ = new BinaryNode($1, $3, ">="); }
-     | expr EQ W { $$ = new BinaryNode($1, $3, "=="); }
-     | expr NEQ W { $$ = new BinaryNode($1, $3, "!="); }
+     | expr LT W { $$ = new BinaryNode($1, $3, OperationType.Less); }
+     | expr GT W { $$ = new BinaryNode($1, $3, OperationType.Greater); }
+     | expr LE W { $$ = new BinaryNode($1, $3, OperationType.LessEq); }
+     | expr GE W { $$ = new BinaryNode($1, $3, OperationType.GreaterEq); }
+     | expr EQ W { $$ = new BinaryNode($1, $3, OperationType.Equal); }
+     | expr NEQ W { $$ = new BinaryNode($1, $3, OperationType.NotEqual); }
      ; 
 
 W    : T { $$ = $1; }
-     | expr PLUS T { $$ = new BinaryNode($1, $3, "+"); }
-     | expr MINUS T { $$ = new BinaryNode($1, $3, "-"); }
+     | expr PLUS T { $$ = new BinaryNode($1, $3, OperationType.Plus); }
+     | expr MINUS T { $$ = new BinaryNode($1, $3, OperationType.Minus); }
      ;
 
 T    : F { $$ = $1; }
-     | T MULT F { $$ = new BinaryNode($1, $3, "*"); }
-     | T DIV F { $$ = new BinaryNode($1, $3, "/"); }
+     | T MULT F { $$ = new BinaryNode($1, $3, OperationType.Mul); }
+     | T DIV F { $$ = new BinaryNode($1, $3, OperationType.Div); }
      ;
 
-F    : MINUS ident { $$ = new UnaryNode($2, '-');}
-     | MINUS INUM { $$ = new UnaryNode($2, '-');}
-     | NOT ident { $$ = new UnaryNode($2, '!');}
-     | NOT INUM { $$ = new UnaryNode($2, '!');}
+F    : MINUS ident { $$ = new UnaryNode($2, OperationType.UnaryMinus);}
+     | MINUS INUM { $$ = new UnaryNode($2, OperationType.UnaryMinus);}
+     | NOT ident { $$ = new UnaryNode($2, OperationType.Not);}
+     | NOT INUM { $$ = new UnaryNode($2, OperationType.Not);}
 	 | ident { $$ = $1 as IdNode; }
      | INUM { $$ = new IntNumNode($1); }
      | OPENBR expr CLOSEBR { $$ = $2; }
-     | MINUS OPENBR expr CLOSEBR { $$ = new UnaryNode($3, '-');}
-     | NOT OPENBR expr CLOSEBR { $$ = new UnaryNode($3, '!');}
+     | MINUS OPENBR expr CLOSEBR { $$ = new UnaryNode($3, OperationType.UnaryMinus);}
+     | NOT OPENBR expr CLOSEBR { $$ = new UnaryNode($3, OperationType.Not);}
      ;
 
 block	: BEGIN stlist END { $$ = $2; }
 		;
 
-cycle	: CYCLE OPENBR expr CLOSEBR block  { $$ = new CycleNode($3, $5); }
+cycle	: CYCLE OPENBR expr CLOSEBR statement { $$ = new CycleNode($3, $5); }
 		;
 
-for 	: FOR OPENBR assign COMMA expr COMMA expr CLOSEBR block { $$ = new ForNode($3 as AssignNode, $5, $7, $9); }
-		| FOR OPENBR assign COMMA expr CLOSEBR block { $$ = new ForNode($3 as AssignNode, $5, $7); }
+for 	: FOR OPENBR assign COMMA expr COMMA expr CLOSEBR statement { $$ = new ForNode($3 as AssignNode, $5, $7, $9); }
+		| FOR OPENBR assign COMMA expr CLOSEBR statement { $$ = new ForNode($3 as AssignNode, $5, $7); }
 		;
 		
 exprlist: expr 
@@ -121,7 +120,7 @@ exprlist: expr
 print   : PRINT OPENBR exprlist CLOSEBR { $$ = new PrintNode($3); }
 		;
 
-if		: IF OPENBR expr CLOSEBR block ELSE block { $$ = new IfNode($3, $5, $7); }
-		| IF OPENBR expr CLOSEBR block { $$ = new IfNode($3, $5); }
+if		: IF OPENBR expr CLOSEBR statement ELSE statement { $$ = new IfNode($3, $5, $7); }
+		| IF OPENBR expr CLOSEBR statement { $$ = new IfNode($3, $5); }
 		;
 %%

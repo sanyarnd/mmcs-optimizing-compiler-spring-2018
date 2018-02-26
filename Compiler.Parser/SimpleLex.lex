@@ -47,7 +47,7 @@ ID {Alpha}{AlphaDigit}*
 "!" { return (int)Tokens.NOT; }
 ":" { return (int)Tokens.COLON; }
 
-[^ \r\n] {
+[^ \t\r\n] {
 	LexError();
 	return (int)Tokens.EOF; // конец разбора
 }

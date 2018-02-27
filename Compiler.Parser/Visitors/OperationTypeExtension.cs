@@ -14,7 +14,7 @@ namespace Compiler.Parser.Visitors
             switch (me)
             {
                 case OperationType.Div: return "/";
-                case OperationType.Equal: return "=";
+                case OperationType.Equal: return "==";
                 case OperationType.Greater: return ">";
                 case OperationType.GreaterEq: return ">=";
                 case OperationType.Less: return "<";

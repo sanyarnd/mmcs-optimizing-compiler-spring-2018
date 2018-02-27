@@ -131,7 +131,7 @@ namespace Compiler
             taCode.AddNode(ass6);
 
             var algOpt = new AlgebraicOptimization();
-            algOpt.Optimize(ta_code.Code);
+            algOpt.Optimize(ta_code.Code, out var applied);
             
             Console.WriteLine($"TA Code\n: {taCode}");
 
@@ -142,6 +142,8 @@ namespace Compiler
                 var bblCodeStr = bbl.CodeList.Aggregate("", (s, node) => s + node.ToString() + Environment.NewLine);
                 Console.WriteLine($"{bblCodeStr}\n");
             }
+
+            Console.WriteLine($"Algebraic Optimization was{(applied ? "" : "n't")} applied");
 
             Console.WriteLine("========================CFG test========================");
             var cfg = new ControlFlowGraph(taCode);

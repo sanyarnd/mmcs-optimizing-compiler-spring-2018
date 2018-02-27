@@ -5,6 +5,7 @@ namespace Compiler.Optimizations
 {
     public interface IOptimization
     {
-        List<Node> Optimize(List<Node> nodes);
+        List<Node> Optimize(List<Node> nodes, out bool applied);
+
     }
 }

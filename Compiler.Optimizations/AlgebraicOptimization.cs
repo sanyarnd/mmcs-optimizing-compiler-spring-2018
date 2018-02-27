@@ -8,8 +8,9 @@ namespace Compiler.Optimizations
 {
     public class AlgebraicOptimization : IOptimization
     {
-        public List<Node> Optimize(List<Node> nodes)
+        public List<Node> Optimize(List<Node> nodes, out bool applied)
         {
+            var app = false;
             foreach (Assign node in nodes
                 .Where(x => x is Assign assn 
                     && assn.Operation != OpCode.Copy 
@@ -21,11 +22,13 @@ namespace Compiler.Optimizations
                     node.Operation = OpCode.Copy;
                     node.Left = value.HasValue ? new IntConst(value.Value) : node.Right;
                     node.Right = null;
+                    app = true;
                 }
                 void SetRight()
                 {
                     node.Operation = OpCode.Copy;
                     node.Right = null;
+                    app = true;
                 }
                 switch (node.Operation)
                 {
@@ -65,6 +68,7 @@ namespace Compiler.Optimizations
                         break;
                 }
             }
+            applied = app;
             return nodes;
         }
     }

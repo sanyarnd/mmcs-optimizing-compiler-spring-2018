@@ -34,14 +34,14 @@ namespace Compiler.Parser.Visitors
             Text += num.Num.ToString();
         }
         public override void VisitUnaryNode(UnaryNode unop) {
-            Text += unop.Operation.ToString() + " ";
+            Text += unop.Operation.ToSymbolString() + " ";
             unop.Num.Visit(this);
         }
         public override void VisitBinaryNode(BinaryNode binop)
         {
             Text += "(";
             binop.Left.Visit(this);
-            Text += " " + binop.Operation.ToString() + " ";
+            Text += " " + binop.Operation.ToSymbolString() + " ";
             binop.Right.Visit(this);
             Text += ")";
         }
@@ -59,11 +59,21 @@ namespace Compiler.Parser.Visitors
             c.Condition.Visit(this);
             Text += ")";
             Text += Environment.NewLine;
-            c.Body.Visit(this);
+			if (!(c.Body is BlockNode))
+			{
+				IndentPlus();
+				c.Body.Visit(this);
+				Text += ";" + Environment.NewLine;
+				IndentMinus();
+			}
+			else
+				c.Body.Visit(this);
         }
         public override void VisitBlockNode(BlockNode bl)
         {
-            Text += IndentStr() + "{" + Environment.NewLine;
+            bool isNotBeginOfProgram = Text != "";
+            if (isNotBeginOfProgram)
+                Text += IndentStr() + "{" + Environment.NewLine;
             IndentPlus();
             var Count = bl.StList.Count;
             for (var i = 0; i < Count; i++)
@@ -75,7 +85,8 @@ namespace Compiler.Parser.Visitors
                         Text += ";" + Environment.NewLine;
             }
             IndentMinus();
-            Text +=  IndentStr() + "}" + Environment.NewLine;
+            if (isNotBeginOfProgram)
+                Text += IndentStr() + "}" + Environment.NewLine;
         }
         public override void VisitPrintNode(PrintNode p)
         {
@@ -90,9 +101,18 @@ namespace Compiler.Parser.Visitors
         }
         public override void VisitLabeledNode(LabeledNode l)
         {
+            Text += IndentStr();
             l.Label.Visit(this);
             Text += ":" + Environment.NewLine;
-            l.Stat.Visit(this);
+            if (!(l.Stat is BlockNode))
+            {
+                IndentPlus();
+                l.Stat.Visit(this);
+                Text += ";" + Environment.NewLine;
+                IndentMinus();
+            }
+            else
+                l.Stat.Visit(this);
         }
         public override void VisitExprListNode(ExprListNode el) {
             var last = el.ExprList.Last();
@@ -108,11 +128,28 @@ namespace Compiler.Parser.Visitors
             Text += IndentStr() + "if (";
             iif.Conditon.Visit(this);
             Text += ")" + Environment.NewLine;
-            iif.IfClause.Visit(this);
+            
+            if (!(iif.IfClause is BlockNode))
+            {
+                IndentPlus();
+                iif.IfClause.Visit(this);
+                Text += ";" + Environment.NewLine;
+                IndentMinus();
+            }
+            else
+                iif.IfClause.Visit(this);
             if (iif.ElseClause != null)
             {
                 Text += IndentStr()  + "else" + Environment.NewLine;
-                iif.ElseClause.Visit(this);
+                if (!(iif.ElseClause is BlockNode))
+                {
+                    IndentPlus();
+                    iif.ElseClause.Visit(this);
+                    Text += ";" + Environment.NewLine;
+                    IndentMinus();
+                }
+                else
+                    iif.ElseClause.Visit(this);
             }
         }
 
@@ -129,7 +166,15 @@ namespace Compiler.Parser.Visitors
             }
             Text += ")";
             Text += Environment.NewLine;
-            w.Body.Visit(this);
+             if (!(w.Body is BlockNode))
+            {
+                IndentPlus();
+                w.Body.Visit(this);
+                Text += ";" + Environment.NewLine;
+                IndentMinus();
+            }
+            else
+                w.Body.Visit(this);
         }
         public override void VisitEmptyNode(EmptyNode w) {}
 

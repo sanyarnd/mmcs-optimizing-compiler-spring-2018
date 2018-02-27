@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Compiler.Parser.Visitors;
 
 namespace Compiler.Parser.AST
 {
@@ -10,11 +11,12 @@ namespace Compiler.Parser.AST
         UnaryMinus
     }
 
-    public class Node // базовый класс для всех узлов    
+    public abstract class Node // базовый класс для всех узлов    
     {
+        public abstract void Visit(Visitor v);
     }
 
-    public class ExprNode : Node // базовый класс для всех выражений
+    public abstract class ExprNode : Node // базовый класс для всех выражений
     {
     }
 
@@ -22,12 +24,20 @@ namespace Compiler.Parser.AST
     {
         public string Name { get; set; }
         public IdNode(string name) { Name = name; }
+        public override void Visit(Visitor v)
+        {
+            v.VisitIdNode(this);
+        }
     }
 
     public class IntNumNode : ExprNode
     {
         public int Num { get; set; }
         public IntNumNode(int num) { Num = num; }
+        public override void Visit(Visitor v)
+        {
+            v.VisitIntNumNode(this);
+        }
     }
 
     public class BinaryNode : ExprNode
@@ -41,6 +51,10 @@ namespace Compiler.Parser.AST
             Right = right;
             Operation = op;
         }
+        public override void Visit(Visitor v)
+        {
+            v.VisitBinaryNode(this);
+        }
     }
 
     public class UnaryNode : ExprNode
@@ -52,10 +66,14 @@ namespace Compiler.Parser.AST
             Num = num;
             Operation = op;
         }
-        public UnaryNode(int num, OperationType op) : this(new IntNumNode(num), op) {}
+        public UnaryNode(int num, OperationType op) : this(new IntNumNode(num), op) { }
+        public override void Visit(Visitor v)
+        {
+            v.VisitUnaryNode(this);
+        }
     }
 
-    public class StatementNode : Node // базовый класс для всех операторов
+    public abstract class StatementNode : Node // базовый класс для всех операторов
     {
     }
 
@@ -69,6 +87,11 @@ namespace Compiler.Parser.AST
             Label = label;
             Stat = stat;
         }
+
+        public override void Visit(Visitor v)
+        {
+            v.VisitLabeledNode(this);
+        }
     }
 
     public class GoToNode : StatementNode
@@ -78,6 +101,11 @@ namespace Compiler.Parser.AST
         public GoToNode(IdNode label)
         {
             Label = label;
+        }
+
+        public override void Visit(Visitor v)
+        {
+            v.VisitGoToNode(this);
         }
     }
 
@@ -90,6 +118,10 @@ namespace Compiler.Parser.AST
             Id = id;
             Expr = expr;
         }
+        public override void Visit(Visitor v)
+        {
+            v.VisitAssignNode(this);
+        }
     }
 
     public class CycleNode : StatementNode
@@ -100,6 +132,10 @@ namespace Compiler.Parser.AST
         {
             Condition = expr;
             Body = stat;
+        }
+        public override void Visit(Visitor v)
+        {
+            v.VisitCycleNode(this);
         }
     }
 
@@ -115,6 +151,10 @@ namespace Compiler.Parser.AST
         {
             StList.Add(stat);
         }
+        public override void Visit(Visitor v)
+        {
+            v.VisitBlockNode(this);
+        }
     }
 
     public class PrintNode : StatementNode
@@ -123,6 +163,10 @@ namespace Compiler.Parser.AST
         public PrintNode(ExprListNode exprlist)
         {
             ExprList = exprlist;
+        }
+        public override void Visit(Visitor v)
+        {
+            v.VisitPrintNode(this);
         }
     }
 
@@ -138,6 +182,10 @@ namespace Compiler.Parser.AST
         {
             ExprList.Add(expr);
         }
+        public override void Visit(Visitor v)
+        {
+            v.VisitExprListNode(this);
+        }
     }
 
     public class IfNode : StatementNode
@@ -150,6 +198,10 @@ namespace Compiler.Parser.AST
             Conditon = expr;
             IfClause = ifClause;
             ElseClause = elseClause;
+        }
+        public override void Visit(Visitor v)
+        {
+            v.VisitIfNode(this);
         }
     }
 
@@ -167,12 +219,19 @@ namespace Compiler.Parser.AST
             Body = body;
         }
 
-        public ForNode(AssignNode assign, ExprNode bord, StatementNode body): this(assign, bord, new IntNumNode(1), body) {}
+        public ForNode(AssignNode assign, ExprNode bord, StatementNode body) : this(assign, bord, new IntNumNode(1), body) { }
+
+        public override void Visit(Visitor v)
+        {
+            v.VisitForNode(this);
+        }
     }
 
     public class EmptyNode : StatementNode
     {
+        public override void Visit(Visitor v)
+        {
+            v.VisitEmptyNode(this);
+        }
     }
-
-
 }

@@ -222,7 +222,7 @@ namespace Compiler.ThreeAddrCode
     }
 
     /// <summary>
-    /// Узел Def цепочки
+    /// Узел Use цепочки
     /// </summary>
     class UNode
     {

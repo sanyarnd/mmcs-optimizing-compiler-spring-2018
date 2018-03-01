@@ -23,6 +23,10 @@ namespace Compiler.ThreeAddrCode
         /// Def цепочка
         /// </summary>
         public List<DNode> DList { get; }
+        /// <summary>
+        /// Use цепочка
+        /// </summary>
+        public List<UNode> UList { get; }
 
         /// <summary>
         /// Конструктор для класса, генерирующий
@@ -33,7 +37,17 @@ namespace Compiler.ThreeAddrCode
 		{
             this.Block = block;
             DList = new List<DNode>();
+            UList = new List<UNode>();
+            BuildDULists();
+        }
+
+        /// <summary>
+        /// Создает Def и Use цепочки для базового блока
+        /// </summary>
+        private void BuildDULists()
+        {
             BuildDList();
+            BuildUList();
         }
 
         /// <summary>
@@ -98,6 +112,23 @@ namespace Compiler.ThreeAddrCode
             }
         }
 
+        /// <summary>
+        /// Создает Use цепочку для базового блока
+        /// </summary>
+        private void BuildUList()
+        {
+            foreach (var dN in DList)
+            {
+                var dVar = dN.DefVariable.Clone();
+                
+                foreach (var uV in dN.UseVariables)
+                {
+                    var uVar = uV.Clone();
+                    UList.Add(new UNode(uVar, dVar));
+                }
+            }
+        }
+
         public override string ToString()
         {
             return Block.ToString();
@@ -106,12 +137,14 @@ namespace Compiler.ThreeAddrCode
         public override bool Equals(object obj)
         {
             return Block.Equals((obj as DULists)) &&
-                DList.Equals((obj as DULists).DList);
+                DList.Equals((obj as DULists).DList) &&
+                UList.Equals((obj as DULists).UList);
         }
 
         public override int GetHashCode()
         {
-            return Block.GetHashCode() + DList.GetHashCode();
+            return Block.GetHashCode() + DList.GetHashCode() 
+                + UList.GetHashCode();
         }
     }
 
@@ -138,6 +171,17 @@ namespace Compiler.ThreeAddrCode
         {
             this.DefVariable = new DUVar(Name, StringId);
             this.UseVariables = new List<DUVar>();
+        }
+
+        /// <summary>
+        /// Конструктор Def узла
+        /// </summary>
+        /// <param name="DefVariable">Def переменная</param>
+        /// <param name="UseVariables">Список Use переменных</param>
+        public DNode(DUVar DefVariable, List<DUVar> UseVariables)
+        {
+            this.DefVariable = DefVariable;
+            this.UseVariables = UseVariables.ToList();
         }
 
         /// <summary>
@@ -178,6 +222,48 @@ namespace Compiler.ThreeAddrCode
     }
 
     /// <summary>
+    /// Узел Def цепочки
+    /// </summary>
+    class UNode
+    {
+        /// <summary>
+        /// Use переменная
+        /// </summary>
+		public DUVar UseVariable { get; }
+        /// <summary>
+        /// Def переменная
+        /// </summary>
+		public DUVar DefVariable { get; }
+
+        /// <summary>
+        /// Конструктор Use узла
+        /// </summary>
+        /// <param name="UseVariable">Use переменная</param>
+        /// <param name="DefVariable">Def переменная</param>
+        public UNode(DUVar UseVariable, DUVar DefVariable)
+        {
+            this.UseVariable = UseVariable;
+            this.DefVariable = DefVariable;
+        }
+
+        public override string ToString()
+        {
+            return UseVariable.ToString();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return DefVariable.Equals((obj as UNode).DefVariable) &&
+                UseVariable.Equals(((obj as UNode).UseVariable));
+        }
+
+        public override int GetHashCode()
+        {
+            return DefVariable.GetHashCode() + UseVariable.GetHashCode();
+        }
+    }
+
+    /// <summary>
     /// DefUse переменная 
     /// </summary>
 	class DUVar
@@ -201,6 +287,15 @@ namespace Compiler.ThreeAddrCode
 			this.Name = Name;
 			this.StringId = StringId;
 		}
+
+        /// <summary>
+        /// Создает копию объекта
+        /// </summary>
+        /// <returns></returns>
+        public DUVar Clone()
+        {
+            return new DUVar(Name, StringId);
+        }
 
         public override string ToString()
         {

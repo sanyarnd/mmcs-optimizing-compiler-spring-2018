@@ -9,6 +9,11 @@ using Compiler.ThreeAddrCode.Expressions;
 
 namespace Compiler.ThreeAddrCode
 {
+    // Список мертвых переменных
+    using DVars = List<DUVar>;
+    // Список живых переменных
+    using LVars = List<DUVar>;
+
     /// <summary>
     /// Класс для определения живых и мертвых переменных
     /// и удаления метвого кода
@@ -22,32 +27,57 @@ namespace Compiler.ThreeAddrCode
         /// <summary>
         /// Список мертвых переменных
         /// </summary>
-        public List<DUVar> DeadVars { get; }
+        public DVars DeadVars { get; }
         /// <summary>
         /// Список живых переменных
         /// </summary>
-        public List<DUVar> LiveVars { get; }
+        public LVars LiveVars { get; }
 
         /// <summary>
         /// Конструктор для класса определения
-        /// живых и мертвых переменных
+        /// живых и мертвых переменных для
+        /// базового блока
         /// </summary>
         /// <param name="block">Базовый блок</param>
         public LiveAndDeadVariables(BasicBlock block)
         {
             this.Block = block;
-            DeadVars = new List<DUVar>();
-            LiveVars = new List<DUVar>();
-            DefineLDVars();
+            DeadVars = new DVars();
+            LiveVars = new LVars();
+            DefineLDVars(Block.CodeList, DeadVars, LiveVars);
         }
+
+        /// <summary>
+        /// Конструктор для класса определения
+        /// живых и мертвых переменных для произвольного
+        /// фрагмента кода
+        /// </summary>
+        /// <param name="nodes">Фрагмент кода</param>
+        public LiveAndDeadVariables(List<Node> nodes) : this(new BasicBlock(nodes, -1)) { }
 
         /// <summary>
         /// Определение живых и мертвых переменных
         /// в базовом блоке
         /// </summary>
-        private void DefineLDVars()
+        /// <param name="nodes">Фрагмент кода</param>
+        private void DefineLDVars(List<Node> nodes, DVars DeadVars, LVars LiveVars)
         {
+            // Построение Def цепочки по блоку
+            var dList = (new DULists(nodes)).DList;
 
+            // Обход Def цепочки
+            foreach (var dVar in dList)
+                // Мертвая переменная (нигде не используется)
+                if (dVar.UseVariables.Count == 0)
+                    DeadVars.Add(dVar.DefVariable.Clone());
+                // Живые переменные
+                else
+                {
+                    LiveVars.Add(dVar.DefVariable.Clone());
+
+                    foreach (var uVar in dVar.UseVariables)
+                        LiveVars.Add(uVar.Clone());
+                }                
         }
 
         /// <summary>
@@ -55,18 +85,22 @@ namespace Compiler.ThreeAddrCode
         /// </summary>
         public BasicBlock RemoveDeadCode()
         {
-            var listNode = new List<Node>();
+            var listNode = Block.CodeList;
+            var deadVars = DeadVars;
+            var liveVars = LiveVars;
 
-            foreach (var command in Block.CodeList)
+            // Пока мы не удалим все мертвые переменные
+            while (deadVars.Count != 0)
             {
-                var index = DeadVars.FindIndex(dV =>
-                {
-                    return dV.StringId == command.Label;
-                });
+                foreach (var dV in deadVars)
+                    listNode.RemoveAll(x => x.Label == dV.StringId);
 
-                if (index == -1)
-                    listNode.Add(command); // метод command.Clone ???
-            }
+                deadVars.Clear();
+                liveVars.Clear();
+
+                // Определение живости/мертвости переменных
+                DefineLDVars(listNode, deadVars, liveVars);
+            }           
 
             return new BasicBlock(listNode, Block.BlockId);
         }

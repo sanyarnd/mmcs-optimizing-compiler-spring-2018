@@ -47,6 +47,14 @@ namespace Compiler.ThreeAddrCode
         }
 
         /// <summary>
+        /// Конструктор для класса, генерирующий
+        /// Def и Use цепочки по произвольному
+        /// фрагменту кода
+        /// </summary>
+        /// <param name="nodes">Фрагмент кода</param>
+		public DULists(List<Node> nodes) : this(new BasicBlock(nodes, -1)) { }
+
+        /// <summary>
         /// Создает Def и Use цепочки для базового блока
         /// </summary>
         private void BuildDULists()
@@ -70,8 +78,7 @@ namespace Compiler.ThreeAddrCode
                     var comA = command as Assign;
                     
                     // Добавление нового Def узла
-                    if (comA.Result is Var)
-                        DList.Add(new DNode(comA.Result.Id, comA.Label));
+                    DList.Add(new DNode(comA.Result.Id, comA.Label));
 
                     // Добавление Use узлов
                     AddUseVariable(comA.Left, comA.Label);
@@ -296,7 +303,7 @@ namespace Compiler.ThreeAddrCode
         /// <summary>
         /// Создает копию объекта
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Копия объекта</returns>
         public virtual DUVar Clone()
         {
             return new DUVar(Name, StringId);
@@ -306,7 +313,7 @@ namespace Compiler.ThreeAddrCode
         /// Конвертирует объект из типа DVar в тип UVar
         /// и наоборот в зависимости от типа переменной
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Объект типа DUVar</returns>
         public virtual DUVar Convert()
         {
             return this.Clone();
@@ -345,7 +352,7 @@ namespace Compiler.ThreeAddrCode
         /// <summary>
         /// Создает копию объекта
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Копия объекта</returns>
         public override DUVar Clone()
         {
             return new DVar(Name, StringId);
@@ -355,7 +362,7 @@ namespace Compiler.ThreeAddrCode
         /// Конвертирует объект из типа DVar в тип UVar
         /// и наоборот в зависимости от типа переменной
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Объект типа UVar</returns>
         public override DUVar Convert()
         {
             return new UVar(Name, StringId);
@@ -377,7 +384,7 @@ namespace Compiler.ThreeAddrCode
         /// <summary>
         /// Создает копию объекта
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Копия объекта</returns>
         public override DUVar Clone()
         {
             return new UVar(Name, StringId);
@@ -387,7 +394,7 @@ namespace Compiler.ThreeAddrCode
         /// Конвертирует объект из типа DVar в тип UVar
         /// и наоборот в зависимости от типа переменной
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Объект типа DVar</returns>
         public override DUVar Convert()
         {
             return new DVar(Name, StringId);

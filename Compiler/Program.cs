@@ -16,8 +16,12 @@ namespace Compiler
     {
         public static void Main()
         {
-            //TaCodeTest();
+            TaCodeTest();
             ASTTest();
+
+            //Test Moving declarations
+            var Test = new DeclarationTest();
+            Test.DeclarationOptimizationTest();
         }
 
         private static void ASTTest()
@@ -36,9 +40,9 @@ namespace Compiler
                 var b = parser.Parse();
                 Console.WriteLine(!b ? "Ошибка" : "Синтаксическое дерево построено");
 
-                    var prettyPrinter = new PrettyPrintVisitor();
-                    parser.root.Visit(prettyPrinter);
-                    Console.WriteLine(prettyPrinter.Text);
+                var prettyPrinter = new PrettyPrintVisitor();
+                parser.root.Visit(prettyPrinter);
+                Console.WriteLine(prettyPrinter.Text);
             }
             catch (FileNotFoundException)
             {
@@ -63,6 +67,7 @@ namespace Compiler
             var ass1 = new Assign
             {
                 Left = new IntConst(3),
+                //Left = new IntConst(5),
                 Operation = OpCode.Minus,
                 Right = new IntConst(5),
                 Result = new Var()
@@ -131,8 +136,8 @@ namespace Compiler
             taCode.AddNode(ass6);
 
             var algOpt = new AlgebraicOptimization();
-            algOpt.Optimize(ta_code.Code, out var applied);
-            
+            algOpt.Optimize(taCode.CodeList.ToList(), out var applied);
+
             Console.WriteLine($"TA Code\n: {taCode}");
 
             var bBlocks = taCode.CreateBasicBlockList();

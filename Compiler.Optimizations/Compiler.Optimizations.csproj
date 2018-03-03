@@ -44,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlgebraicOptimization.cs" />
+    <Compile Include="DeclarationOptimization.cs" />
+    <Compile Include="DeclarationTest.cs" />
     <Compile Include="IOptimization.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

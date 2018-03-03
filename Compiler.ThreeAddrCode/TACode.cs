@@ -17,12 +17,12 @@ namespace Compiler.ThreeAddrCode
         /// <summary>
         ///     Список команд программы в трехадресном формате
         /// </summary>
-        private readonly List<Node> _code;
+        private List<Node> _code;
 
         /// <summary>
         ///     Список команд программы в трехадресном формате
         /// </summary>
-        public IEnumerable<Node> CodeList => _code;
+        public IEnumerable<Node> CodeList { get => _code; set { _code = value.ToList(); } }
 
         /// <summary>
         ///     Словарь соответствий меток и узлов

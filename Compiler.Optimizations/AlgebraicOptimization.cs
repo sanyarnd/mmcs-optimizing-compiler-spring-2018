@@ -12,12 +12,12 @@ namespace Compiler.Optimizations
         {
             var app = false;
             foreach (Assign node in nodes
-                .Where(x => x is Assign assn 
-                    && assn.Operation != OpCode.Copy 
+                .Where(x => x is Assign assn
+                    && assn.Operation != OpCode.Copy
                     && assn.Left != null
-                )) 
+                ))
             {
-                void SetLeft(int? value=null)
+                void SetLeft(int? value = null)
                 {
                     node.Operation = OpCode.Copy;
                     node.Left = value.HasValue ? new IntConst(value.Value) : node.Right;

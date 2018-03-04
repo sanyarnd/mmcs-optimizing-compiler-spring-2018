@@ -15,9 +15,8 @@ namespace Compiler.ThreeAddrCode.CFG
         ///     Список узлов потока управления;
         ///     <para>Первый узел -- входной</para>
         /// </summary>
-        public IEnumerable<CFGNode> CFGNodes => _cfgNodes.AsReadOnly();
-
-        private readonly List<CFGNode> _cfgNodes;
+        public IEnumerable<BasicBlock> CFGNodes => _cfgNodes.AsReadOnly();
+        private readonly List<BasicBlock> _cfgNodes;
 
         /// <summary>
         ///     Конструктор
@@ -26,7 +25,7 @@ namespace Compiler.ThreeAddrCode.CFG
         public ControlFlowGraph(TACode code)
         {
             _code = code;
-            _cfgNodes = new List<CFGNode>();
+            _cfgNodes = new List<BasicBlock>();
 
             CreateCFGNodes();
         }
@@ -38,18 +37,18 @@ namespace Compiler.ThreeAddrCode.CFG
         {
             // оборачиваем ББ в CFG
             foreach (var block in _code.CreateBasicBlockList())
-                _cfgNodes.Add(new CFGNode(block));
+                _cfgNodes.Add(block);
 
             foreach (var cfgNode in _cfgNodes)
             {
                 // блок содержит GoTo в последней строке
-                if (cfgNode.Block.CodeList.Last() is Goto gt)
+                if (cfgNode.CodeList.Last() is Goto gt)
                 {
                     // ищем на какую строку идет переход
                     var targetFirst = _code.LabeledCode[gt.TargetLabel];
 
                     // забираем информацию о том, какому блоку принадлежит эта строка
-                    var targetNode = _cfgNodes.First(n => n.Block.Equals(targetFirst.Block));
+                    var targetNode = _cfgNodes.First(n => n.Equals(targetFirst.Block));
 
                     // устанавливаем связи cfgNode <-> targetNode
                     cfgNode.AddChild(targetNode);

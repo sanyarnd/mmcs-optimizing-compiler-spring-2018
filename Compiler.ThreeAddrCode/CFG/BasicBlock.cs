@@ -1,6 +1,7 @@
 ﻿using Compiler.ThreeAddrCode.Nodes;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Compiler.ThreeAddrCode.CFG
 {
@@ -12,7 +13,21 @@ namespace Compiler.ThreeAddrCode.CFG
         /// <summary>
         ///     Идентификатор блока
         /// </summary>
-        public int BlockId { get; }
+        public Guid BlockId { get; }
+
+        /// <summary>
+        ///     Потомки базового блока
+        /// </summary>
+        public IEnumerable<BasicBlock> Children => _children.ToList();
+
+        private readonly List<BasicBlock> _children;
+
+        /// <summary>
+        ///     Родители базового блока
+        /// </summary>
+        public IEnumerable<BasicBlock> Parents => _parents.ToList();
+
+        private readonly List<BasicBlock> _parents;
 
         /// <summary>
         ///     Список узлов программы в трехадресной форме, связанных с блоком
@@ -27,11 +42,31 @@ namespace Compiler.ThreeAddrCode.CFG
         /// <param name="codeList">список узлов программы в трехадресной форме</param>
         public BasicBlock(List<Node> codeList)
         {
-            BlockId = codeList.GetHashCode();
+            BlockId = Guid.NewGuid();
             _codeList = codeList;
 
             foreach (var node in codeList)
                 node.Block = this;
+        }
+
+        /// <summary>
+        ///     Связать узел с другим по принципу родитель -> ребенок
+        /// </summary>
+        /// <param name="child">дочерний узел</param>
+        public void AddChild(BasicBlock child)
+        {
+            if (!_children.Contains(child))
+                _children.Add(child);
+        }
+
+        /// <summary>
+        ///     Связать узел с другим по принципу ребенок -> родитель
+        /// </summary>
+        /// <param name="parent">родитель</param>
+        public void AddParent(BasicBlock parent)
+        {
+            if (!_parents.Contains(parent))
+                _parents.Add(parent);
         }
 
         public override bool Equals(object obj)
@@ -39,12 +74,12 @@ namespace Compiler.ThreeAddrCode.CFG
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return BlockId == ((BasicBlock) obj).BlockId;
+            return BlockId.Equals(((BasicBlock) obj).BlockId);
         }
 
         public override int GetHashCode()
         {
-            return BlockId;
+            return BlockId.GetHashCode();
         }
 
         public static bool operator ==(BasicBlock left, BasicBlock right)

@@ -154,23 +154,23 @@ namespace Compiler
             var cfg = new ControlFlowGraph(taCode);
             foreach (var cfgn in cfg.CFGNodes)
             {
-                Console.WriteLine($"Block[{cfgn.Block.BlockId}]");
-                var bblCodeStr = cfgn.Block.CodeList.Aggregate("", (s, node) => s + node.ToString() + Environment.NewLine);
+                Console.WriteLine($"Block[{cfgn.BlockId}]");
+                var bblCodeStr = cfgn.CodeList.Aggregate("", (s, node) => s + node.ToString() + Environment.NewLine);
                 Console.WriteLine($"{bblCodeStr}\n");
 
                 Console.WriteLine("Children:\n");
                 foreach (var ch in cfgn.Children)
                 {
-                    Console.WriteLine($"Block[{ch.Block.BlockId}]");
-                    var bblCodeCh = ch.Block.CodeList.Aggregate("", (s, node) => s + node.ToString() + Environment.NewLine);
+                    Console.WriteLine($"Block[{ch.BlockId}]");
+                    var bblCodeCh = ch.CodeList.Aggregate("", (s, node) => s + node.ToString() + Environment.NewLine);
                     Console.WriteLine($"{bblCodeCh}\n");
                 }
 
                 Console.WriteLine("Parents:\n");
                 foreach (var ch in cfgn.Parents)
                 {
-                    Console.WriteLine($"Block[{ch.Block.BlockId}]");
-                    var bblCodeCh = ch.Block.CodeList.Aggregate("", (s, node) => s + node.ToString() + Environment.NewLine);
+                    Console.WriteLine($"Block[{ch.BlockId}]");
+                    var bblCodeCh = ch.CodeList.Aggregate("", (s, node) => s + node.ToString() + Environment.NewLine);
                     Console.WriteLine($"{bblCodeCh}\n");
                 }
                 Console.WriteLine("-----------------------------------------");

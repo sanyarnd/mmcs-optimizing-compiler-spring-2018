@@ -12,22 +12,22 @@ namespace Compiler.ThreeAddrCode.CFG
         private readonly TACode _code;
 
         /// <summary>
-        ///     Список базовых блоков программы (кэш)
-        /// </summary>
-        private readonly List<BasicBlock> _blockList;
-
-        /// <summary>
         ///     Список узлов потока управления;
         ///     <para>Первый узел -- входной</para>
         /// </summary>
-        public SortedSet<CFGNode> CFGNodes { get; }
+        public IEnumerable<CFGNode> CFGNodes => _cfgNodes.AsReadOnly();
 
+        private readonly List<CFGNode> _cfgNodes;
+
+        /// <summary>
+        ///     Конструктор
+        /// </summary>
+        /// <param name="code">экземпляр программы в формате трехадресного кода</param>
         public ControlFlowGraph(TACode code)
         {
             _code = code;
-            _blockList = _code.CreateBasicBlockList().ToList();
+            _cfgNodes = new List<CFGNode>();
 
-            CFGNodes = new SortedSet<CFGNode>();
             CreateCFGNodes();
         }
 
@@ -36,34 +36,25 @@ namespace Compiler.ThreeAddrCode.CFG
         /// </summary>
         private void CreateCFGNodes()
         {
-            var labelDict = _code.LabeledCode;
+            // оборачиваем ББ в CFG
+            foreach (var block in _code.CreateBasicBlockList())
+                _cfgNodes.Add(new CFGNode(block));
 
-            foreach (var block in _blockList)
+            foreach (var cfgNode in _cfgNodes)
             {
-                var last = block.CodeList.Last();
-
-                var cfgNode = new CFGNode(block);
-                CFGNodes.Add(cfgNode);
-
                 // блок содержит GoTo в последней строке
-                if (last is Goto gt)
+                if (cfgNode.Block.CodeList.Last() is Goto gt)
                 {
                     // ищем на какую строку идет переход
-                    var targetFirst = labelDict[gt.TargetLabel];
+                    var targetFirst = _code.LabeledCode[gt.TargetLabel];
+
                     // забираем информацию о том, какому блоку принадлежит эта строка
-                    var targetNode = new CFGNode(targetFirst.Block);
+                    var targetNode = _cfgNodes.First(n => n.Block.Equals(targetFirst.Block));
+
                     // устанавливаем связи cfgNode <-> targetNode
                     cfgNode.AddChild(targetNode);
-
-                    // добавляем его в набор узлов CFG
-                    CFGNodes.Add(targetNode);
+                    targetNode.AddParent(cfgNode);
                 }
-
-                // случай, когда есть переход на первую строку блока:
-                // var first = block.CodeList.First();
-                // if (first.IsLabeled)
-                // рассматривать не нужно, в силу того, что мы пробежимся по всем базовым блокам
-                // и тем самым в любом случае рано или поздно найдем нужную связь
             }
 
             // каждый блок является родителем последующего
@@ -73,8 +64,8 @@ namespace Compiler.ThreeAddrCode.CFG
                 var cur = nodeList[i];
                 var next = nodeList[i + 1];
 
-                cur.Children.Add(next);
-                next.Parents.Add(cur);
+                cur.AddChild(next);
+                next.AddParent(cur);
             }
         }
     }

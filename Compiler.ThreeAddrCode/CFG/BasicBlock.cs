@@ -7,7 +7,7 @@ namespace Compiler.ThreeAddrCode.CFG
     /// <summary>
     ///     Базовый блок участка программы
     /// </summary>
-    public class BasicBlock : IComparable<BasicBlock>
+    public class BasicBlock
     {
         /// <summary>
         ///     Идентификатор блока
@@ -17,31 +17,20 @@ namespace Compiler.ThreeAddrCode.CFG
         /// <summary>
         ///     Список узлов программы в трехадресной форме, связанных с блоком
         /// </summary>
-        public List<Node> CodeList { get; }
-
+        public IEnumerable<Node> CodeList => _codeList.AsReadOnly();
+        private readonly List<Node> _codeList;
+        
         /// <summary>
         ///     Конструктор базового блока
         /// </summary>
         /// <param name="codeList">список узлов программы в трехадресной форме</param>
-        /// <param name="num">номер блока</param>
-        /// <remarks>
-        ///     важно! при создании упорядоченных коллекций блоков, чтобы номера блоков
-        ///     были различны, т.к. на номер блока опирается компаратор
-        /// </remarks>
-        public BasicBlock(List<Node> codeList, int num)
+        public BasicBlock(List<Node> codeList)
         {
-            BlockId = num;
-            CodeList = codeList;
+            BlockId = codeList.GetHashCode();
+            _codeList = codeList;
 
             foreach (var node in codeList)
                 node.Block = this;
-        }
-
-        public int CompareTo(BasicBlock other)
-        {
-            if (ReferenceEquals(this, other)) return 0;
-            if (ReferenceEquals(null, other)) return 1;
-            return BlockId.CompareTo(other.BlockId);
         }
     }
 }

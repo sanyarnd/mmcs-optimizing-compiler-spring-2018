@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Compiler.ThreeAddrCode.CFG
 {
     /// <summary>
     /// Класс-обёртка, который содержит в себе экземпляр базового блока и списки его детей и потомков
     /// </summary>
-    public class CFGNode : IComparable<CFGNode>
+    public class CFGNode
     {
         /// <summary>
         ///     Базовый блок
@@ -16,12 +17,16 @@ namespace Compiler.ThreeAddrCode.CFG
         /// <summary>
         ///     Дети узла CFG графа
         /// </summary>
-        public SortedSet<CFGNode> Children { get; }
+        public IEnumerable<CFGNode> Children => _children.ToList();
+
+        private readonly List<CFGNode> _children;
 
         /// <summary>
         ///     Родители узла CFG графа
         /// </summary>
-        public SortedSet<CFGNode> Parents { get; }
+        public IEnumerable<CFGNode> Parents => _parents.ToList();
+
+        private readonly List<CFGNode> _parents;
 
         /// <summary>
         ///     Конструктор узла графа CFG
@@ -30,8 +35,8 @@ namespace Compiler.ThreeAddrCode.CFG
         public CFGNode(BasicBlock block)
         {
             Block = block ?? throw new NullReferenceException("Block cannot be null");
-            Children = new SortedSet<CFGNode>();
-            Parents = new SortedSet<CFGNode>();
+            _children = new List<CFGNode>();
+            _parents = new List<CFGNode>();
         }
 
         /// <summary>
@@ -40,8 +45,8 @@ namespace Compiler.ThreeAddrCode.CFG
         /// <param name="child">дочерний узел</param>
         public void AddChild(CFGNode child)
         {
-            Children.Add(child);
-            child.Parents.Add(this);
+            if (!_children.Contains(child))
+                _children.Add(child);
         }
 
         /// <summary>
@@ -50,15 +55,8 @@ namespace Compiler.ThreeAddrCode.CFG
         /// <param name="parent">родитель</param>
         public void AddParent(CFGNode parent)
         {
-            Parents.Add(parent);
-            parent.Children.Add(this);
-        }
-
-        public int CompareTo(CFGNode other)
-        {
-            if (ReferenceEquals(this, other)) return 0;
-            if (ReferenceEquals(null, other)) return 1;
-            return Comparer<BasicBlock>.Default.Compare(Block, other.Block);
+            if (!_parents.Contains(parent))
+                _parents.Add(parent);
         }
     }
 }

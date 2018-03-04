@@ -24,7 +24,10 @@ namespace Compiler.ThreeAddrCode.CFG
         /// </summary>
         /// <param name="codeList">список узлов программы в трехадресной форме</param>
         /// <param name="num">номер блока</param>
-        /// <remarks>важно, чтобы номера блоков было различны, т.к. на номер блока операется компаратор</remarks>
+        /// <remarks>
+        ///     важно! при создании упорядоченных коллекций блоков, чтобы номера блоков
+        ///     были различны, т.к. на номер блока опирается компаратор
+        /// </remarks>
         public BasicBlock(List<Node> codeList, int num)
         {
             BlockId = num;

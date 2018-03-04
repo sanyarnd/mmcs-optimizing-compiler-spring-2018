@@ -1,5 +1,8 @@
 ﻿namespace Compiler.ThreeAddrCode
 {
+    /// <summary>
+    ///     Расширение для типов операций трехадресного кода
+    /// </summary>
     public static class OpCodeExtension
     {
         public static string GetSymbol(this OpCode op)

@@ -29,10 +29,7 @@ namespace Compiler.ThreeAddrCode.CFG
         /// <param name="block">базовый блок</param>
         public CFGNode(BasicBlock block)
         {
-            if (block == null)
-                throw new NullReferenceException("Block cannot be null");
-
-            Block = block;
+            Block = block ?? throw new NullReferenceException("Block cannot be null");
             Children = new SortedSet<CFGNode>();
             Parents = new SortedSet<CFGNode>();
         }

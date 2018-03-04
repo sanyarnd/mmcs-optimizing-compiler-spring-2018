@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Compiler.ThreeAddrCode;
 using Compiler.ThreeAddrCode.Nodes;
@@ -8,66 +9,70 @@ namespace Compiler.Optimizations
 {
     public class AlgebraicOptimization : IOptimization
     {
+        private static readonly IntConst Zero = new IntConst(0);
+        private static readonly IntConst One = new IntConst(1);
+
+        private bool SetLeft(Assign node, int? value = null)
+        {
+            node.Operation = OpCode.Copy;
+            node.Left = value.HasValue ? new IntConst(value.Value) : node.Right;
+            node.Right = null;
+            return true;
+        }
+
+        private bool SetRight(Assign node)
+        {
+            node.Operation = OpCode.Copy;
+            node.Right = null;
+            return true;
+        }
+
         public List<Node> Optimize(List<Node> nodes, out bool applied)
         {
             var app = false;
-            foreach (Assign node in nodes
-                .Where(x => x is Assign assn
-                    && assn.Operation != OpCode.Copy
-                    && assn.Left != null
-                ))
+
+            var enumerable = nodes
+                .OfType<Assign>()
+                .Where(assn => assn.Operation != OpCode.Copy && assn.Left != null);
+            foreach (var node in enumerable)
             {
-                void SetLeft(int? value = null)
-                {
-                    node.Operation = OpCode.Copy;
-                    node.Left = value.HasValue ? new IntConst(value.Value) : node.Right;
-                    node.Right = null;
-                    app = true;
-                }
-                void SetRight()
-                {
-                    node.Operation = OpCode.Copy;
-                    node.Right = null;
-                    app = true;
-                }
                 switch (node.Operation)
                 {
                     case OpCode.Plus:
-                        {
-                            if (node.Left.Equals(0))
-                                SetLeft();
-                            else if (node.Right.Equals(0))
-                                SetRight();
-                            break;
-                        }
-                    case OpCode.Minus:
-                        {
-                            if (node.Left.Equals(node.Right))
-                                SetLeft(0);
-                            else if (node.Right.Equals(0))
-                                SetRight();
-                            break;
-                        }
-                    case OpCode.Mul:
-                        {
-                            if (node.Left.Equals(1))
-                                SetLeft();
-                            else if (node.Right.Equals(1))
-                                SetRight();
-                            else if (node.Left.Equals(0) || node.Right.Equals(0))
-                                SetLeft(0);
-                            break;
-                        }
-                    case OpCode.Div:
-                        {
-                            if (node.Right.Equals(1))
-                                SetRight();
-                            else if (node.Right.Equals(node.Left))
-                                SetLeft(1);
-                        }
+                        if (node.Left.Equals(Zero))
+                            app = SetLeft(node);
+                        else if (node.Right.Equals(Zero))
+                            app = SetRight(node);
                         break;
+
+                    case OpCode.Minus:
+                        if (node.Left.Equals(node.Right))
+                            app = SetLeft(node, 0);
+                        else if (node.Right.Equals(Zero))
+                            app = SetRight(node);
+                        break;
+
+                    case OpCode.Mul:
+                        if (node.Left.Equals(One))
+                            app = SetLeft(node);
+                        else if (node.Right.Equals(One))
+                            app = SetRight(node);
+                        else if (node.Left.Equals(Zero) || node.Right.Equals(Zero))
+                            app = SetLeft(node, 0);
+                        break;
+
+                    case OpCode.Div:
+                        if (node.Right.Equals(One))
+                            app = SetRight(node);
+                        else if (node.Right.Equals(node.Left))
+                            app = SetLeft(node, 1);
+                        break;
+                    
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
+
             applied = app;
             return nodes;
         }

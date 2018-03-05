@@ -7,7 +7,7 @@
     {
         public override string ToString()
         {
-            return string.Format("{0} : nop", Label);
+            return $"{Label} : nop";
         }
     }
 }

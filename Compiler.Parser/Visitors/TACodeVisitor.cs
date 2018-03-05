@@ -7,6 +7,9 @@ using TACNodes = Compiler.ThreeAddrCode.Nodes;
 
 namespace Compiler.Parser.Visitors
 {
+    /// <summary>
+    ///     Визитор для обхода AST и генерации трехадресного кода
+    /// </summary>
     public class TACodeVisitor : AutoVisitor
     {
         /// <summary>

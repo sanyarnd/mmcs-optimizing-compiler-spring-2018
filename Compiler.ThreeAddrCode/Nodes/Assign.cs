@@ -31,8 +31,8 @@ namespace Compiler.ThreeAddrCode.Nodes
         public override string ToString()
         {
             if (Left == null)
-                return string.Format("{0} : {1} = {2}{3}", Label, Result, Operation.GetSymbol(), Right);
-            return string.Format("{0} : {1} = {2} {3} {4}", Label, Result, Left, Operation.GetSymbol(), Right);
+                return $"{Label} : {Result} = {Operation.GetSymbol()}{Right}";
+            return $"{Label} : {Result} = {Left} {Operation.GetSymbol()} {Right}";
         }
     }
 }

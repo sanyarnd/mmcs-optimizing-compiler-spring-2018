@@ -5,12 +5,12 @@
     /// </summary>
     public class IntConst : Expr
     {
+        public int Num { get; set; }
+
         public IntConst(int num)
         {
             Num = num;
         }
-
-        public int Num { get; set; }
 
         public override string ToString()
         {
@@ -19,14 +19,25 @@
 
         public override bool Equals(object obj)
         {
-            if (obj is IntConst)
-                return Num == (obj as IntConst).Num;
-            return false;
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Num == ((IntConst) obj).Num;
         }
 
         public override int GetHashCode()
         {
-            return Num.GetHashCode();
+            return Num;
+        }
+
+        public static bool operator ==(IntConst left, IntConst right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(IntConst left, IntConst right)
+        {
+            return !Equals(left, right);
         }
     }
 }

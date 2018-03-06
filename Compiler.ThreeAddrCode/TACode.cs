@@ -17,12 +17,7 @@ namespace Compiler.ThreeAddrCode
         /// <summary>
         ///     Список команд программы в трехадресном формате
         /// </summary>
-        private readonly List<Node> _code;
-
-        /// <summary>
-        ///     Список команд программы в трехадресном формате
-        /// </summary>
-        public IEnumerable<Node> CodeList => _code;
+        public List<Node> CodeList { get; set; }
 
         /// <summary>
         ///     Словарь соответствий меток и узлов
@@ -34,7 +29,7 @@ namespace Compiler.ThreeAddrCode
         /// </summary>
         public TACode()
         {
-            _code = new List<Node>();
+            CodeList = new List<Node>();
             LabeledCode = new Dictionary<Guid, Node>();
         }
 
@@ -43,7 +38,7 @@ namespace Compiler.ThreeAddrCode
         /// </summary>
         public void AddNode(Node node)
         {
-            _code.Add(node);
+            CodeList.Add(node);
             LabeledCode.Add(node.Label, node);
         }
 
@@ -53,7 +48,7 @@ namespace Compiler.ThreeAddrCode
         /// <param name="node">Оператор</param>
         public bool RemoveNode(Node node)
         {
-            return _code.Remove(node);
+            return CodeList.Remove(node);
         }
 
         /// <summary>
@@ -63,7 +58,7 @@ namespace Compiler.ThreeAddrCode
         public void RemoveNodes(IEnumerable<Node> nodes)
         {
             foreach (var node in nodes)
-                _code.Remove(node);
+                CodeList.Remove(node);
         }
 
         /// <summary>
@@ -96,7 +91,6 @@ namespace Compiler.ThreeAddrCode
             // группируем список как набор пар:
             // [a0, a1, a2, a3, ...] -> [(a0, a1), (a1, a2), (a2, a3), ...]
             var ranges = leaders.Zip(leaders.Skip(1), Tuple.Create);
-            int num = 0;
             foreach (var range in ranges)
             {
                 var bbList = new List<Node>();
@@ -104,7 +98,7 @@ namespace Compiler.ThreeAddrCode
                 for (var j = range.Item1; j < range.Item2; ++j)
                     bbList.Add(commands[j]);
 
-                var bb = new BasicBlock(bbList, num++);
+                var bb = new BasicBlock(bbList);
                 basicBlockList.Add(bb);
             }
 
@@ -113,7 +107,7 @@ namespace Compiler.ThreeAddrCode
 
         public override string ToString()
         {
-            return _code.Aggregate("", (s, node) => s + node.ToString() + Environment.NewLine);
+            return CodeList.Aggregate("", (s, node) => s + node.ToString() + Environment.NewLine);
         }
     }
 }

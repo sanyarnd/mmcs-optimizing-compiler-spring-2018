@@ -13,7 +13,7 @@ namespace Compiler.ThreeAddrCode.Nodes
 
         public override string ToString()
         {
-            return string.Format("{0} : print {1} \"{2}\"", Label, Data, Sep);
+            return $"{Label} : print {Data} \"{Sep}\"";
         }
     }
 }

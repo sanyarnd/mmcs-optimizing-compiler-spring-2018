@@ -45,7 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CFG\BasicBlock.cs" />
-    <Compile Include="CFG\CFGNode.cs" />
     <Compile Include="CFG\ControlFlowGraph.cs" />
     <Compile Include="Expressions\Expr.cs" />
     <Compile Include="Expressions\IntConst.cs" />

@@ -41,7 +41,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AST\ProgramTree.cs" />
+    <Compile Include="AST\AssignNode.cs" />
+    <Compile Include="AST\BinaryNode.cs" />
+    <Compile Include="AST\BlockNode.cs" />
+    <Compile Include="AST\CycleNode.cs" />
+    <Compile Include="AST\ExprListNode.cs" />
+    <Compile Include="AST\ExprNode.cs" />
+    <Compile Include="AST\ForNode.cs" />
+    <Compile Include="AST\GoToNode.cs" />
+    <Compile Include="AST\IdNode.cs" />
+    <Compile Include="AST\IfNode.cs" />
+    <Compile Include="AST\IntNumNode.cs" />
+    <Compile Include="AST\LabeledNode.cs" />
+    <Compile Include="AST\Node.cs" />
+    <Compile Include="AST\OperationType.cs" />
+    <Compile Include="AST\PrintNode.cs" />
+    <Compile Include="AST\EmptyNode.cs" />
+    <Compile Include="AST\StatementNode.cs" />
+    <Compile Include="AST\UnaryNode.cs" />
     <Compile Include="ParserHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShiftReduceParserCode.cs" />

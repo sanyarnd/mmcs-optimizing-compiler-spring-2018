@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compiler.Parser", "Compiler
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compiler.ThreeAddrCode", "Compiler.ThreeAddrCode\Compiler.ThreeAddrCode.csproj", "{DB2C1BC7-72B2-429F-9AA1-F364E11DE437}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compiler.Optimizations", "Compiler.Optimizations\Compiler.Optimizations.csproj", "{59559291-27B9-4124-8F46-50DA03ED3E44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compiler.ThreeAddrCode.Tests", "Compiler.ThreeAddrCode.Tests\Compiler.ThreeAddrCode.Tests.csproj", "{07E1468B-F71F-4848-BF68-C05CF4E875EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,10 @@ Global
 		{DB2C1BC7-72B2-429F-9AA1-F364E11DE437}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB2C1BC7-72B2-429F-9AA1-F364E11DE437}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB2C1BC7-72B2-429F-9AA1-F364E11DE437}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59559291-27B9-4124-8F46-50DA03ED3E44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59559291-27B9-4124-8F46-50DA03ED3E44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59559291-27B9-4124-8F46-50DA03ED3E44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59559291-27B9-4124-8F46-50DA03ED3E44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

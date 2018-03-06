@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compiler.Optimizations", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compiler.ThreeAddrCode.Tests", "Compiler.ThreeAddrCode.Tests\Compiler.ThreeAddrCode.Tests.csproj", "{07E1468B-F71F-4848-BF68-C05CF4E875EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compiler.Optimizations.Tests", "Compiler.Optimizations.Tests\Compiler.Optimizations.Tests.csproj", "{B13FFAAA-B6DB-407F-B96C-5A42005CFBE9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,14 @@ Global
 		{59559291-27B9-4124-8F46-50DA03ED3E44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59559291-27B9-4124-8F46-50DA03ED3E44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59559291-27B9-4124-8F46-50DA03ED3E44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07E1468B-F71F-4848-BF68-C05CF4E875EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07E1468B-F71F-4848-BF68-C05CF4E875EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07E1468B-F71F-4848-BF68-C05CF4E875EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07E1468B-F71F-4848-BF68-C05CF4E875EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B13FFAAA-B6DB-407F-B96C-5A42005CFBE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B13FFAAA-B6DB-407F-B96C-5A42005CFBE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B13FFAAA-B6DB-407F-B96C-5A42005CFBE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B13FFAAA-B6DB-407F-B96C-5A42005CFBE9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

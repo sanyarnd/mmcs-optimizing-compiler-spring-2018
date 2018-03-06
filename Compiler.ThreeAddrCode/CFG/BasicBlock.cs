@@ -20,14 +20,14 @@ namespace Compiler.ThreeAddrCode.CFG
         /// </summary>
         public IEnumerable<BasicBlock> Children => _children.ToList();
 
-        private readonly List<BasicBlock> _children;
+        private readonly List<BasicBlock> _children = new List<BasicBlock>();
 
         /// <summary>
         ///     Родители базового блока
         /// </summary>
         public IEnumerable<BasicBlock> Parents => _parents.ToList();
 
-        private readonly List<BasicBlock> _parents;
+        private readonly List<BasicBlock> _parents = new List<BasicBlock>();
 
         /// <summary>
         ///     Список узлов программы в трехадресной форме, связанных с блоком

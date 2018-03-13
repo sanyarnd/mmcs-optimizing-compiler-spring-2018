@@ -49,6 +49,8 @@
     <Compile Include="DeclarationTest.cs" />
     <Compile Include="IOptimization.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SubexpressionOptimization.cs" />
+    <Compile Include="SubexprOptimization\ExpressionNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Compiler.Parser\Compiler.Parser.csproj">

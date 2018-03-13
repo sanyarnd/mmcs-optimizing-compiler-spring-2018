@@ -55,7 +55,7 @@ namespace Compiler.Optimizations
             }
 
             // 3. Если дерево нашлось, запускаем поиск в ширину от корня, чтобы найти самое актуальное вхождение переменной в дереве
-            var lastExpression = BFS(root);
+            var lastExpression = BFS(root, expr);
 
             // 4. Возвращаем найденное вхождение
             initializedNewNode = false;
@@ -69,9 +69,25 @@ namespace Compiler.Optimizations
 
         // Поиск в ширину внутри дерева выражений
         // Вернет null, если переменная не была найдена в указанном дереве
-        private ExpressionNode BFS(ExpressionNode root)
+        private ExpressionNode BFS(ExpressionNode root, Expr expr)
         {
+            Queue<ExpressionNode> q = new Queue<ExpressionNode>();
+            q.Enqueue(root);
 
+            while (q.Count != 0)
+            {
+                ExpressionNode u = q.Peek();
+                q.Dequeue();
+                if (u.LeftNode.AssigneeList.Contains(expr)) {
+                    return u.LeftNode;
+                }
+                q.Enqueue(u.LeftNode);
+                if (u.RightNode.AssigneeList.Contains(expr))
+                {
+                    return u.RightNode;
+                }
+                q.Enqueue(u.RightNode);
+            }
             return null;
         }
     }

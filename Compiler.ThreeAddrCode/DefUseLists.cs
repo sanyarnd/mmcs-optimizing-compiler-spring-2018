@@ -76,13 +76,13 @@ namespace Compiler.ThreeAddrCode
                 if (command is Assign)
                 {
                     var comA = command as Assign;
-                    
-                    // Добавление нового Def узла
-                    DList.Add(new DNode(comA.Result.Id, comA.Label));
 
                     // Добавление Use узлов
                     AddUseVariable(comA.Left, comA.Label);
                     AddUseVariable(comA.Right, comA.Label);
+
+                    // Добавление нового Def узла
+                    DList.Add(new DNode(comA.Result.Id, comA.Label));
                 }
                 else if (command is IfGoto)
                 {

@@ -14,7 +14,7 @@ namespace Compiler.ThreeAddrCode.Nodes
 
         public override string ToString()
         {
-            return string.Format("{0} : goto {1}", Label, TargetLabel);
+            return $"{Label} : goto {TargetLabel}";
         }
     }
 }

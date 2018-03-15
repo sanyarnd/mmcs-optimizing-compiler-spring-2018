@@ -30,8 +30,8 @@ namespace Compiler.ThreeAddrCode.Nodes
 
         public override bool Equals(object obj)
         {
-            if (obj is Node)
-                return Label == (obj as Node).Label;
+            if (obj is Node node)
+                return Label == node.Label;
             return false;
         }
 

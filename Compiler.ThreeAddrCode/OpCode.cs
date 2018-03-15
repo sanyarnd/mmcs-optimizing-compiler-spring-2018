@@ -1,5 +1,8 @@
 ﻿namespace Compiler.ThreeAddrCode
 {
+    /// <summary>
+    ///     Перечисление возможных операций в трехадресном коде
+    /// </summary>
     public enum OpCode
     {
         Plus,

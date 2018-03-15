@@ -1,5 +1,4 @@
-﻿using System;
-using Compiler.Parser.AST;
+﻿using Compiler.Parser.AST;
 
 namespace Compiler.Parser.Visitors
 {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Compiler.Parser.AST;
+﻿using Compiler.Parser.AST;
 
 namespace Compiler.Parser.Visitors
 {

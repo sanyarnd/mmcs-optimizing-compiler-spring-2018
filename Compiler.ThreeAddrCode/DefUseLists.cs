@@ -32,6 +32,10 @@ namespace Compiler.ThreeAddrCode
         /// Use цепочка
         /// </summary>
         public UList UList { get; }
+        /// <summary>
+        /// Use переменные, которые не определены в блоке
+        /// </summary>
+        public List<UVar> UListNotValid { get; }
 
         /// <summary>
         /// Конструктор для класса, генерирующий
@@ -43,6 +47,7 @@ namespace Compiler.ThreeAddrCode
             this.Block = block;
             DList = new DList();
             UList = new UList();
+            UListNotValid = new List<UVar>();
             BuildDULists();
         }
 
@@ -120,7 +125,7 @@ namespace Compiler.ThreeAddrCode
                 if (index != -1)
                     DList[index].AddUseVariables(UVar);
                 else
-                    throw new Exception("Использование переменной до ее определения");
+                    UListNotValid.Add(UVar);
             }
         }
 
@@ -276,27 +281,57 @@ namespace Compiler.ThreeAddrCode
     }
 
     /// <summary>
-    /// DefUse переменная 
+    /// Def Use переменная без идентификатора строки
     /// </summary>
-	class DUVar
+    class DUVarBase
     {
         /// <summary>
         /// Имя переменной
         /// </summary>
 		public Guid Name { get; }
+
+        /// <summary>
+        /// Конструктор DefUse переменной
+        /// </summary>
+        /// <param name="Name">Имя переменной</param>
+        public DUVarBase(Guid Name)
+        {
+            this.Name = Name;
+        }
+
+        public override string ToString()
+        {
+            return "Name = " + Name.ToString();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Name.Equals((obj as DUVarBase).Name);
+        }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
+        }
+    }
+
+    /// <summary>
+    /// DefUse переменная 
+    /// </summary>
+	class DUVar : DUVarBase
+    {
         /// <summary>
         /// Идентификатор строки в блоке
         /// </summary>
-		public Guid StringId { get; }
+		public virtual Guid StringId { get; }
 
         /// <summary>
         /// Конструктор DefUse переменной
         /// </summary>
         /// <param name="Name">Имя переменной</param>
         /// <param name="StringId">Идентификатор строки в блоке</param>
-        public DUVar(Guid Name, Guid StringId)
+        public DUVar(Guid Name, Guid StringId) : base(Name)
         {
-            this.Name = Name;
             this.StringId = StringId;
         }
 
@@ -321,19 +356,19 @@ namespace Compiler.ThreeAddrCode
 
         public override string ToString()
         {
-            return "Name = " + Name.ToString() + "; StringId = " 
+            return base.ToString() + "; StringId = " 
                 + StringId.ToString();
         }
 
         public override bool Equals(object obj)
         {
-            return Name.Equals((obj as DUVar).Name) &&
+            return base.Equals(obj) &&
                 StringId.Equals((obj as DUVar).StringId);
         }
 
         public override int GetHashCode()
         {
-            return Name.GetHashCode() + StringId.GetHashCode();
+            return base.GetHashCode() + StringId.GetHashCode();
         }
     }
 

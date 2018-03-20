@@ -323,7 +323,7 @@ namespace Compiler.ThreeAddrCode
         /// <summary>
         /// Идентификатор строки в блоке
         /// </summary>
-		public virtual Guid StringId { get; }
+		public Guid StringId { get; }
 
         /// <summary>
         /// Конструктор DefUse переменной

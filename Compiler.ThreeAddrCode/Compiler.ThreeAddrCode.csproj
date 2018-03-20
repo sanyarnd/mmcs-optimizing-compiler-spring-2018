@@ -47,9 +47,13 @@
     <Compile Include="CFG\BasicBlock.cs" />
     <Compile Include="CFG\CFGNode.cs" />
     <Compile Include="CFG\ControlFlowGraph.cs" />
+    <Compile Include="DefUse\DefUseLists.cs" />
+    <Compile Include="DefUse\DefUseSets.cs" />
     <Compile Include="Expressions\Expr.cs" />
     <Compile Include="Expressions\IntConst.cs" />
     <Compile Include="Expressions\Var.cs" />
+    <Compile Include="DefUse\IterativeAlgorithmAV.cs" />
+    <Compile Include="DefUse\LiveAndDeadVariables.cs" />
     <Compile Include="OpCode.cs" />
     <Compile Include="OpCodeExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -9,11 +9,24 @@ namespace Compiler.Optimizations.SubexprOptimization
     class ExpressionNode
     {
         // Могут быть null для листовых вершин
+
+        /// <summary>
+        ///     Левый операнд
+        /// </summary>
         public ExpressionNode LeftNode { get; set; }
+        /// <summary>
+        ///     Правый операнд
+        /// </summary>
         public ExpressionNode RightNode { get; set; }
+        /// <summary>
+        ///     Производимая операция
+        /// </summary>
         public OpCode OpCode { get; set; }
 
         // Должен содержать хотя бы один элемент
+        /// <summary>
+        ///     Хранилище операндов
+        /// </summary>
         public List<Expr> AssigneeList { get; }
         
 

@@ -1,0 +1,4 @@
+language: csharp
+solution: Compiler.Parser.sln
+mono:
+  - latest

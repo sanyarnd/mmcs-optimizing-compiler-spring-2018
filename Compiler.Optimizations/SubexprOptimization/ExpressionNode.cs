@@ -35,5 +35,12 @@ namespace Compiler.Optimizations.SubexprOptimization
             AssigneeList = new List<Expr>();
             AssigneeList.Add(expression);
         }
+
+        public bool IsList()
+        {
+            if (RightNode == null && LeftNode == null)
+                return true;
+            return false;
+        }
     }
 }

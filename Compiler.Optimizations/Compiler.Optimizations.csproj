@@ -51,6 +51,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SubexpressionOptimization.cs" />
     <Compile Include="SubexprOptimization\ExpressionNode.cs" />
+    <Compile Include="SubexprOptimization\ExpressionTree.cs" />
+    <Compile Include="SubexprTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Compiler.Parser\Compiler.Parser.csproj">

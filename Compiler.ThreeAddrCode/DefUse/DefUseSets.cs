@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Compiler.ThreeAddrCode.CFG;
 using Compiler.ThreeAddrCode.Nodes;
-using Compiler.ThreeAddrCode.Expressions;
 
 namespace Compiler.ThreeAddrCode
 {
@@ -14,6 +13,10 @@ namespace Compiler.ThreeAddrCode
     // Use множество
     using USet = HashSet<DUVarBase>;
 
+    /// <summary>
+    /// Класс для построения Def и Use множеств
+    /// в пределах одного блока
+    /// </summary>
     class DUSets
     {
         /// <summary>

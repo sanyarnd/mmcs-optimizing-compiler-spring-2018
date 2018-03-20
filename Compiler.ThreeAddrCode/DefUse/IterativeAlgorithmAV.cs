@@ -99,14 +99,31 @@ namespace Compiler.ThreeAddrCode
             while (it.MoveNext());
         }
 
-        /// <summary>
-        /// Базовый итеративный алгоритм
-        /// </summary>
-        private void Algorithm()
+		private bool EqualIN(Dictionary<int, ActiveVar> obj1, Dictionary<int, ActiveVar> obj2)
+		{
+			return EqualINHelp(obj1, obj2) && EqualINHelp(obj2, obj1);
+		}
+		private bool EqualINHelp(Dictionary<int, ActiveVar> obj1, Dictionary<int, ActiveVar> obj2)
+		{
+			var result = true;
+
+			foreach (var o in obj1)
+				result &= obj2.Contains(o);
+
+			return result;
+		}
+
+		/// <summary>
+		/// Базовый итеративный алгоритм
+		/// </summary>
+		private void Algorithm()
         {
-            while (true) // условие выхода
+			var oldSetIN = new Dictionary<int, ActiveVar>();
+
+			while (!EqualIN(oldSetIN, INb))
             {
-                var it = CFG.CFGNodes.GetEnumerator();
+				oldSetIN = new Dictionary<int, ActiveVar>(INb);
+				var it = CFG.CFGNodes.GetEnumerator();
 
                 do
                 {
@@ -116,10 +133,39 @@ namespace Compiler.ThreeAddrCode
                     if (B.Children.Count == 0)
                         continue;
 
+					var idB = B.Block.BlockId;
 
-                }
+					// Первое уравнение
+					foreach (var child in B.Children)
+					{
+						var idCh = child.Block.BlockId;
+						OUTb[idB].Union(INb[idCh]);
+					}
+
+					var subUnion = new ActiveVar(OUTb[idB]);
+					subUnion.ExceptWith(DefSet[idB]);
+
+					// Второе уравнение
+					INb[idB].Union(UseSet[idB]).Union(subUnion);
+				}
                 while (it.MoveNext());
             }
-        }
+
+			var _it = CFG.CFGNodes.GetEnumerator();
+
+			do
+			{
+				var B = _it.Current;
+				var idB = B.Block.BlockId;
+
+				if (B.Children.Count == 0)
+				{
+					IN.Union(INb[idB]);
+					OUT.Union(OUTb[idB]);
+				}
+
+			}
+			while (_it.MoveNext());
+		}
     }
 }

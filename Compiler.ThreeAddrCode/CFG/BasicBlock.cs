@@ -40,7 +40,12 @@ namespace Compiler.ThreeAddrCode.CFG
         ///     Конструктор базового блока
         /// </summary>
         /// <param name="codeList">список узлов программы в трехадресной форме</param>
-        public BasicBlock(List<Node> codeList)
+        /// <param name="num">номер блока</param>
+        /// <remarks>
+        ///     важно! при создании упорядоченных коллекций блоков, чтобы номера блоков
+        ///     были различны, т.к. на номер блока опирается компаратор
+        /// </remarks>
+        public BasicBlock(List<Node> codeList, int num)
         {
             BlockId = Guid.NewGuid();
             _codeList = codeList;

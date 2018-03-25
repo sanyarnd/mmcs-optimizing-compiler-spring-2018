@@ -16,12 +16,12 @@ namespace Compiler
     {
         public static void Main()
         {
-            //TaCodeTest();
-            //ASTTest();
+            TaCodeTest();
+            ASTTest();
 
             //Test Moving declarations
-            //var Test = new DeclarationTest();
-            //Test.DeclarationOptimizationTest();
+            var Test = new DeclarationTest();
+            Test.DeclarationOptimizationTest();
 
             //Test subexpression tree
             var sTest = new SubexprTest();

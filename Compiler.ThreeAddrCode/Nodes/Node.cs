@@ -30,10 +30,9 @@ namespace Compiler.ThreeAddrCode.Nodes
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Label.Equals(((Node) obj).Label);
+            if (obj is Node node)
+                return Label == node.Label;
+            return false;
         }
 
         public override int GetHashCode()

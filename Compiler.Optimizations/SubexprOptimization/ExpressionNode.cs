@@ -38,7 +38,7 @@ namespace Compiler.Optimizations.SubexprOptimization
 
         public bool IsList()
         {
-            if (RightNode == null && LeftNode == null)
+            if ((RightNode == null) && (LeftNode == null))
                 return true;
             return false;
         }

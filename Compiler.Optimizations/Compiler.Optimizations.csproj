@@ -44,10 +44,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlgebraicOptimization.cs" />
+    <Compile Include="ConstantFolding.cs" />
+    <Compile Include="ConstantPropagation.cs" />
     <Compile Include="CopyPropagation.cs" />
     <Compile Include="DeclarationOptimization.cs" />
     <Compile Include="DeclarationTest.cs" />
     <Compile Include="IOptimization.cs" />
+    <Compile Include="AllOptimizations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SubexpressionOptimization.cs" />
     <Compile Include="SubexprOptimization\ExpressionNode.cs" />

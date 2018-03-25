@@ -84,5 +84,5 @@ namespace Compiler.ThreeAddrCode.Tests
             
             // TODO Assert'ы
         }
-    }
+	}
 }

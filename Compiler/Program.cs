@@ -24,8 +24,7 @@ namespace Compiler
             Test.DeclarationOptimizationTest();
 
             //Test subexpression tree
-            var sTest = new SubexprTest();
-            sTest.SubexpressionOptimizationTest();
+            SubexprTest.SubexpressionOptimizationTest();
         }
 
         private static void ASTTest()
@@ -185,7 +184,7 @@ namespace Compiler
 			{
 				Left = null,
 				Operation = OpCode.Copy,
-				Right = new IntConst(5),
+				Right = new Var(),
 				Result = new Var()
 			};
 			var assgn2 = new Assign()
@@ -241,11 +240,136 @@ namespace Compiler
 			*/
 
 			Console.WriteLine($"Testing Copy Propagation Optimisation.\n Three Adress Code:\n {taCodeCopyProp}");
-			var optimization = new CopyPropagation();
-			optimization.Optimize(taCodeCopyProp.CodeList.ToList(), out var appl);
-			Console.WriteLine($"Optimisation Copy Propagation applied:\n");
-			Console.WriteLine($"TA Code\n: {taCodeCopyProp}");
+			var optCopyProp = new CopyPropagation();
+			optCopyProp.Optimize(taCodeCopyProp.CodeList.ToList(), out var applCopProp);
+			Console.WriteLine($"Optimisation Copy Propagation was{(applCopProp ? "" : "n't")} applied");
+			Console.WriteLine($"Three Adress Code Code\n: {taCodeCopyProp}");
+			Console.WriteLine("-----------------------------------------");
+
+			//Constant Folding Test
+			var taCodeConstantFolding = new TACode();
+			var assign1 = new Assign()
+			{
+				Left = null,
+				Operation = OpCode.Copy,
+				Right = new Var(),
+				Result = new Var()
+			};
+			var assign2 = new Assign()
+			{
+				Left = new IntConst(20),
+				Operation = OpCode.Mul,
+				Right = new IntConst(3),
+				Result = new Var()
+			};
+			var assign3 = new Assign()
+			{
+				Left = new IntConst(10),
+				Operation = OpCode.Plus,
+				Right = new IntConst(1),
+				Result = new Var()
+			};
+			var assign4 = new Assign()
+			{
+				Left = new IntConst(100),
+				Operation = OpCode.Div,
+				Right = new IntConst(50),
+				Result = new Var()
+			};
+			var assign5 = new Assign()
+			{
+				Left = new IntConst(30),
+				Operation = OpCode.Minus,
+				Right = new IntConst(20),
+				Result = assign1.Result
+			};
+			var assign6 = new Assign()
+			{
+				Left = assign2.Result,
+				Operation = OpCode.Plus,
+				Right = assign5.Result,
+				Result = new Var()
+			};
+
+			taCodeConstantFolding.AddNode(assign1);
+			taCodeConstantFolding.AddNode(assign2);
+			taCodeConstantFolding.AddNode(assign3);
+			taCodeConstantFolding.AddNode(assign4);
+			taCodeConstantFolding.AddNode(assign5);
+			taCodeConstantFolding.AddNode(assign6);
+
+			/*
+			  a = b
+			  c = 20 * 3    -----> c = 60
+			  d = 10 + 1    -----> d = 11
+			  e = 100 / 50  -----> e = 2
+			  a = 30 - 20   -----> a = 10
+			  k = c + a
+			*/
+
+			Console.WriteLine($"Testing Constant Folding Optimisation.\n Three Adress Code:\n {taCodeConstantFolding}");
+			var optConstFold = new ConstantFolding();
+			optConstFold.Optimize(taCodeConstantFolding.CodeList.ToList(), out var applConstFold);
+			Console.WriteLine($"Optimisation Constant Folding was{(applConstFold ? "" : "n't")} applied");
+			Console.WriteLine($"Three Adress Code Code\n: {taCodeConstantFolding}");
+			Console.WriteLine("-----------------------------------------");
+
+			//All Optimizations Together Test
+			var taCodeAllOptimizations = new TACode();
+			var a1 = new Assign()
+			{
+				Left = null,
+				Operation = OpCode.Copy,
+				Right = new Var(),
+				Result = new Var()
+			};
+			var a2 = new Assign()
+			{
+				Left = a1.Right,
+				Operation = OpCode.Minus,
+				Right = a1.Result,
+				Result = new Var()
+			};
+			var a3 = new Assign()
+			{
+				Left = null,
+				Operation = OpCode.Copy,
+				Right = new IntConst(20),
+				Result = new Var()
+			};
+			var a4 = new Assign()
+			{
+				Left = new IntConst(20),
+				Operation = OpCode.Mul,
+				Right = new IntConst(3),
+				Result = new Var()
+			};
+			var a5 = new Assign()
+			{
+				Left = new IntConst(10),
+				Operation = OpCode.Plus,
+				Right = a3.Result,
+				Result = new Var()
+			};
+			taCodeAllOptimizations.AddNode(a1);
+			taCodeAllOptimizations.AddNode(a2);
+			taCodeAllOptimizations.AddNode(a3);
+			taCodeAllOptimizations.AddNode(a4);
+			taCodeAllOptimizations.AddNode(a5);
+
+			/*
+			  a = b
+			  c = b - a   -----> c = 0
+			  n = 20
+			  c = 20 * 3  -----> c = 60
+			  d = 10 + n  -----> d = 30
+			*/
+
+			Console.WriteLine($"Testing All Optimizations Together.\n Three Adress Code:\n {taCodeAllOptimizations}");
+			var allOptimizations = new AllOptimizations();
+			allOptimizations.ApplyAllOptimizations(taCodeAllOptimizations.CodeList.ToList());
+			Console.WriteLine($"Three Adress Code Code\n: {taCodeAllOptimizations}");
 			Console.WriteLine("-----------------------------------------");
 		}
-    }
+	}
 }

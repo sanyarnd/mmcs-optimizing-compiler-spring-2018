@@ -5,14 +5,14 @@ using Compiler.ThreeAddrCode.Expressions;
 
 namespace Compiler.Optimizations
 {
-	public class CopyPropagation : IOptimization
+	public class ConstantPropagation : IOptimization
 	{
 		public List<Node> Optimize(List<Node> nodes, out bool applied)
 		{
 			var app = false;
 			for (int i = 0; i < nodes.Count; i++)
 			{
-				if (nodes[i] is Assign node && node.Operation == OpCode.Copy && !(node.Right is IntConst))
+				if (nodes[i] is Assign node && node.Operation == OpCode.Copy && node.Right is IntConst)
 				{
 					for (int j = i + 1; j < nodes.Count; j++)
 					{
@@ -44,4 +44,3 @@ namespace Compiler.Optimizations
 		}
 	}
 }
-

@@ -46,26 +46,36 @@ namespace Compiler.Optimizations
                 Right = ass2.Right,
                 Result = ass2.Right as Var
             };
-            /*
-            var ass7 = new Assign
+            var ass5 = new Assign
             {
                 Operation = OpCode.Mul,
-                Left = ass3.Result,
-                Right = new IntConst(3),
+                Left = new IntConst(2),
+                Right = new Var(),
                 Result = new Var()
-            };*/
+            };
+            var ass6 = new Assign
+            {
+                Left = ass5.Result,
+                Operation = OpCode.Minus,
+                Right = new IntConst(1),
+                Result = ass5.Result as Var
+            };
 
             /*
                 a = b + c
                 b = a - d
                 c = b + c
                 d = a - d  -----> d = b
+                e = 2 * n
+                e = e - 1
             */
 
             taCode.AddNode(ass1);
             taCode.AddNode(ass2);
             taCode.AddNode(ass3);
             taCode.AddNode(ass4);
+            taCode.AddNode(ass5);
+            taCode.AddNode(ass6);
 
             Console.WriteLine("SUBEXPRESSION TEST");
             Console.WriteLine($"TA Code:\n{taCode.ToString()}");

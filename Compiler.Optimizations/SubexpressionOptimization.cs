@@ -27,7 +27,7 @@ namespace Compiler.Optimizations
                 currentTree = null;
                 var leftNode = FindOrInitializeExpressionNode(node.Left, out ExpressionNode leftParentNode);
                 var rightNode = FindOrInitializeExpressionNode(node.Right, out ExpressionNode rightParentNode);
-                if (leftParentNode == null || rightParentNode == null)
+                if (leftParentNode == null && rightParentNode == null)
                 {
                     // создать новый ExpressionNode:
                     var resultNode = new ExpressionNode(node.Result);
@@ -76,9 +76,11 @@ namespace Compiler.Optimizations
 
         private ExpressionNode SeekRootTree(Expr expr)
         {
-            foreach (var expTree in exprForest) 
-                if (expTree.AllAssignees.Contains(expr))
+            foreach (var expTree in exprForest)
+                if (expTree.AllAssignees.Contains(expr)) {
+                    currentTree = expTree;
                     return expTree.Nodes.Last();
+                }
             return null;
         }
 
@@ -125,22 +127,24 @@ namespace Compiler.Optimizations
             List<Node> nodes = new List<Node>();
             foreach (var trees in exprForest)
                 foreach (var expNode in trees.Nodes) {
-                    Assign node = new Assign();
-                    node.Result = expNode.AssigneeList.First() as Var;
-                    node.Left = expNode.LeftNode.AssigneeList.First();
-                    node.Right = expNode.RightNode.AssigneeList.First();
-                    node.Operation = expNode.OpCode;
-                    nodes.Add(node);
-                    if (expNode.AssigneeList.Count > 1)
-                    { 
-                        expNode.AssigneeList.RemoveAt(0);
-                        foreach (var optExpr in expNode.AssigneeList)
+                    if (expNode.LeftNode != null && expNode.RightNode != null) {
+                        Assign node = new Assign();
+                        node.Result = expNode.AssigneeList.First() as Var;
+                        node.Left = expNode.LeftNode.AssigneeList.First();
+                        node.Right = expNode.RightNode.AssigneeList.First();
+                        node.Operation = expNode.OpCode;
+                        nodes.Add(node);
+                        if (expNode.AssigneeList.Count > 1)
                         {
-                            Assign extraNode = new Assign();
-                            extraNode.Result = optExpr as Var;
-                            extraNode.Right = node.Result;
-                            extraNode.Operation = OpCode.Copy;
-                            nodes.Add(extraNode);
+                            expNode.AssigneeList.RemoveAt(0);
+                            foreach (var optExpr in expNode.AssigneeList)
+                            {
+                                Assign extraNode = new Assign();
+                                extraNode.Result = optExpr as Var;
+                                extraNode.Right = node.Result;
+                                extraNode.Operation = OpCode.Copy;
+                                nodes.Add(extraNode);
+                            }
                         }
                     }
                 }

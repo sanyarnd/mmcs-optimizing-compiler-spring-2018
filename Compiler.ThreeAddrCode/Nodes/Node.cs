@@ -8,11 +8,6 @@ namespace Compiler.ThreeAddrCode.Nodes
     /// </summary>
     public class Node
     {
-        public Node()
-        {
-            Label = Guid.NewGuid();
-        }
-
         /// <summary>
         ///     Уникальная метка-идентификатор
         /// </summary>
@@ -27,6 +22,11 @@ namespace Compiler.ThreeAddrCode.Nodes
         ///     Флаг наличия перехода по goto на эту строку кода
         /// </summary>
         public bool IsLabeled { get; set; }
+        
+        public Node()
+        {
+            Label = Guid.NewGuid();
+        }
 
         public override bool Equals(object obj)
         {
@@ -38,6 +38,16 @@ namespace Compiler.ThreeAddrCode.Nodes
         public override int GetHashCode()
         {
             return Label.GetHashCode();
+        }
+
+        public static bool operator ==(Node left, Node right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(Node left, Node right)
+        {
+            return !Equals(left, right);
         }
     }
 }

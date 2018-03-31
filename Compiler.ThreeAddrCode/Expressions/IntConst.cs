@@ -1,4 +1,5 @@
-﻿namespace Compiler.ThreeAddrCode.Expressions
+﻿using System;
+namespace Compiler.ThreeAddrCode.Expressions
 {
     /// <summary>
     ///     Операнд-константа (числа типа int)
@@ -7,7 +8,7 @@
     {
         public int Num { get; set; }
 
-        public IntConst(int num)
+		public IntConst(int num)
         {
             Num = num;
         }
@@ -29,8 +30,25 @@
         {
             return Num;
         }
-
-        public static bool operator ==(IntConst left, IntConst right)
+		public static IntConst operator +(IntConst left, IntConst right)
+		{
+			return new IntConst(left.Num + right.Num);
+		}
+		public static IntConst operator -(IntConst left, IntConst right)
+		{
+			return new IntConst(left.Num - right.Num);
+		}
+		public static IntConst operator *(IntConst left, IntConst right)
+		{
+			return new IntConst(left.Num * right.Num);
+		}
+		public static IntConst operator /(IntConst left, IntConst right)
+		{
+			if (right.Num == 0)
+				throw new DivideByZeroException();
+			return new IntConst(left.Num / right.Num);
+		}
+		public static bool operator ==(IntConst left, IntConst right)
         {
             return Equals(left, right);
         }

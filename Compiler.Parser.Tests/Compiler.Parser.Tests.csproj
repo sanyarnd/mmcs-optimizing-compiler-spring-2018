@@ -46,6 +46,10 @@
       <Project>{1A72E236-90D3-4729-9571-FDD1711E4CA7}</Project>
       <Name>Compiler.Parser</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Compiler\Compiler.csproj">
+      <Project>{191C2752-3F31-4235-AD26-B7E1287293E8}</Project>
+      <Name>Compiler</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

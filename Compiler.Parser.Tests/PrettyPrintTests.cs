@@ -21,34 +21,17 @@ namespace Compiler.Parser.Tests
         {
             var scanner = new Scanner();
 
-            // a = 3;
             scanner.SetSource("a = 3;", 0);
-            Assert.True(this.ParseScanner(scanner) == "  a = 3;\n");
+            Assert.True(ParseScanner(scanner) == "  a = 3;\n");
 
-            // while(0)
-            //   b = 2;
             scanner.SetSource("while (0) b = 2;", 0);
-            Assert.True(this.ParseScanner(scanner) == "  while(0)\n    b = 2;\n");
+            Assert.True(ParseScanner(scanner) == "  while(0)\n    b = 2;\n");
 
-            // if (2)
-            // {
-            //   a = 1;
-            // }
-            // else
-            //   a = 2;
             scanner.SetSource("if (2){a = 1;} else a = 2;", 0);
-            Assert.True(this.ParseScanner(scanner) == "  if (2)\n  {\n    a = 1;\n  }\n  else\n    a = 2;\n");
+            Assert.True(ParseScanner(scanner) == "  if (2)\n  {\n    a = 1;\n  }\n  else\n    a = 2;\n");
 
-            // for (i = 0, 10)
-            // {
-            //   print(1 >= 3);
-            //   if (1 + 3)
-            //   {
-            //     a = 1;
-            //   }
-            // }
             scanner.SetSource("for (i = 0, 10){print(1 >= 3);if (1 + 3){a=1;}}", 0);
-            Assert.True(this.ParseScanner(scanner) == "  for(i = 0,10,1)\n  {\n    print((1 >= 3));\n    if ((1 + 3))\n    {\n      a = 1;\n    }\n  }\n");
+            Assert.True(ParseScanner(scanner) == "  for(i = 0,10,1)\n  {\n    print((1 >= 3));\n    if ((1 + 3))\n    {\n      a = 1;\n    }\n  }\n");
         }
 
         /// <summary>
@@ -58,7 +41,7 @@ namespace Compiler.Parser.Tests
         /// <returns>
         /// Возвращает текст программы
         /// </returns>
-        private string ParseScanner(Scanner scanner)
+        private static string ParseScanner(Scanner scanner)
         {
             var parser = new Parser(scanner);
             parser.Parse();

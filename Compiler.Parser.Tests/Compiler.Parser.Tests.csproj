@@ -33,9 +33,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PrettyPrintTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Compiler.Parser\Compiler.Parser.csproj">
+      <Project>{1A72E236-90D3-4729-9571-FDD1711E4CA7}</Project>
+      <Name>Compiler.Parser</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -69,14 +69,14 @@ namespace Compiler.ThreeAddrCode
             foreach (var dVar in dList)
                 // Мертвая переменная (нигде не используется)
                 if (dVar.UseVariables.Count == 0)
-                    DeadVars.Add(dVar.DefVariable.Clone());
+                    DeadVars.Add(dVar.DefVariable);
                 // Живые переменные
                 else
                 {
-                    LiveVars.Add(dVar.DefVariable.Clone());
+                    LiveVars.Add(dVar.DefVariable);
 
                     foreach (var uVar in dVar.UseVariables)
-                        LiveVars.Add(uVar.Clone());
+                        LiveVars.Add(uVar);
                 }                
         }
 

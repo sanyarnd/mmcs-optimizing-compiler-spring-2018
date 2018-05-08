@@ -8,7 +8,7 @@ namespace Compiler.ThreeAddrCode.Expressions
     /// </summary>
     public class Var : Expr
     {        
-        public PrettyGuid Id { get; set; }
+        public Guid Id { get; set; }
         
         public Var() : this(Guid.NewGuid())
         {

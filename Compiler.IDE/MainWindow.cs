@@ -1,4 +1,5 @@
 ﻿using Compiler.IDE.Handlers;
+using Compiler.ILcodeGenerator;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -19,12 +20,15 @@ namespace Compiler.IDE
         private readonly CfgHandler _cfgHandler = new CfgHandler();
         private readonly AstHandler _astHandler = new AstHandler();
 
+        private readonly IlCodeHandler _ilCodeHandler = new IlCodeHandler();
+        private TAcode2ILcodeTranslator program = null;
+
         public MainWindow()
         {
             InitializeComponent();
-            
-            InitCommonListeners();
+
             InitOutputListeners();
+            InitCommonListeners();
             InitInputTabListeners();
             InitCfgTabListeners();
             InitAstTabListeners();
@@ -39,18 +43,6 @@ namespace Compiler.IDE
             // compile button
             compileButton.Click += (o, e) => ClearOutput();
             compileButton.Click += (o, e) => _parseHandler.Parse(inputTextBox.Text);
-
-            // successful compilation
-            _parseHandler.ParsingCompleted += (o, e) =>
-            {
-                runButton.Enabled = true;
-
-                cfgSaveButton.Enabled = true;
-                cfgScaleBar.Enabled = true;
-
-                astSaveButton.Enabled = true;
-                astTrackBar.Enabled = true;
-            };
 
             // AST
             _parseHandler.ParsingCompleted += (o, e) => _astHandler.GenerateAstImage(e);
@@ -73,10 +65,42 @@ namespace Compiler.IDE
                 CFGPictureBox.Image = _cfgImage;
                 cfgScaleBar.Value = cfgScaleBar.Maximum;
             };
+
+            // IL-code
+            _threeCodeHandler.GenerationCompleted += (o, e) => _ilCodeHandler.GenerateILCode(e);
+            _ilCodeHandler.GenerationCompleted += (o, e) =>
+            {
+                ILCodeTextBox.Text = e.PrintCommands();
+                program = e;
+            };
+
+            runButton.Click += (o, e) =>
+            {
+                ClearOutput();
+                if (program == null)
+                    outTextBox.Text += @"Объект с IL-кодом -- null, запуск невозможен";
+                else
+                    program.RunProgram();
+            };
+
+            // enable UI after all build steps
+            _cfgHandler.GenerationCompleted += (o, e) =>
+            {
+                runButton.Enabled = true;
+
+                cfgSaveButton.Enabled = true;
+                cfgScaleBar.Enabled = true;
+
+                astSaveButton.Enabled = true;
+                astTrackBar.Enabled = true;
+            };
         }
 
         private void InitOutputListeners()
         {
+            // redirect console to textbox
+            Console.SetOut(new TextBoxConsole(outTextBox));
+
             _parseHandler.ParsingErrored += (o, e) => outTextBox.AppendText("Ошибка парсинга программы" + Environment.NewLine);
             _parseHandler.ParsingSyntaxErrored += (o, e) => outTextBox.AppendText($"Синтаксическая ошибка. {e.Message}" + Environment.NewLine);
             _parseHandler.ParsingLexErrored += (o, e) => outTextBox.AppendText($"Лексическая ошибка. {e.Message}" + Environment.NewLine);

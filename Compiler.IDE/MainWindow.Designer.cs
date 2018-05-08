@@ -55,13 +55,13 @@
             this.cfgSaveButton = new System.Windows.Forms.Button();
             this.cfgPanel = new System.Windows.Forms.Panel();
             this.CFGPictureBox = new System.Windows.Forms.PictureBox();
-            this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.ASTPage = new System.Windows.Forms.TabPage();
             this.astPanel = new System.Windows.Forms.Panel();
             this.astTrackBar = new System.Windows.Forms.TrackBar();
             this.astSaveButton = new System.Windows.Forms.Button();
             this.astTabPanel = new System.Windows.Forms.Panel();
             this.ASTPictureBox = new System.Windows.Forms.PictureBox();
+            this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.menuStrip1.SuspendLayout();
             this.mainBox.SuspendLayout();
             this.outBox.SuspendLayout();
@@ -74,15 +74,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.cfgScaleBar)).BeginInit();
             this.cfgPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CFGPictureBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
-            this.splitContainer.Panel1.SuspendLayout();
-            this.splitContainer.Panel2.SuspendLayout();
-            this.splitContainer.SuspendLayout();
             this.ASTPage.SuspendLayout();
             this.astPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.astTrackBar)).BeginInit();
             this.astTabPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ASTPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
+            this.splitContainer.Panel1.SuspendLayout();
+            this.splitContainer.Panel2.SuspendLayout();
+            this.splitContainer.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -219,7 +219,7 @@
             this.outBox.Margin = new System.Windows.Forms.Padding(2);
             this.outBox.Name = "outBox";
             this.outBox.Padding = new System.Windows.Forms.Padding(2);
-            this.outBox.Size = new System.Drawing.Size(380, 63);
+            this.outBox.Size = new System.Drawing.Size(380, 65);
             this.outBox.TabIndex = 2;
             this.outBox.TabStop = false;
             this.outBox.Text = "Output";
@@ -235,7 +235,8 @@
             this.outTextBox.Multiline = true;
             this.outTextBox.Name = "outTextBox";
             this.outTextBox.ReadOnly = true;
-            this.outTextBox.Size = new System.Drawing.Size(376, 44);
+            this.outTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.outTextBox.Size = new System.Drawing.Size(373, 46);
             this.outTextBox.TabIndex = 0;
             // 
             // tabsControl
@@ -393,28 +394,6 @@
             this.CFGPictureBox.TabIndex = 0;
             this.CFGPictureBox.TabStop = false;
             // 
-            // splitContainer
-            // 
-            this.splitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer.Location = new System.Drawing.Point(154, 22);
-            this.splitContainer.Margin = new System.Windows.Forms.Padding(2);
-            this.splitContainer.Name = "splitContainer";
-            this.splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer.Panel1
-            // 
-            this.splitContainer.Panel1.Controls.Add(this.tabsControl);
-            // 
-            // splitContainer.Panel2
-            // 
-            this.splitContainer.Panel2.Controls.Add(this.outBox);
-            this.splitContainer.Size = new System.Drawing.Size(389, 341);
-            this.splitContainer.SplitterDistance = 264;
-            this.splitContainer.SplitterWidth = 2;
-            this.splitContainer.TabIndex = 4;
-            // 
             // ASTPage
             // 
             this.ASTPage.Controls.Add(this.astPanel);
@@ -486,6 +465,28 @@
             this.ASTPictureBox.TabIndex = 0;
             this.ASTPictureBox.TabStop = false;
             // 
+            // splitContainer
+            // 
+            this.splitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer.Location = new System.Drawing.Point(154, 22);
+            this.splitContainer.Margin = new System.Windows.Forms.Padding(2);
+            this.splitContainer.Name = "splitContainer";
+            this.splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer.Panel1
+            // 
+            this.splitContainer.Panel1.Controls.Add(this.tabsControl);
+            // 
+            // splitContainer.Panel2
+            // 
+            this.splitContainer.Panel2.Controls.Add(this.outBox);
+            this.splitContainer.Size = new System.Drawing.Size(389, 341);
+            this.splitContainer.SplitterDistance = 264;
+            this.splitContainer.SplitterWidth = 2;
+            this.splitContainer.TabIndex = 4;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -514,10 +515,6 @@
             this.cfgPanel.ResumeLayout(false);
             this.cfgPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CFGPictureBox)).EndInit();
-            this.splitContainer.Panel1.ResumeLayout(false);
-            this.splitContainer.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
-            this.splitContainer.ResumeLayout(false);
             this.ASTPage.ResumeLayout(false);
             this.astPanel.ResumeLayout(false);
             this.astPanel.PerformLayout();
@@ -525,6 +522,10 @@
             this.astTabPanel.ResumeLayout(false);
             this.astTabPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ASTPictureBox)).EndInit();
+            this.splitContainer.Panel1.ResumeLayout(false);
+            this.splitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
+            this.splitContainer.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

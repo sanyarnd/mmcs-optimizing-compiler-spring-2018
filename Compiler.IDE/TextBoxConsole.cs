@@ -6,23 +6,20 @@ namespace Compiler.IDE
 {
     public class TextBoxConsole : TextWriter
     {
-        TextBox output = null;
+        private readonly TextBox _output;
 
-        public TextBoxConsole(TextBox _output)
+        public TextBoxConsole(TextBox output)
         {
-            output = _output;
+            _output = output;
         }
 
         public override void Write(char value)
         {
             base.Write(value);
-            output.AppendText(value.ToString());
+            _output.AppendText(value.ToString());
         }
 
 
-        public override Encoding Encoding
-        {
-            get { return Encoding.UTF8; }
-        }
+        public override Encoding Encoding => Encoding.UTF8;
     }
 }

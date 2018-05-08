@@ -21,7 +21,7 @@ namespace Compiler.IDE
         private readonly AstHandler _astHandler = new AstHandler();
 
         private readonly IlCodeHandler _ilCodeHandler = new IlCodeHandler();
-        private TAcode2ILcodeTranslator program = null;
+        private TAcode2ILcodeTranslator _ilProgram;
 
         public MainWindow()
         {
@@ -67,20 +67,24 @@ namespace Compiler.IDE
             };
 
             // IL-code
-            _threeCodeHandler.GenerationCompleted += (o, e) => _ilCodeHandler.GenerateILCode(e);
+            _threeCodeHandler.GenerationCompleted += (o, e) => _ilCodeHandler.GenerateIlCode(e);
             _ilCodeHandler.GenerationCompleted += (o, e) =>
             {
                 ILCodeTextBox.Text = e.PrintCommands();
-                program = e;
+                _ilProgram = e;
             };
 
             runButton.Click += (o, e) =>
             {
                 ClearOutput();
-                if (program == null)
+                if (_ilProgram == null)
+                {
                     outTextBox.Text += @"Объект с IL-кодом -- null, запуск невозможен";
+                }
                 else
-                    program.RunProgram();
+                {
+                    _ilProgram.RunProgram();
+                }
             };
 
             // enable UI after all build steps
@@ -152,7 +156,7 @@ namespace Compiler.IDE
         {
             _saveGraphDialog.Filter = @"Images|*.png;*.bmp;*.jpg";
             _saveGraphDialog.RestoreDirectory = true;
-            ImageFormat format = ImageFormat.Png;
+            var format = ImageFormat.Png;
             if (_saveGraphDialog.ShowDialog() != DialogResult.OK)
                 return;
 

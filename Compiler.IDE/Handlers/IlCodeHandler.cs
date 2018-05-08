@@ -8,9 +8,9 @@ namespace Compiler.IDE.Handlers
     {
         public event EventHandler<TAcode2ILcodeTranslator> GenerationCompleted = delegate { };
 
-        internal void GenerateILCode(TACode code)
+        public void GenerateIlCode(TACode code)
         {
-            TAcode2ILcodeTranslator trans = new TAcode2ILcodeTranslator();
+            var trans = new TAcode2ILcodeTranslator();
             trans.Translate(code);
             GenerationCompleted(null, trans);
         }

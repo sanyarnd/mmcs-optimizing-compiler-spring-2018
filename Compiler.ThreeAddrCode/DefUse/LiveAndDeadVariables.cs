@@ -18,7 +18,7 @@ namespace Compiler.ThreeAddrCode
     /// Класс для определения живых и мертвых переменных
     /// и удаления метвого кода
     /// </summary>
-    class LiveAndDeadVariables
+    public class LiveAndDeadVariables
     {
         /// <summary>
         /// Базовый блок

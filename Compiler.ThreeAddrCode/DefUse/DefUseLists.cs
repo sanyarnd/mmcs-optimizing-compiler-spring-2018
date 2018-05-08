@@ -18,7 +18,7 @@ namespace Compiler.ThreeAddrCode
     /// Класс для построения Def и Use цепочек 
     /// в пределах одного блока
     /// </summary>
-	class DULists
+	public class DULists
 	{
         /// <summary>
         /// Базовый блок
@@ -168,7 +168,7 @@ namespace Compiler.ThreeAddrCode
     /// <summary>
     /// Узел Def цепочки
     /// </summary>
-    class DNode
+    public class DNode
 	{
         /// <summary>
         /// Def переменная
@@ -241,7 +241,7 @@ namespace Compiler.ThreeAddrCode
     /// <summary>
     /// Узел Use цепочки
     /// </summary>
-    class UNode
+    public class UNode
     {
         /// <summary>
         /// Use переменная
@@ -283,7 +283,7 @@ namespace Compiler.ThreeAddrCode
     /// <summary>
     /// Def Use переменная без идентификатора строки
     /// </summary>
-    class DUVarBase
+    public class DUVarBase
     {
         /// <summary>
         /// Имя переменной
@@ -333,7 +333,7 @@ namespace Compiler.ThreeAddrCode
     /// <summary>
     /// DefUse переменная 
     /// </summary>
-	class DUVar : DUVarBase
+	public class DUVar : DUVarBase
     {
         /// <summary>
         /// Идентификатор строки в блоке
@@ -390,7 +390,7 @@ namespace Compiler.ThreeAddrCode
     /// <summary>
     /// Def переменная
     /// </summary>
-    class DVar : DUVar
+    public class DVar : DUVar
     {
         /// <summary>
         /// Конструктор Def переменной
@@ -422,7 +422,7 @@ namespace Compiler.ThreeAddrCode
     /// <summary>
     /// Use переменная
     /// </summary>
-    class UVar : DUVar
+    public class UVar : DUVar
     {
         /// <summary>
         /// Конструктор Use переменной

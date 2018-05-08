@@ -20,7 +20,7 @@ namespace Compiler.ThreeAddrCode
     /// Класс итеративного алгоритма для 
     /// активных переменных
     /// </summary>
-    class IterativeAlgorithmAV
+    public class IterativeAlgorithmAV
     {
         /// <summary>
         /// Граф потока управления

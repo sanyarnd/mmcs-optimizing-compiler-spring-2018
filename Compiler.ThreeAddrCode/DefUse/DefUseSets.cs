@@ -17,7 +17,7 @@ namespace Compiler.ThreeAddrCode
     /// Класс для построения Def и Use множеств
     /// в пределах одного блока
     /// </summary>
-    class DUSets
+    public class DUSets
     {
         /// <summary>
         /// Базовый блок

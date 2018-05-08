@@ -5,19 +5,19 @@ using System.Text;
 
 namespace Compiler.IDE.Handlers
 {
-    class ASTGraphvizVisitor : IVisitor
+    internal class AstGraphvizVisitor : IVisitor
     {
-        private ObjectIDGenerator gen = new ObjectIDGenerator();
+        private readonly ObjectIDGenerator _gen = new ObjectIDGenerator();
 
         public string Nodes => _nodes.ToString();
-        private StringBuilder _nodes = new StringBuilder();
+        private readonly StringBuilder _nodes = new StringBuilder();
 
         public string Edges => _edges.ToString();
-        private StringBuilder _edges = new StringBuilder();
+        private readonly StringBuilder _edges = new StringBuilder();
 
         private string Mark(Node node)
         {
-            return gen.GetId(node, out bool b).ToString();
+            return _gen.GetId(node, out _).ToString();
         }
 
         public void VisitAssignNode(AssignNode a)

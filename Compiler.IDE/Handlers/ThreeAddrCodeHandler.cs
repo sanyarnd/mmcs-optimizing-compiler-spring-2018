@@ -1,13 +1,14 @@
 ﻿using Compiler.Parser.AST;
 using Compiler.Parser.Visitors;
 using System;
+using Compiler.ThreeAddrCode;
 
 namespace Compiler.IDE.Handlers
 {
-    class ThreeAddrCodeHandler
+    internal class ThreeAddrCodeHandler
     {
-        public event EventHandler<ThreeAddrCode.TACode> GenerationCompleted;
-        public event EventHandler<string> PrintableCodeGenerated;
+        public event EventHandler<ThreeAddrCode.TACode> GenerationCompleted = delegate {};
+        public event EventHandler<string> PrintableCodeGenerated = delegate {};
 
         public void GenerateThreeAddrCode(object sender, BlockNode e)
         {
@@ -19,7 +20,7 @@ namespace Compiler.IDE.Handlers
             PostProcess(visitor.Code);
         }
 
-        private void PostProcess(ThreeAddrCode.TACode code)
+        private void PostProcess(TACode code)
         {
             string postProcessCode = OutputSanitizer.Sanitize(code.ToString(), OutputSanitizer.SanitizeLevel.TextBox);
             PrintableCodeGenerated(null, postProcessCode);

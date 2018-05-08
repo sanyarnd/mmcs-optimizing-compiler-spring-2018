@@ -9,38 +9,39 @@ using GraphVizWrapper.Queries;
 
 namespace Compiler.IDE.Handlers
 {
-    class ASTHandler
+    internal class AstHandler
     {
-        public event EventHandler<Image> GenerationCompleted;
+        public event EventHandler<Image> GenerationCompleted = delegate {};
 
-
-        public void GenerateASTImage(BlockNode root)
+        public void GenerateAstImage(BlockNode root)
         {
             string graph = BuildDotGraph(root);
             File.WriteAllText(@"ast_graph.txt", graph);
 
-            var getStartProcessQuery = new GetStartProcessQuery();
-            var getProcessStartInfoQuery = new GetProcessStartInfoQuery();
-            var registerLayoutPluginCommand = new RegisterLayoutPluginCommand(getProcessStartInfoQuery, getStartProcessQuery);
-            var wrapper = new GraphGeneration(getStartProcessQuery, getProcessStartInfoQuery, registerLayoutPluginCommand);
-            wrapper.RenderingEngine = Enums.RenderingEngine.Dot;
+            var processQuery = new GetStartProcessQuery();
+            var processStartInfoQuery = new GetProcessStartInfoQuery();
+            var registerLayout = new RegisterLayoutPluginCommand(processStartInfoQuery, processQuery);
+            var wrapper = new GraphGeneration(processQuery, processStartInfoQuery, registerLayout)
+                {
+                    RenderingEngine = Enums.RenderingEngine.Dot
+                };
             byte[] output = wrapper.GenerateGraph(graph, Enums.GraphReturnType.Png);
             
 
-            using (MemoryStream stream = new MemoryStream(output))
+            using (var stream = new MemoryStream(output))
             {
-                Image image = Image.FromStream(stream);
+                var image = Image.FromStream(stream);
                 GenerationCompleted(null, image);
             }
         }
 
-        private string BuildDotGraph(BlockNode root)
+        private static string BuildDotGraph(Node root)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendLine("digraph AST {");
             sb.AppendLine("node[shape = record]\n");
             sb.AppendLine("graph [splines=ortho, nodesep=1, overlap=false];");
-            ASTGraphvizVisitor nodeVisitor = new ASTGraphvizVisitor();
+            var nodeVisitor = new AstGraphvizVisitor();
             root.Visit(nodeVisitor);
             sb.AppendLine(nodeVisitor.Nodes);
             sb.AppendLine("\n");

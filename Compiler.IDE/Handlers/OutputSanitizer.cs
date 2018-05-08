@@ -2,7 +2,7 @@
 
 namespace Compiler.IDE.Handlers
 {
-    static class OutputSanitizer
+    internal static class OutputSanitizer
     {
 
         public enum SanitizeLevel { TextBox, DotFile };

@@ -4,12 +4,12 @@ using System;
 
 namespace Compiler.IDE.Handlers
 {
-    class ParseHandler
+    internal class ParseHandler
     {
-        public event EventHandler<BlockNode> ParsingCompleted;
-        public event EventHandler ParsingErrored;
-        public event EventHandler<SyntaxException> ParsingSyntaxErrored;
-        public event EventHandler<LexException> ParsingLexErrored;
+        public event EventHandler<BlockNode> ParsingCompleted = delegate {};
+        public event EventHandler ParsingErrored = delegate {};
+        public event EventHandler<SyntaxException> ParsingSyntaxErrored = delegate {};
+        public event EventHandler<LexException> ParsingLexErrored = delegate {};
 
         public void Parse(string text)
         {

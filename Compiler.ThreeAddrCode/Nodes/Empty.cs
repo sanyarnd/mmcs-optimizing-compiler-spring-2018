@@ -5,6 +5,8 @@
     /// </summary>
     public class Empty : Node
     {
+        public Empty(string name = "") : base(name) { }
+
         public override string ToString()
         {
             return $"{Label} : nop";

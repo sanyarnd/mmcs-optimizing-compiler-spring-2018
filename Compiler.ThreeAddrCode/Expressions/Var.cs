@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Compiler.ThreeAddrCode.Nodes;
+using System;
 
 namespace Compiler.ThreeAddrCode.Expressions
 {
@@ -6,13 +7,18 @@ namespace Compiler.ThreeAddrCode.Expressions
     ///     Операнд-переменная
     /// </summary>
     public class Var : Expr
-    {
-        public Guid Id { get; set; }
+    {        
+        public PrettyGuid Id { get; set; }
         
-        public Var()
+        public Var(string name = "")
         {
-            Id = Guid.NewGuid();
+            Id = new PrettyGuid(IDType.Var, name);
         }
+
+        //public Var(Guid id)
+        //{
+        //    Id = id;
+        //}
 
         public override string ToString()
         {

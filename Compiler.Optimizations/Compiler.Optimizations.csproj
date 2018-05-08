@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -43,8 +43,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlgebraicOptimization.cs" />
+    <Compile Include="ConstantFolding.cs" />
+    <Compile Include="ConstantPropagation.cs" />
+    <Compile Include="CopyPropagation.cs" />
+    <Compile Include="DeclarationOptimization.cs" />
+    <Compile Include="DeclarationTest.cs" />
     <Compile Include="IOptimization.cs" />
+    <Compile Include="AllOptimizations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SubexpressionOptimization.cs" />
+    <Compile Include="SubexprOptimization\ExpressionNode.cs" />
+    <Compile Include="SubexprOptimization\ExpressionTree.cs" />
+    <Compile Include="SubexprTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Compiler.Parser\Compiler.Parser.csproj">

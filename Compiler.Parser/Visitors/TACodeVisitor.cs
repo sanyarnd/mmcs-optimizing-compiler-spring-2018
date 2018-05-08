@@ -43,7 +43,7 @@ namespace Compiler.Parser.Visitors
         {
             string labelName = l.Label.Name;
             // Создаем пустой оператор и указываем, что на него есть переход по метке
-            var labeledNop = GetEmptyLabeledNode();
+            var labeledNop = GetEmptyLabeledNode(labelName);
 
             // Добавляем метку и помеченный оператор в список помеченных операторов (это всегда нужно делать,
             // т.к. дальше по тексту могут оказаться goto на данную метку)
@@ -366,9 +366,9 @@ namespace Compiler.Parser.Visitors
         /// <summary>
         ///     Создать новый пустой оператор - метку в ТА коде
         /// </summary>
-        private TACNodes.Empty GetEmptyLabeledNode()
+        private TACNodes.Empty GetEmptyLabeledNode(string name = "")
         {
-            var labeledNop = new TACNodes.Empty { IsLabeled = true };
+            var labeledNop = new TACNodes.Empty(name) { IsLabeled = true };
             code.AddNode(labeledNop);
             return labeledNop;
         }
@@ -379,7 +379,7 @@ namespace Compiler.Parser.Visitors
         private TACExpr.Var GetVarByName(string name)
         {
             if (!m_varsInCode.ContainsKey(name))
-                m_varsInCode.Add(name, new TACExpr.Var());
+                m_varsInCode.Add(name, new TACExpr.Var(name));
 
             return m_varsInCode[name];
         }

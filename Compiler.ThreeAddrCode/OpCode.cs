@@ -19,6 +19,6 @@
         LessEq,
         Equal,
         NotEqual,
-        Not
+        Not,
     }
 }

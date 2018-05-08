@@ -93,7 +93,7 @@ namespace Compiler.ThreeAddrCode
             while (deadVars.Count != 0)
             {
                 foreach (var dV in deadVars)
-                    listNode.ToList().RemoveAll(x => x.Label == dV.StringId);
+                    listNode.ToList().RemoveAt(dV.StringId);
 
                 deadVars.Clear();
                 liveVars.Clear();

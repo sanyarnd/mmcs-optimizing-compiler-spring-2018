@@ -35,7 +35,11 @@ namespace Compiler.ThreeAddrCode
         /// <summary>
         /// Use переменные, которые не определены в блоке
         /// </summary>
-        public List<UVar> UListNotValid { get; }
+        public List<DUVar> UListNotValid { get; }
+        /// <summary>
+        /// Нумерация строк блока
+        /// </summary>
+        public Dictionary<Guid, int> N { get; }
 
         /// <summary>
         /// Конструктор для класса, генерирующий
@@ -47,7 +51,8 @@ namespace Compiler.ThreeAddrCode
             this.Block = block;
             DList = new DList();
             UList = new UList();
-            UListNotValid = new List<UVar>();
+            UListNotValid = new List<DUVar>();
+            NumberOfStringInBlock();
             BuildDULists();
         }
 
@@ -69,6 +74,16 @@ namespace Compiler.ThreeAddrCode
         }
 
         /// <summary>
+        /// Нумерация строк блока
+        /// </summary>
+        private void NumberOfStringInBlock()
+        {
+            var i = 0;
+            foreach (var command in Block.CodeList)
+                N.Add(command.Label, i++);
+        }
+
+        /// <summary>
         /// Создает Def цепочку для базового блока
         /// </summary>
         private void BuildDList()
@@ -87,7 +102,7 @@ namespace Compiler.ThreeAddrCode
                     AddUseVariable(comA.Right, comA.Label);
 
                     // Добавление нового Def узла
-                    DList.Add(new DNode(comA.Result.Id, comA.Label));
+                    DList.Add(new DNode(comA.Result, N[comA.Label]));
                 }
                 else if (command is IfGoto)
                 {
@@ -116,10 +131,10 @@ namespace Compiler.ThreeAddrCode
                 // Поиск последнего переопределения переменной
                 var index = DList.FindLastIndex(v => 
                 {
-                    return v.DefVariable.Name == variable.Id;
+                    return v.DefVariable.Name.Id == variable.Id;
                 });
 
-                var UVar = new UVar(variable.Id, strId);
+                var UVar = new DUVar(variable, N[strId]);
 
                 // Добавление Use переменной
                 if (index != -1)
@@ -136,11 +151,10 @@ namespace Compiler.ThreeAddrCode
         {
             foreach (var dN in DList)
             {
-                var dVar = dN.DefVariable.Clone();
+                var dVar = dN.DefVariable;
                 
-                foreach (var uV in dN.UseVariables)
+                foreach (var uVar in dN.UseVariables)
                 {
-                    var uVar = uV.Clone();
                     UList.Add(new UNode(uVar as DUVar, dVar as DUVar));
                 }
             }
@@ -182,23 +196,23 @@ namespace Compiler.ThreeAddrCode
         /// <summary>
         /// Конструктор Def узла
         /// </summary>
-        /// <param name="Name">Имя переменной</param>
-        /// <param name="StringId">Идентификатор строки в блоке</param>
-        public DNode(Guid Name, Guid StringId)
-        {
-            this.DefVariable = new DVar(Name, StringId);
-            this.UseVariables = new List<DUVar>();
-        }
-
-        /// <summary>
-        /// Конструктор Def узла
-        /// </summary>
         /// <param name="DefVariable">Def переменная</param>
         /// <param name="UseVariables">Список Use переменных</param>
         public DNode(DUVar DefVariable, List<DUVar> UseVariables)
         {
             this.DefVariable = DefVariable;
             this.UseVariables = UseVariables.ToList();
+        }
+
+        /// <summary>
+        /// Конструктор Def узла
+        /// </summary>
+        /// <param name="Name">Имя переменной</param>
+        /// <param name="StringId">Идентификатор строки в блоке</param>
+        public DNode(Var Name, int StringId)
+        {
+            this.DefVariable = new DUVar(Name, StringId);
+            this.UseVariables = new List<DUVar>();
         }
 
         /// <summary>
@@ -281,92 +295,27 @@ namespace Compiler.ThreeAddrCode
     }
 
     /// <summary>
-    /// Def Use переменная без идентификатора строки
+    /// DefUse переменная 
     /// </summary>
-    public class DUVarBase
+	public class DUVar
     {
         /// <summary>
         /// Имя переменной
         /// </summary>
-		public Guid Name { get; }
-
-        /// <summary>
-        /// Конструктор DefUse переменной
-        /// </summary>
-        /// <param name="Name">Имя переменной</param>
-        public DUVarBase(Guid Name)
-        {
-            this.Name = Name;
-        }
-
-		public virtual DUVarBase Clone()
-		{
-			return new DUVarBase(Name);
-		}
-
-		/// <summary>
-		/// Конвертирует объект из типа DVar в тип UVar
-		/// и наоборот в зависимости от типа переменной
-		/// </summary>
-		/// <returns>Объект типа DUVar</returns>
-		public virtual DUVarBase Convert()
-		{
-			return this.Clone();
-		}
-
-		public override string ToString()
-        {
-            return "Name = " + Name.ToString();
-        }
-
-        public override bool Equals(object obj)
-        {
-            return Name.Equals((obj as DUVarBase).Name);
-        }
-
-        public override int GetHashCode()
-        {
-            return Name.GetHashCode();
-        }
-    }
-
-    /// <summary>
-    /// DefUse переменная 
-    /// </summary>
-	public class DUVar : DUVarBase
-    {
+        public Var Name { get; }
         /// <summary>
         /// Идентификатор строки в блоке
         /// </summary>
-		public Guid StringId { get; }
+		public int StringId { get; }
 
         /// <summary>
         /// Конструктор DefUse переменной
         /// </summary>
         /// <param name="Name">Имя переменной</param>
         /// <param name="StringId">Идентификатор строки в блоке</param>
-        public DUVar(Guid Name, Guid StringId) : base(Name)
+        public DUVar(Var Name, int StringId) 
         {
             this.StringId = StringId;
-        }
-
-        /// <summary>
-        /// Создает копию объекта
-        /// </summary>
-        /// <returns>Копия объекта</returns>
-        public override DUVarBase Clone()
-        {
-            return new DUVar(Name, StringId);
-        }
-
-        /// <summary>
-        /// Конвертирует объект из типа DVar в тип UVar
-        /// и наоборот в зависимости от типа переменной
-        /// </summary>
-        /// <returns>Объект типа DUVar</returns>
-        public override DUVarBase Convert()
-        {
-            return this.Clone();
         }
 
         public override string ToString()
@@ -384,70 +333,6 @@ namespace Compiler.ThreeAddrCode
         public override int GetHashCode()
         {
             return base.GetHashCode() + StringId.GetHashCode();
-        }
-    }
-
-    /// <summary>
-    /// Def переменная
-    /// </summary>
-    public class DVar : DUVar
-    {
-        /// <summary>
-        /// Конструктор Def переменной
-        /// </summary>
-        /// <param name="Name">Имя переменной</param>
-        /// <param name="StringId">Идентификатор строки в блоке</param>
-        public DVar(Guid Name, Guid StringId) : base(Name, StringId) { }
-
-        /// <summary>
-        /// Создает копию объекта
-        /// </summary>
-        /// <returns>Копия объекта</returns>
-        public override DUVarBase Clone()
-        {
-            return new DVar(Name, StringId);
-        }
-
-        /// <summary>
-        /// Конвертирует объект из типа DVar в тип UVar
-        /// и наоборот в зависимости от типа переменной
-        /// </summary>
-        /// <returns>Объект типа UVar</returns>
-        public override DUVarBase Convert()
-        {
-            return new UVar(Name, StringId);
-        }
-    }
-
-    /// <summary>
-    /// Use переменная
-    /// </summary>
-    public class UVar : DUVar
-    {
-        /// <summary>
-        /// Конструктор Use переменной
-        /// </summary>
-        /// <param name="Name">Имя переменной</param>
-        /// <param name="StringId">Идентификатор строки в блоке</param>
-        public UVar(Guid Name, Guid StringId) : base(Name, StringId) { }
-
-        /// <summary>
-        /// Создает копию объекта
-        /// </summary>
-        /// <returns>Копия объекта</returns>
-        public override DUVarBase Clone()
-        {
-            return new UVar(Name, StringId);
-        }
-
-        /// <summary>
-        /// Конвертирует объект из типа DVar в тип UVar
-        /// и наоборот в зависимости от типа переменной
-        /// </summary>
-        /// <returns>Объект типа DVar</returns>
-        public override DUVarBase Convert()
-        {
-            return new DVar(Name, StringId);
         }
     }
 }

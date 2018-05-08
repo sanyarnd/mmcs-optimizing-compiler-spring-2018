@@ -9,9 +9,9 @@ using Compiler.ThreeAddrCode.Nodes;
 namespace Compiler.ThreeAddrCode
 {
     // Def множество 
-    using DSet = HashSet<DUVarBase>;
+    using DSet = HashSet<DUVar>;
     // Use множество
-    using USet = HashSet<DUVarBase>;
+    using USet = HashSet<DUVar>;
 
     /// <summary>
     /// Класс для построения Def и Use множеств

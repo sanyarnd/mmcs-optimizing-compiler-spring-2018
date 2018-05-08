@@ -51,6 +51,7 @@
     <Compile Include="CFG\ControlFlowGraph.cs" />
     <Compile Include="DefUse\DefUseLists.cs" />
     <Compile Include="DefUse\DefUseSets.cs" />
+    <Compile Include="DefUse\DefUseTestExample.cs" />
     <Compile Include="DefUse\IterativeAlgorithmAV.cs" />
     <Compile Include="DefUse\LiveAndDeadVariables.cs" />
     <Compile Include="DFA\ILatticeOperations.cs" />

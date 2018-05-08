@@ -10,11 +10,11 @@ using Compiler.ThreeAddrCode.Expressions;
 namespace Compiler.ThreeAddrCode
 {
     // Тип для множества активных переменных
-    using ActiveVar = HashSet<DUVarBase>;
+    using ActiveVar = HashSet<DUVar>;
     // Def множество 
-    using DSet = HashSet<DUVarBase>;
+    using DSet = HashSet<DUVar>;
     // Use множество
-    using USet = HashSet<DUVarBase>;
+    using USet = HashSet<DUVar>;
 
     /// <summary>
     /// Класс итеративного алгоритма для 

@@ -57,7 +57,7 @@ namespace Compiler.ThreeAddrCode
         /// фрагменту кода
         /// </summary>
         /// <param name="nodes">Фрагмент кода</param>
-		public DULists(List<Node> nodes) : this(new BasicBlock(nodes, -1)) { }
+		public DULists(List<Node> nodes) : this(new BasicBlock(nodes)) { }
 
         /// <summary>
         /// Создает Def и Use цепочки для базового блока

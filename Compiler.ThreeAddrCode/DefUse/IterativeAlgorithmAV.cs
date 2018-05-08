@@ -41,22 +41,22 @@ namespace Compiler.ThreeAddrCode
         /// Список активных переменных на входе
         /// для каждого блока в CFG
         /// </summary>
-        private Dictionary<int, ActiveVar> INb;
+        private Dictionary<Guid, ActiveVar> INb;
         /// <summary>
         /// Список активных переменных на выходе
         /// для каждого блока в CFG
         /// </summary>
-        private Dictionary<int, ActiveVar> OUTb;
+        private Dictionary<Guid, ActiveVar> OUTb;
         /// <summary>
         /// Def множество для каждого блока
         /// в CFG
         /// </summary>
-        private Dictionary<int, DSet> DefSet;
+        private Dictionary<Guid, DSet> DefSet;
         /// <summary>
         /// Use множество для каждого блока
         /// в CFG
         /// </summary>
-        private Dictionary<int, USet> UseSet;
+        private Dictionary<Guid, USet> UseSet;
 
         /// <summary>
         /// Класс для итеративного алгоритма 
@@ -77,17 +77,13 @@ namespace Compiler.ThreeAddrCode
         /// </summary>
         private void StartSettings()
         {
-            INb = new Dictionary<int, ActiveVar>();
-            OUTb = new Dictionary<int, ActiveVar>();
-            DefSet = new Dictionary<int, ActiveVar>();
-            UseSet = new Dictionary<int, ActiveVar>();
+            INb = new Dictionary<Guid, ActiveVar>();
+            OUTb = new Dictionary<Guid, ActiveVar>();
+            DefSet = new Dictionary<Guid, ActiveVar>();
+            UseSet = new Dictionary<Guid, ActiveVar>();
 
-            var it = CFG.CFGNodes.GetEnumerator();
-
-            do
+            foreach (var B in CFG.CFGNodes)
             {
-                var B = it.Current.Block;
-
                 INb.Add(B.BlockId, new ActiveVar());
                 OUTb.Add(B.BlockId, new ActiveVar());
 
@@ -96,14 +92,13 @@ namespace Compiler.ThreeAddrCode
                 DefSet.Add(B.BlockId, duSets.DSet);
                 UseSet.Add(B.BlockId, duSets.USet);
             }
-            while (it.MoveNext());
         }
 
-		private bool EqualIN(Dictionary<int, ActiveVar> obj1, Dictionary<int, ActiveVar> obj2)
+		private bool EqualIN(Dictionary<Guid, ActiveVar> obj1, Dictionary<Guid, ActiveVar> obj2)
 		{
 			return EqualINHelp(obj1, obj2) && EqualINHelp(obj2, obj1);
 		}
-		private bool EqualINHelp(Dictionary<int, ActiveVar> obj1, Dictionary<int, ActiveVar> obj2)
+		private bool EqualINHelp(Dictionary<Guid, ActiveVar> obj1, Dictionary<Guid, ActiveVar> obj2)
 		{
 			var result = true;
 
@@ -118,27 +113,24 @@ namespace Compiler.ThreeAddrCode
 		/// </summary>
 		private void Algorithm()
         {
-			var oldSetIN = new Dictionary<int, ActiveVar>();
+			var oldSetIN = new Dictionary<Guid, ActiveVar>();
 
 			while (!EqualIN(oldSetIN, INb))
             {
-				oldSetIN = new Dictionary<int, ActiveVar>(INb);
-				var it = CFG.CFGNodes.GetEnumerator();
+				oldSetIN = new Dictionary<Guid, ActiveVar>(INb);
 
-                do
+                foreach (var B in CFG.CFGNodes)
                 {
-                    var B = it.Current;
-
                     // выходной блок
-                    if (B.Children.Count == 0)
+                    if (B.Children.Count() == 0)
                         continue;
 
-					var idB = B.Block.BlockId;
+					var idB = B.BlockId;
 
 					// Первое уравнение
 					foreach (var child in B.Children)
 					{
-						var idCh = child.Block.BlockId;
+						var idCh = child.BlockId;
 						OUTb[idB].Union(INb[idCh]);
 					}
 
@@ -148,24 +140,19 @@ namespace Compiler.ThreeAddrCode
 					// Второе уравнение
 					INb[idB].Union(UseSet[idB]).Union(subUnion);
 				}
-                while (it.MoveNext());
             }
 
-			var _it = CFG.CFGNodes.GetEnumerator();
+            foreach (var B in CFG.CFGNodes)
+            {
+				var idB = B.BlockId;
 
-			do
-			{
-				var B = _it.Current;
-				var idB = B.Block.BlockId;
-
-				if (B.Children.Count == 0)
+				if (B.Children.Count() == 0)
 				{
 					IN.Union(INb[idB]);
 					OUT.Union(OUTb[idB]);
 				}
 
 			}
-			while (_it.MoveNext());
 		}
     }
 }

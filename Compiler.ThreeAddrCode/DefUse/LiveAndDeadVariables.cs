@@ -44,7 +44,7 @@ namespace Compiler.ThreeAddrCode
             this.Block = block;
             DeadVars = new DVars();
             LiveVars = new LVars();
-            DefineLDVars(Block.CodeList, DeadVars, LiveVars);
+            DefineLDVars(Block.CodeList.ToList(), DeadVars, LiveVars);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Compiler.ThreeAddrCode
         /// фрагмента кода
         /// </summary>
         /// <param name="nodes">Фрагмент кода</param>
-        public LiveAndDeadVariables(List<Node> nodes) : this(new BasicBlock(nodes, -1)) { }
+        public LiveAndDeadVariables(List<Node> nodes) : this(new BasicBlock(nodes)) { }
 
         /// <summary>
         /// Определение живых и мертвых переменных
@@ -93,16 +93,16 @@ namespace Compiler.ThreeAddrCode
             while (deadVars.Count != 0)
             {
                 foreach (var dV in deadVars)
-                    listNode.RemoveAll(x => x.Label == dV.StringId);
+                    listNode.ToList().RemoveAll(x => x.Label == dV.StringId);
 
                 deadVars.Clear();
                 liveVars.Clear();
 
                 // Определение живости/мертвости переменных
-                DefineLDVars(listNode, deadVars, liveVars);
+                DefineLDVars(listNode.ToList(), deadVars, liveVars);
             }           
 
-            return new BasicBlock(listNode, Block.BlockId);
+            return new BasicBlock(listNode.ToList());
         }
 
         public override string ToString()

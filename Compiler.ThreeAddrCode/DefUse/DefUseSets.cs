@@ -51,7 +51,7 @@ namespace Compiler.ThreeAddrCode
         /// фрагменту кода
         /// </summary>
         /// <param name="nodes">Фрагмент кода</param>
-		public DUSets(List<Node> nodes) : this(new BasicBlock(nodes, -1)) { }
+		public DUSets(List<Node> nodes) : this(new BasicBlock(nodes)) { }
 
         /// <summary>
         /// Создает Def и Use множества для базового блока

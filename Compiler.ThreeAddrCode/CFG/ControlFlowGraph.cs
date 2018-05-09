@@ -64,6 +64,9 @@ namespace Compiler.ThreeAddrCode.CFG
                 var cur = nodeList[i];
                 var next = nodeList[i + 1];
 
+                // если последняя строчка -- чистый goto (не if), то дуги быть не может
+                if (cur.CodeList.Last().GetType() == typeof(Goto)) continue;
+
                 cur.AddChild(next);
                 next.AddParent(cur);
             }

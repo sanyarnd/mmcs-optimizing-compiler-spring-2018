@@ -371,7 +371,10 @@ namespace Compiler.Parser.Visitors
         {
             var labeledNop = new TACNodes.Empty { IsLabeled = true };
             code.AddNode(labeledNop);
-            TACodeNameManager.Instance.Name(labeledNop.Label, name);
+            if (name == "")
+                TACodeNameManager.Instance.Label(labeledNop.Label);
+            else
+                TACodeNameManager.Instance.Name(labeledNop.Label, name);
             return labeledNop;
         }
 

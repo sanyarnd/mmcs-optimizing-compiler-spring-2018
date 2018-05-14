@@ -32,8 +32,9 @@ return 0;
 
 
 #### Практическая часть задачи (реализация)
-Был реализован класс ConstantPropagation.
+Был реализован класс `ConstantPropagation`.
 
+```
 public class ConstantPropagation : IOptimization
 	{
 		public List<Node> Optimize(List<Node> nodes, out bool applied)
@@ -72,7 +73,7 @@ public class ConstantPropagation : IOptimization
 			return nodes;
 		}
 	}
-
+```
 #### Тесты
 Короткие примеры, демонстрирующие правильность.
 

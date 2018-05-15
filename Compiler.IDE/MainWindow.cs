@@ -2,6 +2,7 @@
 using Compiler.ILcodeGenerator;
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
@@ -18,6 +19,7 @@ namespace Compiler.IDE
         private readonly ParseHandler _parseHandler = new ParseHandler();
         private readonly ThreeAddrCodeHandler _threeCodeHandler = new ThreeAddrCodeHandler();
         private readonly CfgHandler _cfgHandler = new CfgHandler();
+        private readonly IterativeAlgorithmHandler _algoHandler = new IterativeAlgorithmHandler();
         private readonly AstHandler _astHandler = new AstHandler();
 
         private readonly IlCodeHandler _ilCodeHandler = new IlCodeHandler();
@@ -28,6 +30,7 @@ namespace Compiler.IDE
             InitializeComponent();
 
             InitOptimizations();
+            InitIterativeAlgorithms();
 
             InitOutputListeners();
             InitCommonListeners();
@@ -58,6 +61,47 @@ namespace Compiler.IDE
             };
         }
 
+        private void InitIterativeAlgorithms()
+        {
+            // populate listbox with enums
+            foreach (IterativeAlgorithms opt in Enum.GetValues(
+                typeof(IterativeAlgorithms)))
+                iterativeAlgoList.Items.Add(opt);
+
+            // enable custom formatting
+            iterativeAlgoList.FormattingEnabled = true;
+            iterativeAlgoList.Format += (s, e) =>
+            {
+                e.Value = $"{((IterativeAlgorithms)e.ListItem).GetString()}";
+            };
+
+            // on item click enable/disable algorithm
+            iterativeAlgoList.ItemCheck += (o, e) =>
+            {
+                //// reset selection
+                //if (e.NewValue == CheckState.Checked)
+                //{
+                //    for (int ix = 0; ix < iterativeAlgoList.Items.Count; ++ix)
+                //    {
+                //        if (e.Index != ix)
+                //        {
+                //            iterativeAlgoList.SetItemChecked(ix, false);
+                //        }
+                //    }
+                //}
+
+                // select algorithm from list
+                var algo = (IterativeAlgorithms)iterativeAlgoList.Items[e.Index];
+
+                //// reset algorithm
+                //foreach (var key in _algoHandler.IterativeAlgoList.Keys)
+                //    _algoHandler.IterativeAlgoList[key] = false;
+
+                // pass algorithm to handler
+                _algoHandler.IterativeAlgoList[algo] = e.NewValue == CheckState.Checked;
+            };
+        }
+
         private void InitCommonListeners()
         {
             // open/exit
@@ -79,6 +123,7 @@ namespace Compiler.IDE
                     optsList.SetItemChecked(i, !allChecked);
             };
             optsList.SelectedIndexChanged += (o, e) => optsList.ClearSelected();
+            iterativeAlgoList.SelectedIndexChanged += (o, e) => iterativeAlgoList.ClearSelected();
 
             // AST
             _parseHandler.ParsingCompleted += (o, e) => _astHandler.GenerateAstImage(e);
@@ -101,6 +146,10 @@ namespace Compiler.IDE
                 CFGPictureBox.Image = _cfgImage;
                 cfgScaleBar.Value = cfgScaleBar.Maximum;
             };
+
+            // iterative algorithms
+            _cfgHandler.CfgGenerated += (o, e) => _algoHandler.CollectInOutData(e);
+            _algoHandler.PrintableInOutDataCollected += (o, e) => iterativeAlgoTextBox.Text = e;
 
             // IL-code
             _threeCodeHandler.GenerationCompleted += (o, e) =>

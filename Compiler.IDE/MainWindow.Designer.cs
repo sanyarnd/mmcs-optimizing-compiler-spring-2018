@@ -61,7 +61,11 @@
             this.astSaveButton = new System.Windows.Forms.Button();
             this.astTabPanel = new System.Windows.Forms.Panel();
             this.ASTPictureBox = new System.Windows.Forms.PictureBox();
+            this.iterativeAlgoPage = new System.Windows.Forms.TabPage();
+            this.iterativeAlgoTextBox = new System.Windows.Forms.RichTextBox();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.iterativeAlgoLabel = new System.Windows.Forms.Label();
+            this.iterativeAlgoList = new System.Windows.Forms.CheckedListBox();
             this.menuStrip1.SuspendLayout();
             this.mainBox.SuspendLayout();
             this.outBox.SuspendLayout();
@@ -79,6 +83,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.astTrackBar)).BeginInit();
             this.astTabPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ASTPictureBox)).BeginInit();
+            this.iterativeAlgoPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -139,6 +144,8 @@
             // 
             this.mainBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.mainBox.Controls.Add(this.iterativeAlgoLabel);
+            this.mainBox.Controls.Add(this.iterativeAlgoList);
             this.mainBox.Controls.Add(this.optimizationsLabel);
             this.mainBox.Controls.Add(this.compileButton);
             this.mainBox.Controls.Add(this.runButton);
@@ -207,7 +214,7 @@
             this.optsList.Location = new System.Drawing.Point(3, 61);
             this.optsList.Margin = new System.Windows.Forms.Padding(2);
             this.optsList.Name = "optsList";
-            this.optsList.Size = new System.Drawing.Size(212, 259);
+            this.optsList.Size = new System.Drawing.Size(212, 124);
             this.optsList.TabIndex = 2;
             // 
             // outBox
@@ -220,7 +227,7 @@
             this.outBox.Margin = new System.Windows.Forms.Padding(2);
             this.outBox.Name = "outBox";
             this.outBox.Padding = new System.Windows.Forms.Padding(2);
-            this.outBox.Size = new System.Drawing.Size(446, 71);
+            this.outBox.Size = new System.Drawing.Size(446, 67);
             this.outBox.TabIndex = 2;
             this.outBox.TabStop = false;
             this.outBox.Text = "Output";
@@ -237,7 +244,7 @@
             this.outTextBox.Name = "outTextBox";
             this.outTextBox.ReadOnly = true;
             this.outTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.outTextBox.Size = new System.Drawing.Size(439, 52);
+            this.outTextBox.Size = new System.Drawing.Size(439, 48);
             this.outTextBox.TabIndex = 0;
             // 
             // tabsControl
@@ -250,6 +257,7 @@
             this.tabsControl.Controls.Add(this.threeAddrPage);
             this.tabsControl.Controls.Add(this.CFGPage);
             this.tabsControl.Controls.Add(this.ASTPage);
+            this.tabsControl.Controls.Add(this.iterativeAlgoPage);
             this.tabsControl.Location = new System.Drawing.Point(2, 2);
             this.tabsControl.Margin = new System.Windows.Forms.Padding(2);
             this.tabsControl.Name = "tabsControl";
@@ -285,7 +293,7 @@
             this.ILCodePage.Margin = new System.Windows.Forms.Padding(2);
             this.ILCodePage.Name = "ILCodePage";
             this.ILCodePage.Padding = new System.Windows.Forms.Padding(2);
-            this.ILCodePage.Size = new System.Drawing.Size(377, 236);
+            this.ILCodePage.Size = new System.Drawing.Size(443, 249);
             this.ILCodePage.TabIndex = 1;
             this.ILCodePage.Text = "IL-Code";
             this.ILCodePage.UseVisualStyleBackColor = true;
@@ -297,7 +305,7 @@
             this.ILCodeTextBox.Location = new System.Drawing.Point(2, 2);
             this.ILCodeTextBox.Name = "ILCodeTextBox";
             this.ILCodeTextBox.ReadOnly = true;
-            this.ILCodeTextBox.Size = new System.Drawing.Size(373, 232);
+            this.ILCodeTextBox.Size = new System.Drawing.Size(439, 245);
             this.ILCodeTextBox.TabIndex = 0;
             this.ILCodeTextBox.Text = "";
             // 
@@ -308,7 +316,7 @@
             this.threeAddrPage.Margin = new System.Windows.Forms.Padding(2);
             this.threeAddrPage.Name = "threeAddrPage";
             this.threeAddrPage.Padding = new System.Windows.Forms.Padding(2);
-            this.threeAddrPage.Size = new System.Drawing.Size(377, 236);
+            this.threeAddrPage.Size = new System.Drawing.Size(443, 249);
             this.threeAddrPage.TabIndex = 2;
             this.threeAddrPage.Text = "3-Address Code";
             this.threeAddrPage.UseVisualStyleBackColor = true;
@@ -320,7 +328,7 @@
             this.threeAddrTextBox.Location = new System.Drawing.Point(2, 2);
             this.threeAddrTextBox.Name = "threeAddrTextBox";
             this.threeAddrTextBox.ReadOnly = true;
-            this.threeAddrTextBox.Size = new System.Drawing.Size(373, 232);
+            this.threeAddrTextBox.Size = new System.Drawing.Size(439, 245);
             this.threeAddrTextBox.TabIndex = 0;
             this.threeAddrTextBox.Text = "";
             // 
@@ -333,7 +341,7 @@
             this.CFGPage.Margin = new System.Windows.Forms.Padding(2);
             this.CFGPage.Name = "CFGPage";
             this.CFGPage.Padding = new System.Windows.Forms.Padding(2);
-            this.CFGPage.Size = new System.Drawing.Size(377, 236);
+            this.CFGPage.Size = new System.Drawing.Size(443, 249);
             this.CFGPage.TabIndex = 3;
             this.CFGPage.Text = "CFG";
             this.CFGPage.UseVisualStyleBackColor = true;
@@ -343,9 +351,9 @@
             this.cfgScalePanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cfgScalePanel.Controls.Add(this.cfgScaleBar);
-            this.cfgScalePanel.Location = new System.Drawing.Point(5, 210);
+            this.cfgScalePanel.Location = new System.Drawing.Point(5, 223);
             this.cfgScalePanel.Name = "cfgScalePanel";
-            this.cfgScalePanel.Size = new System.Drawing.Size(286, 21);
+            this.cfgScalePanel.Size = new System.Drawing.Size(352, 21);
             this.cfgScalePanel.TabIndex = 5;
             // 
             // cfgScaleBar
@@ -357,7 +365,7 @@
             this.cfgScaleBar.Location = new System.Drawing.Point(5, -1);
             this.cfgScaleBar.Maximum = 100;
             this.cfgScaleBar.Name = "cfgScaleBar";
-            this.cfgScaleBar.Size = new System.Drawing.Size(277, 45);
+            this.cfgScaleBar.Size = new System.Drawing.Size(343, 45);
             this.cfgScaleBar.TabIndex = 2;
             this.cfgScaleBar.TickFrequency = 10;
             this.cfgScaleBar.TickStyle = System.Windows.Forms.TickStyle.None;
@@ -367,7 +375,7 @@
             // 
             this.cfgSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cfgSaveButton.Enabled = false;
-            this.cfgSaveButton.Location = new System.Drawing.Point(297, 208);
+            this.cfgSaveButton.Location = new System.Drawing.Point(363, 221);
             this.cfgSaveButton.Name = "cfgSaveButton";
             this.cfgSaveButton.Size = new System.Drawing.Size(75, 23);
             this.cfgSaveButton.TabIndex = 4;
@@ -383,7 +391,7 @@
             this.cfgPanel.Controls.Add(this.CFGPictureBox);
             this.cfgPanel.Location = new System.Drawing.Point(5, 5);
             this.cfgPanel.Name = "cfgPanel";
-            this.cfgPanel.Size = new System.Drawing.Size(367, 198);
+            this.cfgPanel.Size = new System.Drawing.Size(433, 211);
             this.cfgPanel.TabIndex = 1;
             // 
             // CFGPictureBox
@@ -404,7 +412,7 @@
             this.ASTPage.Margin = new System.Windows.Forms.Padding(2);
             this.ASTPage.Name = "ASTPage";
             this.ASTPage.Padding = new System.Windows.Forms.Padding(2);
-            this.ASTPage.Size = new System.Drawing.Size(377, 236);
+            this.ASTPage.Size = new System.Drawing.Size(443, 249);
             this.ASTPage.TabIndex = 4;
             this.ASTPage.Text = "AST";
             this.ASTPage.UseVisualStyleBackColor = true;
@@ -414,9 +422,9 @@
             this.astPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.astPanel.Controls.Add(this.astTrackBar);
-            this.astPanel.Location = new System.Drawing.Point(5, 210);
+            this.astPanel.Location = new System.Drawing.Point(5, 223);
             this.astPanel.Name = "astPanel";
-            this.astPanel.Size = new System.Drawing.Size(286, 21);
+            this.astPanel.Size = new System.Drawing.Size(352, 21);
             this.astPanel.TabIndex = 5;
             // 
             // astTrackBar
@@ -428,7 +436,7 @@
             this.astTrackBar.Location = new System.Drawing.Point(5, -1);
             this.astTrackBar.Maximum = 100;
             this.astTrackBar.Name = "astTrackBar";
-            this.astTrackBar.Size = new System.Drawing.Size(277, 45);
+            this.astTrackBar.Size = new System.Drawing.Size(343, 45);
             this.astTrackBar.TabIndex = 2;
             this.astTrackBar.TickFrequency = 10;
             this.astTrackBar.TickStyle = System.Windows.Forms.TickStyle.None;
@@ -438,7 +446,7 @@
             // 
             this.astSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.astSaveButton.Enabled = false;
-            this.astSaveButton.Location = new System.Drawing.Point(297, 208);
+            this.astSaveButton.Location = new System.Drawing.Point(363, 221);
             this.astSaveButton.Name = "astSaveButton";
             this.astSaveButton.Size = new System.Drawing.Size(75, 23);
             this.astSaveButton.TabIndex = 4;
@@ -454,7 +462,7 @@
             this.astTabPanel.Controls.Add(this.ASTPictureBox);
             this.astTabPanel.Location = new System.Drawing.Point(5, 5);
             this.astTabPanel.Name = "astTabPanel";
-            this.astTabPanel.Size = new System.Drawing.Size(367, 198);
+            this.astTabPanel.Size = new System.Drawing.Size(433, 211);
             this.astTabPanel.TabIndex = 1;
             // 
             // ASTPictureBox
@@ -465,6 +473,28 @@
             this.ASTPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.ASTPictureBox.TabIndex = 0;
             this.ASTPictureBox.TabStop = false;
+            // 
+            // iterativeAlgoPage
+            // 
+            this.iterativeAlgoPage.Controls.Add(this.iterativeAlgoTextBox);
+            this.iterativeAlgoPage.Location = new System.Drawing.Point(4, 22);
+            this.iterativeAlgoPage.Name = "iterativeAlgoPage";
+            this.iterativeAlgoPage.Padding = new System.Windows.Forms.Padding(3);
+            this.iterativeAlgoPage.Size = new System.Drawing.Size(443, 249);
+            this.iterativeAlgoPage.TabIndex = 5;
+            this.iterativeAlgoPage.Text = "Iter. algorithm";
+            this.iterativeAlgoPage.UseVisualStyleBackColor = true;
+            // 
+            // iterativeAlgoTextBox
+            // 
+            this.iterativeAlgoTextBox.BackColor = System.Drawing.Color.White;
+            this.iterativeAlgoTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.iterativeAlgoTextBox.Location = new System.Drawing.Point(3, 3);
+            this.iterativeAlgoTextBox.Name = "iterativeAlgoTextBox";
+            this.iterativeAlgoTextBox.ReadOnly = true;
+            this.iterativeAlgoTextBox.Size = new System.Drawing.Size(437, 243);
+            this.iterativeAlgoTextBox.TabIndex = 1;
+            this.iterativeAlgoTextBox.Text = "";
             // 
             // splitContainer
             // 
@@ -487,6 +517,28 @@
             this.splitContainer.SplitterDistance = 277;
             this.splitContainer.SplitterWidth = 2;
             this.splitContainer.TabIndex = 4;
+            // 
+            // iterativeAlgoLabel
+            // 
+            this.iterativeAlgoLabel.AutoSize = true;
+            this.iterativeAlgoLabel.Location = new System.Drawing.Point(4, 187);
+            this.iterativeAlgoLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.iterativeAlgoLabel.Name = "iterativeAlgoLabel";
+            this.iterativeAlgoLabel.Size = new System.Drawing.Size(95, 13);
+            this.iterativeAlgoLabel.TabIndex = 8;
+            this.iterativeAlgoLabel.Text = "Iterative algorithms";
+            // 
+            // iterativeAlgoList
+            // 
+            this.iterativeAlgoList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.iterativeAlgoList.CheckOnClick = true;
+            this.iterativeAlgoList.FormattingEnabled = true;
+            this.iterativeAlgoList.Location = new System.Drawing.Point(3, 202);
+            this.iterativeAlgoList.Margin = new System.Windows.Forms.Padding(2);
+            this.iterativeAlgoList.Name = "iterativeAlgoList";
+            this.iterativeAlgoList.Size = new System.Drawing.Size(212, 124);
+            this.iterativeAlgoList.TabIndex = 7;
             // 
             // MainWindow
             // 
@@ -523,6 +575,7 @@
             this.astTabPanel.ResumeLayout(false);
             this.astTabPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ASTPictureBox)).EndInit();
+            this.iterativeAlgoPage.ResumeLayout(false);
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
@@ -568,5 +621,9 @@
         private System.Windows.Forms.Button astSaveButton;
         private System.Windows.Forms.Panel astTabPanel;
         private System.Windows.Forms.PictureBox ASTPictureBox;
+        private System.Windows.Forms.TabPage iterativeAlgoPage;
+        private System.Windows.Forms.RichTextBox iterativeAlgoTextBox;
+        private System.Windows.Forms.Label iterativeAlgoLabel;
+        private System.Windows.Forms.CheckedListBox iterativeAlgoList;
     }
 }

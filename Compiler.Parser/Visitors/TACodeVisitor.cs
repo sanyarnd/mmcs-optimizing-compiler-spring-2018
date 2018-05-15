@@ -366,21 +366,15 @@ namespace Compiler.Parser.Visitors
             }
         }
 
-        /// <summary>
-        ///     Создать новый пустой оператор - метку в ТА коде
-        /// </summary>
-        private TACNodes.Empty GetEmptyLabeledNode(string name = "")
-        {
-            var labeledNop = new TACNodes.Empty(name) { IsLabeled = true };
-            code.AddNode(labeledNop);
-            return labeledNop;
-        }
-
-        private TACNodes.Empty GetEmptyLabeledNode(String name)
+       
+        private TACNodes.Empty GetEmptyLabeledNode(String name = null)
         {
             var labeledNop = new TACNodes.Empty { IsLabeled = true };
             code.AddNode(labeledNop);
-            TACodeNameManager.Instance.Name(labeledNop.Label, name);
+            if (name == null)
+                TACodeNameManager.Instance.Label(labeledNop.Label);
+            else
+                TACodeNameManager.Instance.Name(labeledNop.Label, name);
             return labeledNop;
         }
 

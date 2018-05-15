@@ -87,11 +87,12 @@
     <Compile Include="DFA\ConstantPropagation\Operations.cs" />
     <Compile Include="DFA\ConstantPropagation\TransferFunctions.cs" />
     <Compile Include="DFA\ConstantPropagation\VarValue.cs" />
-    <Compile Include="DFA\GenericInterativeAlgorithm.cs" />
+    <Compile Include="DFA\GenericIterativeAlgorithm.cs" />
     <Compile Include="DFA\ILatticeOperations.cs" />
     <Compile Include="DFA\IAlgorithm.cs" />
     <Compile Include="DFA\InOutData.cs" />
     <Compile Include="DFA\ITransferFunction.cs" />
+    <Compile Include="DFA\OptimizedGenericIterativeAlgorithm.cs" />
     <Compile Include="DFA\ReachingDefinitions\IterativeAlgorithm.cs" />
     <Compile Include="DFA\ReachingDefinitions\Operations.cs" />
     <Compile Include="DFA\ReachingDefinitions\TransferFunction.cs" />

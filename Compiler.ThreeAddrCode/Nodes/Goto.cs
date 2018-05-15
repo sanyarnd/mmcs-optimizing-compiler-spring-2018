@@ -10,7 +10,7 @@ namespace Compiler.ThreeAddrCode.Nodes
         /// <summary>
         ///     Метка-идентификатор оператора, на который происходит переход
         /// </summary>
-        public PrettyGuid TargetLabel { get; set; }
+        public Guid TargetLabel { get; set; }
 
         public override string ToString()
         {

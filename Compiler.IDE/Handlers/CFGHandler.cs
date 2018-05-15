@@ -13,11 +13,13 @@ namespace Compiler.IDE.Handlers
     internal class CfgHandler
     {
         public event EventHandler<Image> GenerationCompleted = delegate { };
+        public event EventHandler<ControlFlowGraph> CfgGenerated = delegate { };
 
 
         public void GenerateCfgImage(TACode code)
         {
             var cfg = new ControlFlowGraph(code);
+            CfgGenerated(null, cfg);
 
             string graph = BuildDotGraph(cfg);
             File.WriteAllText(@"cfg_graph.txt", graph);

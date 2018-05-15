@@ -55,7 +55,7 @@
     <Compile Include="Handlers\ThreeAddrCodeHandler.cs" />
     <Compile Include="Handlers\ParseHandler.cs" />
     <Compile Include="Handlers\IlCodeHandler.cs" />
-    <Compile Include="Handlers\Optimizations.cs" />
+    <Compile Include="Optimizations.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -39,21 +39,21 @@ namespace Compiler.IDE
         private void InitOptimizations()
         {
             // populate listbox with enums
-            foreach (ThreeAddrCodeHandler.Optimizations opt in Enum.GetValues(
-                typeof(ThreeAddrCodeHandler.Optimizations)))
+            foreach (Optimizations opt in Enum.GetValues(
+                typeof(Optimizations)))
                 optsList.Items.Add(opt);
 
             // enable custom formatting for listbox
             optsList.FormattingEnabled = true;
             optsList.Format += (s, e) =>
             {
-                e.Value = $"{((ThreeAddrCodeHandler.Optimizations) e.ListItem).GetString()}";
+                e.Value = $"{((Optimizations) e.ListItem).GetString()}";
             };
 
             // on item click enable/disable optimization in three addr code hadler
             optsList.ItemCheck += (o, e) =>
             {
-                var opt = (ThreeAddrCodeHandler.Optimizations) optsList.Items[e.Index];
+                var opt = (Optimizations) optsList.Items[e.Index];
                 _threeCodeHandler.OptimizationList[opt] = e.NewValue == CheckState.Checked;
             };
         }

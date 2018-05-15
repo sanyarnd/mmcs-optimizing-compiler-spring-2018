@@ -8,7 +8,7 @@ using Compiler.ThreeAddrCode.Nodes;
 
 namespace Compiler.IDE.Handlers
 {
-    internal partial class ThreeAddrCodeHandler
+    internal class ThreeAddrCodeHandler
     {
         public readonly Dictionary<Optimizations, bool> OptimizationList = new Dictionary<Optimizations, bool>
         {
@@ -33,7 +33,7 @@ namespace Compiler.IDE.Handlers
             PostProcess(visitor.Code);
         }
 
-        private List<IOptimization> BasicBlockOptimizationList()
+        private List<IOptimization> BlockOptimizationList()
         {
             var optimizations = new List<IOptimization>();
 
@@ -72,7 +72,7 @@ namespace Compiler.IDE.Handlers
 
         private TACode ApplyOptimizations(TACode code)
         {
-            var optList = BasicBlockOptimizationList();
+            var optList = BlockOptimizationList();
 
             bool canApplyAny = true;
 

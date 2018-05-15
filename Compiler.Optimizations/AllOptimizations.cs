@@ -15,19 +15,14 @@ namespace Compiler.Optimizations
 		{
 			List<IOptimization> optimizations = new List<IOptimization>();
 
-			AlgebraicOptimization algOptimization = new AlgebraicOptimization();
-			CopyPropagation copyPropOptimization = new CopyPropagation();
-			ConstantFolding constFoldingOptimization = new ConstantFolding();
-			ConstantPropagation constPropOptimization = new ConstantPropagation();
-			DeclarationOptimization declOptimization = new DeclarationOptimization();
+			optimizations.Add(new CopyPropagation());
+			optimizations.Add(new ConstantFolding());
+			optimizations.Add(new ConstantPropagation());
+			optimizations.Add(new DeclarationOptimization());
+			optimizations.Add(new AlgebraicOptimization());
+			optimizations.Add(new SubexpressionOptimization());
 
-			optimizations.Add(copyPropOptimization);
-			optimizations.Add(constFoldingOptimization);
-			optimizations.Add(constPropOptimization);
-			//optimizations.Add(declOptimization);
-            optimizations.Add(algOptimization);
-
-            return optimizations;
+			return optimizations;
 		}
 
         private List<IOptimization> O2OptimizationList()

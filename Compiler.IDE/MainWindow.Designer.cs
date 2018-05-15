@@ -109,36 +109,36 @@
             this.openToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 22);
-            this.fileToolStripMenuItem.Text = "File";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(48, 22);
+            this.fileToolStripMenuItem.Text = "Файл";
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.openToolStripMenuItem.Text = "Open";
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openToolStripMenuItem.Text = "Открыть...";
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Text = "Выход";
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem1});
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 22);
-            this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(65, 22);
+            this.aboutToolStripMenuItem.Text = "Справка";
             // 
             // aboutToolStripMenuItem1
             // 
             this.aboutToolStripMenuItem1.Name = "aboutToolStripMenuItem1";
-            this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(107, 22);
-            this.aboutToolStripMenuItem1.Text = "About";
+            this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.aboutToolStripMenuItem1.Text = "О программе";
             // 
             // mainBox
             // 
@@ -158,7 +158,7 @@
             this.mainBox.Size = new System.Drawing.Size(219, 358);
             this.mainBox.TabIndex = 1;
             this.mainBox.TabStop = false;
-            this.mainBox.Text = "Control Panel";
+            this.mainBox.Text = "Панель управления";
             // 
             // optimizationsLabel
             // 
@@ -166,9 +166,9 @@
             this.optimizationsLabel.Location = new System.Drawing.Point(4, 46);
             this.optimizationsLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.optimizationsLabel.Name = "optimizationsLabel";
-            this.optimizationsLabel.Size = new System.Drawing.Size(69, 13);
+            this.optimizationsLabel.Size = new System.Drawing.Size(76, 13);
             this.optimizationsLabel.TabIndex = 6;
-            this.optimizationsLabel.Text = "Optimizations";
+            this.optimizationsLabel.Text = "Оптимизации";
             // 
             // compileButton
             // 
@@ -178,7 +178,7 @@
             this.compileButton.Name = "compileButton";
             this.compileButton.Size = new System.Drawing.Size(67, 20);
             this.compileButton.TabIndex = 5;
-            this.compileButton.Text = "Compile";
+            this.compileButton.Text = "Сборка";
             this.compileButton.UseVisualStyleBackColor = true;
             // 
             // runButton
@@ -190,7 +190,7 @@
             this.runButton.Name = "runButton";
             this.runButton.Size = new System.Drawing.Size(67, 20);
             this.runButton.TabIndex = 4;
-            this.runButton.Text = "Run";
+            this.runButton.Text = "Запуск";
             this.runButton.UseVisualStyleBackColor = true;
             // 
             // toggleOptsButton
@@ -202,7 +202,7 @@
             this.toggleOptsButton.Name = "toggleOptsButton";
             this.toggleOptsButton.Size = new System.Drawing.Size(212, 22);
             this.toggleOptsButton.TabIndex = 3;
-            this.toggleOptsButton.Text = "Toggle All";
+            this.toggleOptsButton.Text = "Переключить все";
             this.toggleOptsButton.UseVisualStyleBackColor = true;
             // 
             // optsList
@@ -230,7 +230,7 @@
             this.outBox.Size = new System.Drawing.Size(446, 67);
             this.outBox.TabIndex = 2;
             this.outBox.TabStop = false;
-            this.outBox.Text = "Output";
+            this.outBox.Text = "Вывод";
             // 
             // outTextBox
             // 
@@ -274,7 +274,7 @@
             this.inputPage.Padding = new System.Windows.Forms.Padding(2);
             this.inputPage.Size = new System.Drawing.Size(443, 249);
             this.inputPage.TabIndex = 0;
-            this.inputPage.Text = "Input";
+            this.inputPage.Text = "Исходный код";
             this.inputPage.UseVisualStyleBackColor = true;
             // 
             // inputTextBox
@@ -295,7 +295,7 @@
             this.ILCodePage.Padding = new System.Windows.Forms.Padding(2);
             this.ILCodePage.Size = new System.Drawing.Size(443, 249);
             this.ILCodePage.TabIndex = 1;
-            this.ILCodePage.Text = "IL-Code";
+            this.ILCodePage.Text = "IL-код";
             this.ILCodePage.UseVisualStyleBackColor = true;
             // 
             // ILCodeTextBox
@@ -318,7 +318,7 @@
             this.threeAddrPage.Padding = new System.Windows.Forms.Padding(2);
             this.threeAddrPage.Size = new System.Drawing.Size(443, 249);
             this.threeAddrPage.TabIndex = 2;
-            this.threeAddrPage.Text = "3-Address Code";
+            this.threeAddrPage.Text = "Трехадресный код";
             this.threeAddrPage.UseVisualStyleBackColor = true;
             // 
             // threeAddrTextBox
@@ -482,7 +482,7 @@
             this.iterativeAlgoPage.Padding = new System.Windows.Forms.Padding(3);
             this.iterativeAlgoPage.Size = new System.Drawing.Size(443, 249);
             this.iterativeAlgoPage.TabIndex = 5;
-            this.iterativeAlgoPage.Text = "Iter. algorithm";
+            this.iterativeAlgoPage.Text = "Итер. алгоритм";
             this.iterativeAlgoPage.UseVisualStyleBackColor = true;
             // 
             // iterativeAlgoTextBox
@@ -524,9 +524,9 @@
             this.iterativeAlgoLabel.Location = new System.Drawing.Point(4, 187);
             this.iterativeAlgoLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.iterativeAlgoLabel.Name = "iterativeAlgoLabel";
-            this.iterativeAlgoLabel.Size = new System.Drawing.Size(95, 13);
+            this.iterativeAlgoLabel.Size = new System.Drawing.Size(141, 13);
             this.iterativeAlgoLabel.TabIndex = 8;
-            this.iterativeAlgoLabel.Text = "Iterative algorithms";
+            this.iterativeAlgoLabel.Text = "Итерационные алгоритмы";
             // 
             // iterativeAlgoList
             // 
@@ -550,7 +550,7 @@
             this.Controls.Add(this.menuStrip1);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainWindow";
-            this.Text = "Compiler IDE";
+            this.Text = "Среда разработки";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.mainBox.ResumeLayout(false);

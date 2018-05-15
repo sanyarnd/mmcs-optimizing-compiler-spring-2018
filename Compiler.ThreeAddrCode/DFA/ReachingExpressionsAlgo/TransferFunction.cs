@@ -7,7 +7,7 @@ using Compiler.ThreeAddrCode.CFG;
 using Compiler.ThreeAddrCode.Nodes;
 using Compiler.ThreeAddrCode.Expressions;
 
-namespace Compiler.ThreeAddrCode.DFA.ReachingExpressionsAlgo
+namespace Compiler.ThreeAddrCode.DFA.ReachingExpressions
 {
     public class TransferFunction : ITransferFunction<HashSet<Guid>>
     {

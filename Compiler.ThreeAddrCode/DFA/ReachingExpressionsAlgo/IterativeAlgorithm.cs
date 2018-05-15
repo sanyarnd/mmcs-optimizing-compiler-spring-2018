@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Compiler.ThreeAddrCode.CFG;
 
-namespace Compiler.ThreeAddrCode.DFA.ReachingExpressionsAlgo
+namespace Compiler.ThreeAddrCode.DFA.ReachingExpressions
 {
     /// <summary>
     /// Реализация итеративного алгоритма для достигающих выражений

@@ -8,9 +8,6 @@
 Зависит от:
 - Все реализованные оптимизации для базового блока
 
-От задачи зависит:
-- ?????
-
 #### Теоретическая часть задачи
 Требуется реализовать алгоритм, который применил бы к базовому блоку все имеющиеся оптимизации. Также необходимо, чтобы легко можно было добавить новые оптимизации.
 
@@ -23,18 +20,14 @@ public class AllOptimizations
 		{
 			List<IOptimization> optimizations = new List<IOptimization>();
 
-			AlgebraicOptimization algOptimization = new AlgebraicOptimization();
-			CopyPropagation copyPropOptimization = new CopyPropagation();
-			ConstantFolding constFoldingOptimization = new ConstantFolding();
-			ConstantPropagation constPropOptimization = new ConstantPropagation();
-			DeclarationOptimization declOptimization = new DeclarationOptimization();
+			optimizations.Add(new CopyPropagation());
+			optimizations.Add(new ConstantFolding());
+			optimizations.Add(new ConstantPropagation());
+			optimizations.Add(new DeclarationOptimization());
+			optimizations.Add(new AlgebraicOptimization());
+			optimizations.Add(new SubexpressionOptimization());
 
-			optimizations.Add(copyPropOptimization);
-			optimizations.Add(constFoldingOptimization);
-			optimizations.Add(constPropOptimization);
-      optimizations.Add(algOptimization);
-
-      return optimizations;
+			return optimizations;
 		}
 
         private List<IOptimization> O2OptimizationList()

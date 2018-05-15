@@ -33,6 +33,11 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'WithoutIDE|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\WithoutIDE</OutputPath>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="NGitVersion, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NVisitor.1.1.0.73\lib\net45\NGitVersion.exe</HintPath>

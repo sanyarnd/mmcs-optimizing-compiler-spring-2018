@@ -117,4 +117,9 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(ProjectDir)graphviz" "$(ProjectDir)$(OutDir)graphviz" /E /V /F /H /Y /I</PostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'WithoutIDE|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\WithoutIDE</OutputPath>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
 </Project>

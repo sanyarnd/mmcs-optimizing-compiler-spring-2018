@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Compiler.IDE.Handlers
+namespace Compiler.IDE
 {
     internal static class OutputSanitizer
     {

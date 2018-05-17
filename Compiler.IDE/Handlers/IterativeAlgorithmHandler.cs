@@ -1,23 +1,22 @@
-﻿using Compiler.ThreeAddrCode;
-using Compiler.ThreeAddrCode.CFG;
+﻿using Compiler.ThreeAddrCode.CFG;
 using Compiler.ThreeAddrCode.DFA;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Compiler.IDE.Handlers
 {
-    class IterativeAlgorithmHandler
+    internal class IterativeAlgorithmHandler
     {
         //public event EventHandler<string> InOutDataCollected = delegate { };
         public event EventHandler<string> PrintableInOutDataCollected = delegate { };
 
-        public readonly Dictionary<IterativeAlgorithms, bool> IterativeAlgoList = new Dictionary<IterativeAlgorithms, bool>
-        {
-            {IterativeAlgorithms.ReachingDefs, false},
-            {IterativeAlgorithms.ReachingExprs, false},
-        };        
+        public readonly Dictionary<IterativeAlgorithms, bool> IterativeAlgoList =
+            new Dictionary<IterativeAlgorithms, bool>
+            {
+                {IterativeAlgorithms.ReachingDefs, false},
+                {IterativeAlgorithms.ReachingExprs, false},
+            };
 
         private Dictionary<IterativeAlgorithms, InOutData<HashSet<Guid>>> AlgorithmResults(ControlFlowGraph cfg)
         {
@@ -26,8 +25,8 @@ namespace Compiler.IDE.Handlers
             if (IterativeAlgoList[IterativeAlgorithms.ReachingDefs])
             {
                 var reachingDefs = new ThreeAddrCode.DFA.ReachingDefinitions.IterativeAlgorithm();
-                var output = reachingDefs.Analyze(cfg, 
-                    new ThreeAddrCode.DFA.ReachingDefinitions.Operations(cfg.Code), 
+                var output = reachingDefs.Analyze(cfg,
+                    new ThreeAddrCode.DFA.ReachingDefinitions.Operations(cfg.Code),
                     new ThreeAddrCode.DFA.ReachingDefinitions.TransferFunction(cfg.Code));
                 algorithms.Add(IterativeAlgorithms.ReachingDefs, output);
             }
@@ -35,8 +34,8 @@ namespace Compiler.IDE.Handlers
             if (IterativeAlgoList[IterativeAlgorithms.ReachingExprs])
             {
                 var reachingExprs = new ThreeAddrCode.DFA.ReachingExpressions.IterativeAlgorithm();
-                var output = reachingExprs.Analyze(cfg, 
-                    new ThreeAddrCode.DFA.ReachingExpressions.Operations(cfg.Code), 
+                var output = reachingExprs.Analyze(cfg,
+                    new ThreeAddrCode.DFA.ReachingExpressions.Operations(cfg.Code),
                     new ThreeAddrCode.DFA.ReachingExpressions.TransferFunction(cfg.Code));
                 algorithms.Add(IterativeAlgorithms.ReachingExprs, output);
             }
@@ -51,7 +50,8 @@ namespace Compiler.IDE.Handlers
             PrintableInOutDataCollected(null, output);
         }
 
-        private static string ResultsToString(ControlFlowGraph cfg, Dictionary<IterativeAlgorithms, InOutData<HashSet<Guid>>> dictionary)
+        private static string ResultsToString(ControlFlowGraph cfg,
+            Dictionary<IterativeAlgorithms, InOutData<HashSet<Guid>>> dictionary)
         {
             var sb = new StringBuilder();
             foreach (var kvp in dictionary)
@@ -76,8 +76,8 @@ namespace Compiler.IDE.Handlers
                     sb.AppendLine("}\n");
                 }
             }
+
             return sb.ToString();
         }
     }
 }
-

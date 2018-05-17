@@ -50,10 +50,7 @@ namespace Compiler.IDE
 
             // enable custom formatting for listbox
             optsList.FormattingEnabled = true;
-            optsList.Format += (s, e) =>
-            {
-                e.Value = $"{((Optimizations) e.ListItem).GetString()}";
-            };
+            optsList.Format += (s, e) => { e.Value = $"{((Optimizations) e.ListItem).GetString()}"; };
 
             // on item click enable/disable optimization in three addr code hadler
             optsList.ItemCheck += (o, e) =>
@@ -72,16 +69,13 @@ namespace Compiler.IDE
 
             // enable custom formatting
             iterativeAlgoList.FormattingEnabled = true;
-            iterativeAlgoList.Format += (s, e) =>
-            {
-                e.Value = $"{((IterativeAlgorithms)e.ListItem).GetString()}";
-            };
+            iterativeAlgoList.Format += (s, e) => { e.Value = $"{((IterativeAlgorithms) e.ListItem).GetString()}"; };
 
             // on item click enable/disable algorithm
             iterativeAlgoList.ItemCheck += (o, e) =>
             {
                 // select algorithm from list
-                var algo = (IterativeAlgorithms)iterativeAlgoList.Items[e.Index];
+                var algo = (IterativeAlgorithms) iterativeAlgoList.Items[e.Index];
 
                 // pass algorithm to handler
                 _algoHandler.IterativeAlgoList[algo] = e.NewValue == CheckState.Checked;
@@ -164,12 +158,13 @@ namespace Compiler.IDE
             {
                 if (_runThread != null)
                 {
-                    MessageBox.Show(this, "Программа уже запущена!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(this, @"Программа уже запущена!", @"Ошибка", MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
                     return;
                 }
 
                 ClearOutput();
-                var _runTask = Task.Factory.StartNew(() =>
+                var runTask = Task.Factory.StartNew(() =>
                 {
                     _runThread = Thread.CurrentThread;
                     try
@@ -182,14 +177,16 @@ namespace Compiler.IDE
                         {
                             Invoke(new Action(() =>
                             {
-                                MessageBox.Show(this, "Запуск остановлен", "Остановка", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                MessageBox.Show(this, @"Запуск остановлен", @"Остановка", MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
                                 outTextBox.AppendText($"{Environment.NewLine}ОСТАНОВКА");
                             }));
                             _runThread = null;
                         }
                         else
                         {
-                            MessageBox.Show(this, "Запуск остановлен", "Остановка", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show(this, @"Запуск остановлен", @"Остановка", MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
                         }
                     }
                     catch (Exception ex)

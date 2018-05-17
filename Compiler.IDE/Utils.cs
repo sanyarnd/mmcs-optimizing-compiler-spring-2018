@@ -3,14 +3,14 @@ using System.Windows.Forms;
 
 namespace Compiler.IDE
 {
-    static class Utils
+    internal static class Utils
     {
-        static double SCALE_MIN = 0.1;
-        static double SCALE_MAX = 1;
+        private const double ScaleMin = 0.1;
+        private const double ScaleMax = 1;
 
         public static double TrackBarToScale(TrackBar bar)
         {
-            return MapToRange(bar.Value, bar.Minimum, bar.Maximum, SCALE_MIN, SCALE_MAX);
+            return MapToRange(bar.Value, bar.Minimum, bar.Maximum, ScaleMin, ScaleMax);
         }
 
         public static double MapToRange(double x, double in_min, double in_max, double out_min, double out_max)
@@ -20,7 +20,7 @@ namespace Compiler.IDE
 
         public static Image ScaleImage(Image original, double scaleValue)
         {
-            Size size = new Size((int) (original.Width * scaleValue), (int) (original.Height * scaleValue));
+            var size = new Size((int) (original.Width * scaleValue), (int) (original.Height * scaleValue));
             return new Bitmap(original, size);
         }
     }

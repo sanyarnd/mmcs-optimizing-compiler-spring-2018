@@ -35,6 +35,8 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.mainBox = new System.Windows.Forms.GroupBox();
+            this.iterativeAlgoLabel = new System.Windows.Forms.Label();
+            this.iterativeAlgoList = new System.Windows.Forms.CheckedListBox();
             this.optimizationsLabel = new System.Windows.Forms.Label();
             this.compileButton = new System.Windows.Forms.Button();
             this.runButton = new System.Windows.Forms.Button();
@@ -64,8 +66,7 @@
             this.iterativeAlgoPage = new System.Windows.Forms.TabPage();
             this.iterativeAlgoTextBox = new System.Windows.Forms.RichTextBox();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.iterativeAlgoLabel = new System.Windows.Forms.Label();
-            this.iterativeAlgoList = new System.Windows.Forms.CheckedListBox();
+            this.stopButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.mainBox.SuspendLayout();
             this.outBox.SuspendLayout();
@@ -116,14 +117,14 @@
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.openToolStripMenuItem.Text = "Открыть...";
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.exitToolStripMenuItem.Text = "Выход";
             // 
             // aboutToolStripMenuItem
@@ -137,13 +138,14 @@
             // aboutToolStripMenuItem1
             // 
             this.aboutToolStripMenuItem1.Name = "aboutToolStripMenuItem1";
-            this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(149, 22);
             this.aboutToolStripMenuItem1.Text = "О программе";
             // 
             // mainBox
             // 
             this.mainBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.mainBox.Controls.Add(this.stopButton);
             this.mainBox.Controls.Add(this.iterativeAlgoLabel);
             this.mainBox.Controls.Add(this.iterativeAlgoList);
             this.mainBox.Controls.Add(this.optimizationsLabel);
@@ -160,6 +162,28 @@
             this.mainBox.TabStop = false;
             this.mainBox.Text = "Панель управления";
             // 
+            // iterativeAlgoLabel
+            // 
+            this.iterativeAlgoLabel.AutoSize = true;
+            this.iterativeAlgoLabel.Location = new System.Drawing.Point(4, 187);
+            this.iterativeAlgoLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.iterativeAlgoLabel.Name = "iterativeAlgoLabel";
+            this.iterativeAlgoLabel.Size = new System.Drawing.Size(141, 13);
+            this.iterativeAlgoLabel.TabIndex = 8;
+            this.iterativeAlgoLabel.Text = "Итерационные алгоритмы";
+            // 
+            // iterativeAlgoList
+            // 
+            this.iterativeAlgoList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.iterativeAlgoList.CheckOnClick = true;
+            this.iterativeAlgoList.FormattingEnabled = true;
+            this.iterativeAlgoList.Location = new System.Drawing.Point(3, 202);
+            this.iterativeAlgoList.Margin = new System.Windows.Forms.Padding(2);
+            this.iterativeAlgoList.Name = "iterativeAlgoList";
+            this.iterativeAlgoList.Size = new System.Drawing.Size(212, 124);
+            this.iterativeAlgoList.TabIndex = 7;
+            // 
             // optimizationsLabel
             // 
             this.optimizationsLabel.AutoSize = true;
@@ -173,7 +197,7 @@
             // compileButton
             // 
             this.compileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.compileButton.Location = new System.Drawing.Point(3, 335);
+            this.compileButton.Location = new System.Drawing.Point(3, 332);
             this.compileButton.Margin = new System.Windows.Forms.Padding(2);
             this.compileButton.Name = "compileButton";
             this.compileButton.Size = new System.Drawing.Size(67, 20);
@@ -185,7 +209,7 @@
             // 
             this.runButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.runButton.Enabled = false;
-            this.runButton.Location = new System.Drawing.Point(148, 334);
+            this.runButton.Location = new System.Drawing.Point(147, 332);
             this.runButton.Margin = new System.Windows.Forms.Padding(2);
             this.runButton.Name = "runButton";
             this.runButton.Size = new System.Drawing.Size(67, 20);
@@ -227,7 +251,7 @@
             this.outBox.Margin = new System.Windows.Forms.Padding(2);
             this.outBox.Name = "outBox";
             this.outBox.Padding = new System.Windows.Forms.Padding(2);
-            this.outBox.Size = new System.Drawing.Size(446, 67);
+            this.outBox.Size = new System.Drawing.Size(446, 69);
             this.outBox.TabIndex = 2;
             this.outBox.TabStop = false;
             this.outBox.Text = "Вывод";
@@ -244,7 +268,7 @@
             this.outTextBox.Name = "outTextBox";
             this.outTextBox.ReadOnly = true;
             this.outTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.outTextBox.Size = new System.Drawing.Size(439, 48);
+            this.outTextBox.Size = new System.Drawing.Size(439, 50);
             this.outTextBox.TabIndex = 0;
             // 
             // tabsControl
@@ -518,27 +542,16 @@
             this.splitContainer.SplitterWidth = 2;
             this.splitContainer.TabIndex = 4;
             // 
-            // iterativeAlgoLabel
+            // stopButton
             // 
-            this.iterativeAlgoLabel.AutoSize = true;
-            this.iterativeAlgoLabel.Location = new System.Drawing.Point(4, 187);
-            this.iterativeAlgoLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.iterativeAlgoLabel.Name = "iterativeAlgoLabel";
-            this.iterativeAlgoLabel.Size = new System.Drawing.Size(141, 13);
-            this.iterativeAlgoLabel.TabIndex = 8;
-            this.iterativeAlgoLabel.Text = "Итерационные алгоритмы";
-            // 
-            // iterativeAlgoList
-            // 
-            this.iterativeAlgoList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.iterativeAlgoList.CheckOnClick = true;
-            this.iterativeAlgoList.FormattingEnabled = true;
-            this.iterativeAlgoList.Location = new System.Drawing.Point(3, 202);
-            this.iterativeAlgoList.Margin = new System.Windows.Forms.Padding(2);
-            this.iterativeAlgoList.Name = "iterativeAlgoList";
-            this.iterativeAlgoList.Size = new System.Drawing.Size(212, 124);
-            this.iterativeAlgoList.TabIndex = 7;
+            this.stopButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.stopButton.Location = new System.Drawing.Point(75, 332);
+            this.stopButton.Margin = new System.Windows.Forms.Padding(2);
+            this.stopButton.Name = "stopButton";
+            this.stopButton.Size = new System.Drawing.Size(67, 20);
+            this.stopButton.TabIndex = 9;
+            this.stopButton.Text = "Стоп";
+            this.stopButton.UseVisualStyleBackColor = true;
             // 
             // MainWindow
             // 
@@ -625,5 +638,6 @@
         private System.Windows.Forms.RichTextBox iterativeAlgoTextBox;
         private System.Windows.Forms.Label iterativeAlgoLabel;
         private System.Windows.Forms.CheckedListBox iterativeAlgoList;
+        private System.Windows.Forms.Button stopButton;
     }
 }

@@ -2,9 +2,10 @@
 using Compiler.ILcodeGenerator;
 using System;
 using System.Drawing;
-using System.Linq;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Compiler.IDE
@@ -24,6 +25,7 @@ namespace Compiler.IDE
 
         private readonly IlCodeHandler _ilCodeHandler = new IlCodeHandler();
         private TAcode2ILcodeTranslator _ilProgram;
+        private Thread _runThread;
 
         public MainWindow()
         {
@@ -78,24 +80,8 @@ namespace Compiler.IDE
             // on item click enable/disable algorithm
             iterativeAlgoList.ItemCheck += (o, e) =>
             {
-                //// reset selection
-                //if (e.NewValue == CheckState.Checked)
-                //{
-                //    for (int ix = 0; ix < iterativeAlgoList.Items.Count; ++ix)
-                //    {
-                //        if (e.Index != ix)
-                //        {
-                //            iterativeAlgoList.SetItemChecked(ix, false);
-                //        }
-                //    }
-                //}
-
                 // select algorithm from list
                 var algo = (IterativeAlgorithms)iterativeAlgoList.Items[e.Index];
-
-                //// reset algorithm
-                //foreach (var key in _algoHandler.IterativeAlgoList.Keys)
-                //    _algoHandler.IterativeAlgoList[key] = false;
 
                 // pass algorithm to handler
                 _algoHandler.IterativeAlgoList[algo] = e.NewValue == CheckState.Checked;
@@ -171,25 +157,47 @@ namespace Compiler.IDE
                 _ilProgram = e;
             };
 
+            // run and stop
+            // no way to pass cancellation token inside DynMethod's Invoke, so doing it hard way =\
+            stopButton.Click += (o, e) => _runThread?.Abort();
             runButton.Click += (o, e) =>
             {
-                ClearOutput();
-                if (_ilProgram == null)
+                if (_runThread != null)
                 {
-                    outTextBox.Text += @"Объект с IL-кодом -- null, запуск невозможен";
+                    MessageBox.Show(this, "Программа уже запущена!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
-                else
+
+                ClearOutput();
+                var _runTask = Task.Factory.StartNew(() =>
                 {
+                    _runThread = Thread.CurrentThread;
                     try
                     {
                         _ilProgram.RunProgram();
+                    }
+                    catch (ThreadAbortException)
+                    {
+                        if (InvokeRequired)
+                        {
+                            Invoke(new Action(() =>
+                            {
+                                MessageBox.Show(this, "Запуск остановлен", "Остановка", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                outTextBox.AppendText($"{Environment.NewLine}ОСТАНОВКА");
+                            }));
+                            _runThread = null;
+                        }
+                        else
+                        {
+                            MessageBox.Show(this, "Запуск остановлен", "Остановка", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show(this, $@"Запуск завершился с ошибкой:{Environment.NewLine} {ex.Message}",
                             @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                }
+                });
             };
 
             // enable UI after all build steps

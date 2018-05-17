@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
@@ -16,7 +17,14 @@ namespace Compiler.IDE
         public override void Write(char value)
         {
             base.Write(value);
-            _output.AppendText(value.ToString());
+            if (_output.InvokeRequired)
+            {
+                _output.Invoke(new Action<char>(c => _output.AppendText(c.ToString())), value);
+            }
+            else
+            {
+                _output.AppendText(value.ToString());
+            }
         }
 
 

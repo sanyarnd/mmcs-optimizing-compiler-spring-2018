@@ -1,11 +1,8 @@
 ﻿using Compiler.IDE.Handlers;
-using Compiler.ILcodeGenerator;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Compiler.IDE
@@ -24,8 +21,7 @@ namespace Compiler.IDE
         private readonly AstHandler _astHandler = new AstHandler();
 
         private readonly IlCodeHandler _ilCodeHandler = new IlCodeHandler();
-        private TAcode2ILcodeTranslator _ilProgram;
-        private Thread _runThread;
+
 
         public MainWindow()
         {
@@ -145,56 +141,40 @@ namespace Compiler.IDE
                         @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             };
-            _ilCodeHandler.GenerationCompleted += (o, e) =>
-            {
-                ILCodeTextBox.Text = e.PrintCommands();
-                _ilProgram = e;
-            };
+            _ilCodeHandler.GenerationCompleted += (o, e) => { ILCodeTextBox.Text = e.PrintCommands(); };
 
             // run and stop
             // no way to pass cancellation token inside DynMethod's Invoke, so doing it hard way =\
-            stopButton.Click += (o, e) => _runThread?.Abort();
-            runButton.Click += (o, e) =>
-            {
-                if (_runThread != null)
-                {
-                    MessageBox.Show(this, @"Программа уже запущена!", @"Ошибка", MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                    return;
-                }
+            stopButton.Click += (o, e) => _ilCodeHandler.Abort();
+            runButton.Click += (o, e) => _ilCodeHandler.Run();
 
-                ClearOutput();
-                var runTask = Task.Factory.StartNew(() =>
+            _ilCodeHandler.RuntimeStarted += (o, e) => ClearOutput();
+            _ilCodeHandler.Aborted += (o, e) =>
+            {
+                if (InvokeRequired)
                 {
-                    _runThread = Thread.CurrentThread;
-                    try
+                    Invoke(new Action(() =>
                     {
-                        _ilProgram.RunProgram();
-                    }
-                    catch (ThreadAbortException)
-                    {
-                        if (InvokeRequired)
-                        {
-                            Invoke(new Action(() =>
-                            {
-                                MessageBox.Show(this, @"Запуск остановлен", @"Остановка", MessageBoxButtons.OK,
-                                    MessageBoxIcon.Information);
-                                outTextBox.AppendText($"{Environment.NewLine}ОСТАНОВКА");
-                            }));
-                            _runThread = null;
-                        }
-                        else
-                        {
-                            MessageBox.Show(this, @"Запуск остановлен", @"Остановка", MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(this, $@"Запуск завершился с ошибкой:{Environment.NewLine} {ex.Message}",
-                            @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                });
+                        MessageBox.Show(this, @"Запуск остановлен", @"Остановка", MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+                        outTextBox.AppendText($"{Environment.NewLine}ОСТАНОВКА");
+                    }));
+                }
+                else
+                {
+                    MessageBox.Show(this, @"Запуск остановлен", @"Остановка", MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
+            };
+            _ilCodeHandler.AlreadyRunningErrored += (o, e) =>
+            {
+                MessageBox.Show(this, @"Программа уже запущена!", @"Ошибка", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            };
+            _ilCodeHandler.RuntimeErrored += (o, e) =>
+            {
+                MessageBox.Show(this, $@"Запуск завершился с ошибкой:{Environment.NewLine} {e.Message}",
+                    @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             };
 
             // enable UI after all build steps
@@ -249,7 +229,7 @@ namespace Compiler.IDE
             astSaveButton.Click += (o, e) => SaveGraphFile(ASTPictureBox);
         }
 
-        private void ClearOutput()
+        internal void ClearOutput()
         {
             outTextBox.Text = "";
         }

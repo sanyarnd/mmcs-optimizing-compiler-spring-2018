@@ -229,7 +229,7 @@ namespace Compiler.IDE
             astSaveButton.Click += (o, e) => SaveGraphFile(ASTPictureBox);
         }
 
-        internal void ClearOutput()
+        private void ClearOutput()
         {
             outTextBox.Text = "";
         }

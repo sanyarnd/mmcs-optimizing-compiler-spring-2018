@@ -35,6 +35,7 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.mainBox = new System.Windows.Forms.GroupBox();
+            this.stopButton = new System.Windows.Forms.Button();
             this.iterativeAlgoLabel = new System.Windows.Forms.Label();
             this.iterativeAlgoList = new System.Windows.Forms.CheckedListBox();
             this.optimizationsLabel = new System.Windows.Forms.Label();
@@ -66,7 +67,6 @@
             this.iterativeAlgoPage = new System.Windows.Forms.TabPage();
             this.iterativeAlgoTextBox = new System.Windows.Forms.RichTextBox();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.stopButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.mainBox.SuspendLayout();
             this.outBox.SuspendLayout();
@@ -162,8 +162,20 @@
             this.mainBox.TabStop = false;
             this.mainBox.Text = "Панель управления";
             // 
+            // stopButton
+            // 
+            this.stopButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.stopButton.Location = new System.Drawing.Point(75, 332);
+            this.stopButton.Margin = new System.Windows.Forms.Padding(2);
+            this.stopButton.Name = "stopButton";
+            this.stopButton.Size = new System.Drawing.Size(67, 20);
+            this.stopButton.TabIndex = 9;
+            this.stopButton.Text = "Стоп";
+            this.stopButton.UseVisualStyleBackColor = true;
+            // 
             // iterativeAlgoLabel
             // 
+            this.iterativeAlgoLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.iterativeAlgoLabel.AutoSize = true;
             this.iterativeAlgoLabel.Location = new System.Drawing.Point(4, 187);
             this.iterativeAlgoLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
@@ -174,8 +186,7 @@
             // 
             // iterativeAlgoList
             // 
-            this.iterativeAlgoList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.iterativeAlgoList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.iterativeAlgoList.CheckOnClick = true;
             this.iterativeAlgoList.FormattingEnabled = true;
             this.iterativeAlgoList.Location = new System.Drawing.Point(3, 202);
@@ -251,7 +262,7 @@
             this.outBox.Margin = new System.Windows.Forms.Padding(2);
             this.outBox.Name = "outBox";
             this.outBox.Padding = new System.Windows.Forms.Padding(2);
-            this.outBox.Size = new System.Drawing.Size(446, 69);
+            this.outBox.Size = new System.Drawing.Size(446, 71);
             this.outBox.TabIndex = 2;
             this.outBox.TabStop = false;
             this.outBox.Text = "Вывод";
@@ -268,7 +279,7 @@
             this.outTextBox.Name = "outTextBox";
             this.outTextBox.ReadOnly = true;
             this.outTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.outTextBox.Size = new System.Drawing.Size(439, 50);
+            this.outTextBox.Size = new System.Drawing.Size(439, 52);
             this.outTextBox.TabIndex = 0;
             // 
             // tabsControl
@@ -541,17 +552,6 @@
             this.splitContainer.SplitterDistance = 277;
             this.splitContainer.SplitterWidth = 2;
             this.splitContainer.TabIndex = 4;
-            // 
-            // stopButton
-            // 
-            this.stopButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.stopButton.Location = new System.Drawing.Point(75, 332);
-            this.stopButton.Margin = new System.Windows.Forms.Padding(2);
-            this.stopButton.Name = "stopButton";
-            this.stopButton.Size = new System.Drawing.Size(67, 20);
-            this.stopButton.TabIndex = 9;
-            this.stopButton.Text = "Стоп";
-            this.stopButton.UseVisualStyleBackColor = true;
             // 
             // MainWindow
             // 

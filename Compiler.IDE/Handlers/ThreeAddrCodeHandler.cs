@@ -17,6 +17,7 @@ namespace Compiler.IDE.Handlers
             {Optimizations.ConstProp, false},
             {Optimizations.CopyProp, false},
             {Optimizations.ConstFold, false},
+            {Optimizations.Subexpr, false},
         };
 
         public event EventHandler<TACode> GenerationCompleted = delegate { };
@@ -65,6 +66,12 @@ namespace Compiler.IDE.Handlers
             {
                 var constPropOptimization = new ConstantPropagation();
                 optimizations.Add(constPropOptimization);
+            }
+
+            if (OptimizationList[Optimizations.Subexpr])
+            {
+                var subexpOptimization = new SubexpressionOptimization();
+                optimizations.Add(subexpOptimization);
             }
 
             return optimizations;

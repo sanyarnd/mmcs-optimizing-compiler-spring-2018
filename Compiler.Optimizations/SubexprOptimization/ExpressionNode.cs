@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using Compiler.ThreeAddrCode.Nodes;
 using Compiler.ThreeAddrCode.Expressions;
 using Compiler.ThreeAddrCode;
+using System;
 
 namespace Compiler.Optimizations.SubexprOptimization
 {
@@ -29,7 +28,6 @@ namespace Compiler.Optimizations.SubexprOptimization
         /// </summary>
         public List<Expr> AssigneeList { get; }
         
-
         public ExpressionNode(Expr expression)
         {
             AssigneeList = new List<Expr>();

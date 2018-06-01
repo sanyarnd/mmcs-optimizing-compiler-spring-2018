@@ -5,19 +5,41 @@ using Compiler.Parser.AST;
 
 namespace Compiler.Parser.Visitors
 {
+    /// <summary>
+    /// Класс реализующий Pretty-print visitor
+    /// Восстанавливает текст программы по AST
+    /// </summary>
     public class PrettyPrintVisitor : AutoVisitor
     {
+        /// <summary>
+        /// Текст программы.
+        /// </summary>
         public string Text = "";
+        /// <summary>
+        /// Текущий отступ.
+        /// </summary>
         private int Indent = 0;
 
+        /// <summary>
+        /// Возвращает строку с текущим отступом от ее начала.
+        /// </summary>
+        /// <returns></returns>
         private string IndentStr()
         {
             return new string(' ', Indent);
         }
+
+        /// <summary>
+        /// Увеличения текущего отступа
+        /// </summary>
         private void IndentPlus()
         {
             Indent += 2;
         }
+
+        /// <summary>
+        /// Уменьшение текущего отступа
+        /// </summary>
         private void IndentMinus()
         {
             Indent -= 2;

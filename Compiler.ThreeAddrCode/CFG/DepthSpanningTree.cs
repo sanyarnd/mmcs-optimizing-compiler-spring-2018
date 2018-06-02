@@ -61,8 +61,8 @@ namespace Compiler.ThreeAddrCode.CFG
         public bool FindBackwardPath(BasicBlock source, BasicBlock target)
         {
             var result = false;
-
-            var incomingEdges = SpanningTree.InEdges(source);
+            var containVertex = SpanningTree.ContainsVertex(source);
+            var incomingEdges = containVertex ? SpanningTree.InEdges(source) : new List<Edge<BasicBlock>>();
             while (incomingEdges.Count() > 0)
             {
                 var edge = incomingEdges.First();

@@ -20,16 +20,15 @@ namespace Compiler.Optimizations
 			optimizations.Add(new ConstantPropagation());
 			optimizations.Add(new DeclarationOptimization());
 			optimizations.Add(new AlgebraicOptimization());
-			optimizations.Add(new SubexpressionOptimization());
+			//optimizations.Add(new SubexpressionOptimization());
 
 			return optimizations;
 		}
 
-        private List<IOptimization> O2OptimizationList()
-        {
-            return new List<IOptimization>();
-        }
-
+		private List<IOptimization> O2OptimizationList()
+		{
+			return new List<IOptimization>();
+		}
 
         public TACode ApplyAllOptimizations(TACode code)
 		{
@@ -56,6 +55,15 @@ namespace Compiler.Optimizations
                 code = new TACode();
                 code.CodeList = codeList;
             }
+
+			return code;
+		}
+		public TACode LabelCode(TACode code)
+		{
+			foreach (var l in code.CodeList.ToList())
+			{
+				code.LabeledCode[l.Label] = l;
+			}
 
 			return code;
 		}

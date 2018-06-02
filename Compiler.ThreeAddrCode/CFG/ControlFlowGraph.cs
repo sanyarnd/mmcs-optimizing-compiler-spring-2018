@@ -123,26 +123,30 @@ namespace Compiler.ThreeAddrCode.CFG
         }
 
 
+        public bool IsReducible { get => isReducible(); }
+
         /// <summary>
         /// Проверка CFG на приводимость
         /// </summary>
         /// <returns>Возвращает true, если CFG приводим, иначе - false</returns>
-        public bool isReducible()
+        private bool isReducible()
         {
             //Отбираем все обратные дуги
             var retreatiangEdges = EdgeTypes.Where(elem => elem.Value == EdgeType.Retreating).Select(pair => pair.Key);
+            var count = retreatiangEdges.Count();
             //Если таковых нет - CFG приводим
             if (retreatiangEdges.Count() == 0)
                 return true;
             //Строим дерево доминанто
-            var dominatorTree = new DominatorTree();
-            dominatorTree.CreateDomMatrix(this);
-            var matrix = dominatorTree.Matrix;
-
-            //Проверяем каждую обратную дугу на обратимость
+            var domMatrix = new DominatorTree(this).Matrix;
+            //Проверяем каждую обратную дугу на обратимость(target доминирует на source в DominatorTree)
             foreach (var edge in retreatiangEdges)
             {
-                dominatorTree.Matrix;
+                //DominatorTree.matrix(i, j).HasLine <=> j dom i. (c) Max
+                var rowWithSource = domMatrix.FirstOrDefault(row => row.BasicBlock.BlockId == edge.Source.BlockId);
+                var edgeInDomTree = rowWithSource.ItemDoms.FirstOrDefault(cell => cell.BasicBlock.BlockId == edge.Target.BlockId);
+                if (!edgeInDomTree.HasLine)
+                    return false;
             }
             return true;
         }

@@ -86,9 +86,11 @@ namespace Compiler.ThreeAddrCode
                     }
 
                     // Список = { dom(i_1) && dom(i_2) && ... && dom(i_k) }
-                    List<bool> results = new List<bool>(N);
-                    results.ForEach(x => x = true);
-
+                    List<bool> results = new List<bool>();
+                    for (int j = 0; j < N; j++)
+                    {
+                        results.Add(true);
+                    }
                     foreach (var parent in CFG.CFGNodes[i].Parents)
                     {
                         // Находим dom каждого предка

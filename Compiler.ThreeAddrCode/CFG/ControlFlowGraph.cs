@@ -24,6 +24,11 @@ namespace Compiler.ThreeAddrCode.CFG
 
         public EdgeTypes EdgeTypes { get; set; }
 
+
+        public void ReverseCFGNodes()
+        {
+            _cfgNodes.Reverse();
+        }
         /// <summary>
         ///     Конструктор
         /// </summary>

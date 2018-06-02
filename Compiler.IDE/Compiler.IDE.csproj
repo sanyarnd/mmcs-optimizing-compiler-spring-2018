@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -37,6 +37,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,17 +52,22 @@
     <Compile Include="Handlers\ASTGraphvizVisitor.cs" />
     <Compile Include="Handlers\ASTHandler.cs" />
     <Compile Include="Handlers\CFGHandler.cs" />
-    <Compile Include="Handlers\OutputSanitizer.cs" />
+    <Compile Include="Handlers\IterativeAlgorithmHandler.cs" />
+    <Compile Include="IterativeAlgorithms.cs" />
     <Compile Include="Handlers\ThreeAddrCodeHandler.cs" />
     <Compile Include="Handlers\ParseHandler.cs" />
+    <Compile Include="Handlers\IlCodeHandler.cs" />
+    <Compile Include="Optimizations.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="OutputSanitizer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TextBoxConsole.cs" />
     <Compile Include="Utils.cs" />
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
@@ -92,6 +98,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Compiler.ILcodeGenerator\Compiler.ILcodeGenerator.csproj">
+      <Project>{6BE788EE-6B8B-40F8-9423-5D71D99BD024}</Project>
+      <Name>Compiler.ILcodeGenerator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Compiler.Optimizations\Compiler.Optimizations.csproj">
+      <Project>{59559291-27B9-4124-8F46-50DA03ED3E44}</Project>
+      <Name>Compiler.Optimizations</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Compiler.Parser\Compiler.Parser.csproj">
       <Project>{1A72E236-90D3-4729-9571-FDD1711E4CA7}</Project>
       <Name>Compiler.Parser</Name>
@@ -105,5 +119,10 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(ProjectDir)graphviz" "$(ProjectDir)$(OutDir)graphviz" /E /V /F /H /Y /I</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'WithoutIDE|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\WithoutIDE</OutputPath>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
 </Project>

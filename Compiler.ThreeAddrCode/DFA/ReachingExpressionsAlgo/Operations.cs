@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Compiler.ThreeAddrCode.Nodes;
 using Compiler.ThreeAddrCode.Expressions;
 
-namespace Compiler.ThreeAddrCode.DFA.ReachingExpressionsAlgo
+namespace Compiler.ThreeAddrCode.DFA.ReachingExpressions
 {
     //Реализация методов интерфейса операторов полурешётки для достигающих выражений
     //Реализация взята с ReachingDefinitions с небольшими изменениями

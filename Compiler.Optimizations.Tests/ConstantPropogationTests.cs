@@ -1,4 +1,5 @@
-﻿using Compiler.ThreeAddrCode;
+﻿using System.Linq;
+using Compiler.ThreeAddrCode;
 using Compiler.ThreeAddrCode.Expressions;
 using Compiler.ThreeAddrCode.Nodes;
 using NUnit.Framework;
@@ -21,7 +22,7 @@ namespace Compiler.Optimizations.Tests
 			};
 			var assgn2 = new Assign()
 			{
-				Left = assgn1.Right,
+				Left = new Var(),
 				Operation = OpCode.Minus,
 				Right = assgn1.Result,
 				Result = new Var()
@@ -62,17 +63,20 @@ namespace Compiler.Optimizations.Tests
 			taCodeConstProp.AddNode(assgn5);
 			taCodeConstProp.AddNode(assgn6);
 
+			var optConstProp = new CopyPropagation();
+			optConstProp.Optimize(taCodeConstProp.CodeList.ToList(), out var applCopProp);
 			/*
               a = 10
-              c = b - 10     -----> c = b - 10
+              c = b - a     -----> c = b - 10
               d = c + 1
               e = d * a     -----> e = d * 10
               a = 30 - 20
               k = c + a     -----> k = c + a
             */
-			
-			// TODO Assert'ы
 
+			Assert.AreEqual(assgn2.Right, assgn1.Result);
+			Assert.AreEqual(assgn4.Right, assgn1.Result);
+			Assert.AreNotSame(assgn6.Right, assgn1.Result);
 			Assert.True(true);
 		}
 	}

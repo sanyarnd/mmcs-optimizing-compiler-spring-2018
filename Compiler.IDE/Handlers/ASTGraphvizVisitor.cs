@@ -5,25 +5,25 @@ using System.Text;
 
 namespace Compiler.IDE.Handlers
 {
-    class ASTGraphvizVisitor : IVisitor
+    internal class AstGraphvizVisitor : IVisitor
     {
-        private ObjectIDGenerator gen = new ObjectIDGenerator();
+        private readonly ObjectIDGenerator _gen = new ObjectIDGenerator();
 
         public string Nodes => _nodes.ToString();
-        private StringBuilder _nodes = new StringBuilder();
+        private readonly StringBuilder _nodes = new StringBuilder();
 
         public string Edges => _edges.ToString();
-        private StringBuilder _edges = new StringBuilder();
+        private readonly StringBuilder _edges = new StringBuilder();
 
         private string Mark(Node node)
         {
-            return gen.GetId(node, out bool b).ToString();
+            return _gen.GetId(node, out _).ToString();
         }
 
         public void VisitAssignNode(AssignNode a)
         {
             string label = Mark(a);
-            _nodes.AppendLine($"{label}  [label = \"ASSIGN\"]");
+            _nodes.AppendLine($"{label}  [label = \"Assign: {a.Id.Name} = expr\"]");
 
             a.Id.Visit(this);
             a.Expr.Visit(this);
@@ -35,7 +35,7 @@ namespace Compiler.IDE.Handlers
         public void VisitBinaryNode(BinaryNode a)
         {
             string label = Mark(a);
-            _nodes.AppendLine($"{label}  [label = \"BINOP\"]");
+            _nodes.AppendLine($"{label}  [label = \"BinOp: {a.Operation}\"]");
 
             a.Left.Visit(this);
             a.Right.Visit(this);
@@ -47,7 +47,7 @@ namespace Compiler.IDE.Handlers
         public void VisitBlockNode(BlockNode a)
         {
             string label = Mark(a);
-            _nodes.AppendLine($"{label}  [label = \"BLOCK\"]");
+            _nodes.AppendLine($"{label}  [label = \"Block\"]");
 
             foreach (var st in a.StList)
             {
@@ -59,7 +59,7 @@ namespace Compiler.IDE.Handlers
         public void VisitCycleNode(CycleNode a)
         {
             string label = Mark(a);
-            _nodes.AppendLine($"{label}  [label = \"CYCLE\"]");
+            _nodes.AppendLine($"{label}  [label = \"Cycle\"]");
 
             a.Condition.Visit(this);
             a.Body.Visit(this);
@@ -71,13 +71,13 @@ namespace Compiler.IDE.Handlers
         public void VisitEmptyNode(EmptyNode a)
         {
             string label = Mark(a);
-            _nodes.AppendLine($"{label}  [label = \"EMPTY\"]");
+            _nodes.AppendLine($"{label}  [label = \"Empty\"]");
         }
 
         public void VisitExprListNode(ExprListNode a)
         {
             string label = Mark(a);
-            _nodes.AppendLine($"{label}  [label = \"EXPR_LIST\"]");
+            _nodes.AppendLine($"{label}  [label = \"ExprList\"]");
 
             foreach (var st in a.ExprList)
             {
@@ -89,13 +89,13 @@ namespace Compiler.IDE.Handlers
         public void VisitExprNode(ExprNode a)
         {
             string label = Mark(a);
-            _nodes.AppendLine($"{label}  [label = \"EXPR\"]");
+            _nodes.AppendLine($"{label}  [label = \"Expr\"]");
         }
 
         public void VisitForNode(ForNode a)
         {
             string label = Mark(a);
-            _nodes.AppendLine($"{label}  [label = \"FOR\"]");
+            _nodes.AppendLine($"{label}  [label = \"For: {a.Assign.Id} = expr; border; inc; body\"]");
 
             a.Assign.Visit(this);
             a.Border.Visit(this);
@@ -111,7 +111,7 @@ namespace Compiler.IDE.Handlers
         public void VisitGoToNode(GoToNode a)
         {
             string label = Mark(a);
-            _nodes.AppendLine($"{label}  [label = \"GOTO\"]");
+            _nodes.AppendLine($"{label}  [label = \"GoTo: {a.Label.Name}\"]");
 
             a.Label.Visit(this);
 
@@ -121,13 +121,17 @@ namespace Compiler.IDE.Handlers
         public void VisitIdNode(IdNode a)
         {
             string label = Mark(a);
-            _nodes.AppendLine($"{label}  [label = \"ID: {a.Name}\"]");
+            _nodes.AppendLine($"{label}  [label = \"Id: {a.Name}\"]");
         }
 
         public void VisitIfNode(IfNode a)
         {
             string label = Mark(a);
-            _nodes.AppendLine($"{label}  [label = \"IF\"]");
+
+            string elsePresent = "present";
+            if (a.ElseClause == null)
+                elsePresent = elsePresent.Insert(0, "not ");
+            _nodes.AppendLine($"{label}  [label = \"If: else is {elsePresent} \"]");
 
             a.Conditon.Visit(this);
             a.IfClause.Visit(this);
@@ -142,13 +146,13 @@ namespace Compiler.IDE.Handlers
         public void VisitIntNumNode(IntNumNode a)
         {
             string label = Mark(a);
-            _nodes.AppendLine($"{label}  [label = \"INT: {a.Num}\"]");
+            _nodes.AppendLine($"{label}  [label = \"Int: {a.Num}\"]");
         }
 
         public void VisitLabeledNode(LabeledNode a)
         {
             string label = Mark(a);
-            _nodes.AppendLine($"{label}  [label = \"LABELED\"]");
+            _nodes.AppendLine($"{label}  [label = \"Labeled: {a.Label.Name}, statement\"]");
 
             a.Label.Visit(this);
             a.Stat.Visit(this);
@@ -160,7 +164,7 @@ namespace Compiler.IDE.Handlers
         public void VisitPrintNode(PrintNode a)
         {
             string label = Mark(a);
-            _nodes.AppendLine($"{label}  [label = \"PRINT\"]");
+            _nodes.AppendLine($"{label}  [label = \"Print: exprList\"]");
 
             a.ExprList.Visit(this);
 
@@ -170,7 +174,7 @@ namespace Compiler.IDE.Handlers
         public void VisitUnaryNode(UnaryNode a)
         {
             string label = Mark(a);
-            _nodes.AppendLine($"{label}  [label = \"UNARY: {a.Operation}\"]");
+            _nodes.AppendLine($"{label}  [label = \"UnaryOp: {a.Operation}, {a.Num} \"]");
 
             a.Num.Visit(this);
 

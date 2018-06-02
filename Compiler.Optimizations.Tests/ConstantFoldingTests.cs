@@ -1,4 +1,5 @@
-﻿using Compiler.ThreeAddrCode;
+﻿using System.Linq;
+using Compiler.ThreeAddrCode;
 using Compiler.ThreeAddrCode.Expressions;
 using Compiler.ThreeAddrCode.Nodes;
 using NUnit.Framework;
@@ -62,6 +63,8 @@ namespace Compiler.Optimizations.Tests
 			taCodeConstantFolding.AddNode(assgn5);
 			taCodeConstantFolding.AddNode(assgn6);
 
+			var optConstFold = new ConstantFolding();
+			optConstFold.Optimize(taCodeConstantFolding.CodeList.ToList(), out var applConstFold);
 			/*
 			  a = b
 			  c = 20 * 3    -----> c = 60
@@ -71,8 +74,10 @@ namespace Compiler.Optimizations.Tests
 			  k = c + a
 			*/
 
-			// TODO Assert'ы
-
+			Assert.AreEqual(assgn2.Right, 60);
+			Assert.AreEqual(assgn3.Right, 11);
+			Assert.AreEqual(assgn4.Right, 2);
+			Assert.AreEqual(assgn5.Right, 10);
 			Assert.True(true);
 		}
 	}

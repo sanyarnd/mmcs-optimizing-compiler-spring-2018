@@ -2,22 +2,27 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using QuickGraph;
 
 namespace Compiler.ThreeAddrCode.CFG
 {
     public class ControlFlowGraph
     {
-        /// <summary>
-        ///     Программа в формате трехадресного кода
-        /// </summary>
-        private readonly TACode _code;
 
         /// <summary>
         ///     Список узлов потока управления;
         ///     <para>Первый узел -- входной</para>
         /// </summary>
         public ReadOnlyCollection<BasicBlock> CFGNodes => _cfgNodes.AsReadOnly();
+
+        public TACode Code { get; }
+
         private readonly List<BasicBlock> _cfgNodes;
+
+        public BidirectionalGraph<BasicBlock, Edge<BasicBlock>> CFGAuxiliary =
+            new BidirectionalGraph<BasicBlock, Edge<BasicBlock>>();
+
+        public EdgeTypes EdgeTypes { get; set; }
 
         /// <summary>
         ///     Конструктор
@@ -25,7 +30,7 @@ namespace Compiler.ThreeAddrCode.CFG
         /// <param name="code">экземпляр программы в формате трехадресного кода</param>
         public ControlFlowGraph(TACode code)
         {
-            _code = code;
+            Code = code;
             _cfgNodes = new List<BasicBlock>();
 
             CreateCFGNodes();
@@ -37,8 +42,11 @@ namespace Compiler.ThreeAddrCode.CFG
         private void CreateCFGNodes()
         {
             // оборачиваем ББ в CFG
-            foreach (var block in _code.CreateBasicBlockList())
+            foreach (var block in Code.CreateBasicBlockList())
+            {
                 _cfgNodes.Add(block);
+                CFGAuxiliary.AddVertex(block);
+            }
 
             foreach (var cfgNode in _cfgNodes)
             {
@@ -46,7 +54,7 @@ namespace Compiler.ThreeAddrCode.CFG
                 if (cfgNode.CodeList.Last() is Goto gt)
                 {
                     // ищем на какую строку идет переход
-                    var targetFirst = _code.LabeledCode[gt.TargetLabel];
+                    var targetFirst = Code.LabeledCode[gt.TargetLabel];
 
                     // забираем информацию о том, какому блоку принадлежит эта строка
                     var targetNode = _cfgNodes.First(n => n.Equals(targetFirst.Block));
@@ -54,6 +62,8 @@ namespace Compiler.ThreeAddrCode.CFG
                     // устанавливаем связи cfgNode <-> targetNode
                     cfgNode.AddChild(targetNode);
                     targetNode.AddParent(cfgNode);
+
+                    CFGAuxiliary.AddEdge(new Edge<BasicBlock>(cfgNode, targetNode));
                 }
             }
 
@@ -64,9 +74,47 @@ namespace Compiler.ThreeAddrCode.CFG
                 var cur = nodeList[i];
                 var next = nodeList[i + 1];
 
+                // если последняя строчка -- чистый goto (не if), то дуги быть не может
+                if (cur.CodeList.Last().GetType() == typeof(Goto)) continue;
+
                 cur.AddChild(next);
                 next.AddParent(cur);
+
+                CFGAuxiliary.AddEdge(new Edge<BasicBlock>(cur, next));
             }
+
+            EdgeTypes = new EdgeTypes();
+            ClassificateEdges();
+        }
+
+        private void ClassificateEdges()
+        {
+            var depthTree = new DepthSpanningTree(this);
+            foreach (var edge in CFGAuxiliary.Edges)
+            {
+                if (depthTree.SpanningTree.Edges.Any(e => e.Target.Equals(edge.Target) && e.Source.Equals(edge.Source)))
+                {
+                    EdgeTypes.Add(edge, EdgeType.Coming);
+                }
+                else if (depthTree.FindBackwardPath(edge.Source, edge.Target))
+                {
+                    EdgeTypes.Add(edge, EdgeType.Retreating);
+                }
+                else
+                {
+                    EdgeTypes.Add(edge, EdgeType.Cross);
+                }
+            }
+        }
+
+        public int NumberOfVertices()
+        {
+            return CFGNodes.Count;
+        }
+
+        public BasicBlock GetRoot()
+        {
+            return (NumberOfVertices() > 0) ? CFGNodes.ElementAt(0) : null;
         }
     }
 }

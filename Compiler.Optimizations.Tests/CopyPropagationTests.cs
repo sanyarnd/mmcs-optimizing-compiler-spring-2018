@@ -1,4 +1,5 @@
-﻿using Compiler.ThreeAddrCode;
+﻿using System.Linq;
+using Compiler.ThreeAddrCode;
 using Compiler.ThreeAddrCode.Expressions;
 using Compiler.ThreeAddrCode.Nodes;
 using NUnit.Framework;
@@ -62,6 +63,8 @@ namespace Compiler.Optimizations.Tests
             taCodeCopyProp.AddNode(assgn5);
             taCodeCopyProp.AddNode(assgn6);
 
+			var optCopyProp = new CopyPropagation();
+			optCopyProp.Optimize(taCodeCopyProp.CodeList.ToList(), out var applCopProp);
 			/*
               a = b
               c = b - a     -----> c = b - b
@@ -71,8 +74,9 @@ namespace Compiler.Optimizations.Tests
               k = c + a     -----> k = c + a
             */
 
-			// TODO Assert'ы
-
+			Assert.AreEqual(assgn2.Right, assgn1.Right);
+			Assert.AreEqual(assgn4.Right, assgn1.Right);
+			Assert.AreNotSame(assgn6.Right, assgn1.Right);
 			Assert.True(true);
         }
     }

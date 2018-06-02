@@ -35,7 +35,7 @@ namespace Compiler
             astRoot = AST(fileName);
             if (astRoot == null)
                 return;
-                
+
             var tacodeVisitor = new TACodeVisitor();
             astRoot.Visit(tacodeVisitor);
             tacodeInstance = tacodeVisitor.Code;

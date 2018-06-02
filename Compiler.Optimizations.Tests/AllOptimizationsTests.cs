@@ -60,9 +60,12 @@ namespace Compiler.Optimizations.Tests
 			  c = 20 * 3  -----> c = 60
 			  d = 10 + n  -----> d = 30
 			*/
+			var allOptimizations = new AllOptimizations();
+			allOptimizations.ApplyAllOptimizations(taCodeAllOptimizations);
 
-			// TODO Assert'ы
-
+			Assert.AreEqual(assgn2.Right, 0);
+			Assert.AreEqual(assgn4.Right, 60);
+			Assert.AreEqual(assgn5.Right, 30);
 			Assert.True(true);
 		}
 	}

@@ -1,11 +1,15 @@
 ﻿using System;
 
-namespace Compiler.IDE.Handlers
+namespace Compiler.IDE
 {
-    static class OutputSanitizer
+    internal static class OutputSanitizer
     {
+        public enum SanitizeLevel
+        {
+            TextBox,
+            DotFile
+        };
 
-        public enum SanitizeLevel { TextBox, DotFile };
         /// <summary>
         ///     Заменить недоспустимые последовательности на аналоги, например \n, " и т.п.
         /// </summary>
@@ -17,9 +21,9 @@ namespace Compiler.IDE.Handlers
             switch (level)
             {
                 case SanitizeLevel.TextBox:
-                    return input.Replace($"\"{Environment.NewLine}\"", "NEW_LINE");
+                    return input.Replace($"\"{Environment.NewLine}\"", "CLRF");
                 case SanitizeLevel.DotFile:
-                    return input.Replace($"\"{Environment.NewLine}\"", "NEW_LINE")
+                    return input.Replace($"\"{Environment.NewLine}\"", "CLRF")
                         .Replace("<", @"\<")
                         .Replace(">", @"\>")
                         .Replace("\"", "'");

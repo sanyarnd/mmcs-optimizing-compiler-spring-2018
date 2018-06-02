@@ -127,14 +127,14 @@ namespace Compiler.Optimizations
             foreach (var trees in exprForest) { 
                 foreach (var expNode in trees.Nodes) {
                     if (!expNode.IsList()) {
-                        var node = (Assign)inputNodes.Find(x => expNode.AssigneeList.Contains((x as Assign).Result));
+                        var node = inputNodes.OfType<Assign>().FirstOrDefault(x => expNode.AssigneeList.Contains((x as Assign).Result));
                         if (node != null) {
                             if (expNode.AssigneeList.Count > 1)
                             {
                                 expNode.AssigneeList.RemoveAt(0);
                                 foreach (var optExpr in expNode.AssigneeList)
                                 {
-                                    var extraNode = (Assign)inputNodes.Find(x => (x as Assign).Result == optExpr as Var);
+                                    var extraNode = inputNodes.OfType<Assign>().FirstOrDefault(x => (x as Assign).Result == optExpr as Var);
                                     extraNode.Left = null;
                                     extraNode.Right = node.Result;
                                     extraNode.Operation = OpCode.Copy;

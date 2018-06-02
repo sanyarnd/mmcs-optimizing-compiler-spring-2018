@@ -20,7 +20,7 @@ namespace Compiler.Optimizations
 			optimizations.Add(new ConstantPropagation());
 			optimizations.Add(new DeclarationOptimization());
 			optimizations.Add(new AlgebraicOptimization());
-			//optimizations.Add(new SubexpressionOptimization());
+			optimizations.Add(new SubexpressionOptimization());
 
 			return optimizations;
 		}

@@ -234,7 +234,7 @@ namespace Compiler.ThreeAddrCode.Tests
 
             var op = new Operations(taCode);
             var tf = new TransferFunction(taCode);
-            
+
 
             var (gen, kill) = tf.GetGenAndKill(cfg.CFGNodes.ElementAt(0), op);
             Assert.True(gen.SetEquals(new HashSet<Guid> { ass1.Label }));
@@ -242,19 +242,19 @@ namespace Compiler.ThreeAddrCode.Tests
 
             (gen, kill) = tf.GetGenAndKill(cfg.CFGNodes.ElementAt(1), op);
             var lName = TACodeNameManager.Instance[gen.ElementAt(0)];
-            Assert.True(gen.SetEquals(new HashSet<Guid> {  ass2.Label}));
+            Assert.True(gen.SetEquals(new HashSet<Guid> { ass2.Label }));
             Assert.True(kill.SetEquals(new HashSet<Guid> { }));
 
             (gen, kill) = tf.GetGenAndKill(cfg.CFGNodes.ElementAt(2), op);
-            Assert.True(gen.SetEquals(new HashSet<Guid> { ass3.Label  }));
-            Assert.True(kill.SetEquals(new HashSet<Guid> {  }));
+            Assert.True(gen.SetEquals(new HashSet<Guid> { ass3.Label }));
+            Assert.True(kill.SetEquals(new HashSet<Guid> { }));
 
             (gen, kill) = tf.GetGenAndKill(cfg.CFGNodes.ElementAt(3), op);
-            Assert.True(gen.SetEquals(new HashSet<Guid> { ass4.Label  }));
-            Assert.True(kill.SetEquals(new HashSet<Guid> {  }));
+            Assert.True(gen.SetEquals(new HashSet<Guid> { ass4.Label }));
+            Assert.True(kill.SetEquals(new HashSet<Guid> { }));
 
             (gen, kill) = tf.GetGenAndKill(cfg.CFGNodes.ElementAt(4), op);
-            Assert.True(gen.SetEquals(new HashSet<Guid> {  ass5.Label, ass6.Label }));
+            Assert.True(gen.SetEquals(new HashSet<Guid> { ass5.Label, ass6.Label }));
             Assert.True(kill.SetEquals(new HashSet<Guid> { }));
 
 
@@ -274,12 +274,12 @@ namespace Compiler.ThreeAddrCode.Tests
             }.Analyze(cfg, op, tf);
 
             var trueInOut = new DFA.InOutData<HashSet<System.Guid>>();
-            trueInOut.Add(cfg.CFGNodes.ElementAt(0), 
+            trueInOut.Add(cfg.CFGNodes.ElementAt(0),
                 (new HashSet<Guid>(),
                  new HashSet<Guid> { ass1.Label })
             );
-            trueInOut.Add(cfg.CFGNodes.ElementAt(1), 
-                (new HashSet<Guid> { ass1.Label , ass2.Label, ass3.Label, ass4.Label }, 
+            trueInOut.Add(cfg.CFGNodes.ElementAt(1),
+                (new HashSet<Guid> { ass1.Label, ass2.Label, ass3.Label, ass4.Label },
                 new HashSet<Guid> { ass1.Label, ass2.Label, ass3.Label, ass4.Label })
             );
             trueInOut.Add(cfg.CFGNodes.ElementAt(2),
@@ -308,7 +308,7 @@ namespace Compiler.ThreeAddrCode.Tests
             }
         }
 
-        
+
         //  Переделанный пример из презентации поменял местами b2 и b3 базовые блоки
         [Test]
         public void ReachingDefenitionTest2()
@@ -349,7 +349,7 @@ namespace Compiler.ThreeAddrCode.Tests
                 Result = ass1.Result
             };
 
-            
+
             var ass6 = new Assign
             {
                 Left = ass2.Result,
@@ -357,7 +357,7 @@ namespace Compiler.ThreeAddrCode.Tests
                 Right = new IntConst(4),
                 Result = ass2.Result
             };
-            
+
             var ass7 = new Assign
             {
                 Operation = OpCode.Copy,
@@ -439,15 +439,15 @@ namespace Compiler.ThreeAddrCode.Tests
             );
             trueInOut.Add(cfg.CFGNodes.ElementAt(1),
                 (new HashSet<Guid> { ass1.Label, ass2.Label, ass3.Label, ass5.Label, ass6.Label, ass7.Label },
-                new HashSet<Guid> { ass1.Label, ass2.Label,  ass5.Label, ass6.Label, ass7.Label })
+                new HashSet<Guid> { ass1.Label, ass2.Label, ass5.Label, ass6.Label, ass7.Label })
             );
             trueInOut.Add(cfg.CFGNodes.ElementAt(2),
-                (new HashSet<Guid> { ass1.Label, ass2.Label,  ass5.Label, ass6.Label, ass7.Label },
+                (new HashSet<Guid> { ass1.Label, ass2.Label, ass5.Label, ass6.Label, ass7.Label },
                 new HashSet<Guid> { ass4.Label, ass5.Label, ass6.Label })
             );
             trueInOut.Add(cfg.CFGNodes.ElementAt(3),
                 (new HashSet<Guid> { ass1.Label, ass2.Label, ass4.Label, ass5.Label, ass6.Label, ass7.Label },
-                new HashSet<Guid> {  ass2.Label, ass5.Label, ass6.Label, ass7.Label })
+                new HashSet<Guid> { ass2.Label, ass5.Label, ass6.Label, ass7.Label })
             );
             trueInOut.Add(cfg.CFGNodes.ElementAt(4),
                 (new HashSet<Guid> { ass2.Label, ass5.Label, ass6.Label, ass7.Label },
@@ -460,12 +460,235 @@ namespace Compiler.ThreeAddrCode.Tests
                 HashSet<Guid> outItem1 = inout[x].Item1;
                 HashSet<Guid> toutItem2 = trueInOut[x].Item2;
                 HashSet<Guid> outItem2 = inout[x].Item2;
-              
+
                 var inEq = toutItem1.SetEquals(outItem1);
                 var outEq = toutItem2.SetEquals(outItem2);
                 Assert.True(inEq && outEq);
             }
 
+        }
+
+        [Test]
+        public void IterationCountTest()
+        {
+            var taCode = new TACode();
+
+            var ass1 = new Assign
+            {
+                Left = new IntConst(10),
+                Operation = OpCode.Copy,
+                Result = new Var()
+            };
+            var ass2 = new Assign
+            {
+                Left = new IntConst(10),
+                Operation = OpCode.Mul,
+                Right = new IntConst(3),
+                Result = new Var()
+            };
+            ass2.IsLabeled = true;
+            var ass3 = new Assign
+            {
+                Left = ass2.Result,
+                Operation = OpCode.Plus,
+                Right = ass1.Result,
+                Result = new Var()
+            };
+            ass3.IsLabeled = true;
+            var ass4 = new Assign
+            {
+                Operation = OpCode.Copy,
+                Right = new IntConst(0),
+                Result = new Var()
+            };
+
+            var ass5 = new Assign
+            {
+                Operation = OpCode.Copy,
+                Right = new IntConst(14),
+                Result = ass4.Result
+            };
+
+
+            var ass6 = new Assign
+            {
+                Operation = OpCode.Minus,
+                Left = ass3.Result,
+                Right = ass2.Result,
+                Result = ass4.Result
+            };
+
+            ass6.IsLabeled = true;
+
+            var ass7 = new Assign
+            {
+                Operation = OpCode.Plus,
+                Right = new IntConst(1),
+                Left = ass1.Result,
+                Result = ass1.Result
+            };
+            ass7.IsLabeled = true;
+
+            var ifgt1 = new IfGoto
+            {
+                Condition = new IntConst(1),
+                TargetLabel = ass6.Label
+            };
+            var ifgt2 = new IfGoto
+            {
+                Condition = new IntConst(2),
+                TargetLabel = ass3.Label
+            };
+            var ifgt3 = new IfGoto
+            {
+                Condition = new IntConst(3),
+                TargetLabel = ass2.Label
+            };
+            var goto1 = new Goto
+            {
+                TargetLabel = ass7.Label
+            };
+            var empty = new Empty { };
+
+            taCode.AddNode(ass1);
+            taCode.AddNode(ass2);
+            taCode.AddNode(ass3);
+            taCode.AddNode(ass4);
+            taCode.AddNode(ifgt1);
+            taCode.AddNode(ass5);
+            taCode.AddNode(goto1);
+            taCode.AddNode(ass6);
+            taCode.AddNode(ifgt2);
+            taCode.AddNode(ass7);
+            taCode.AddNode(ifgt3);
+            taCode.AddNode(empty);
+
+            var cfg = new ControlFlowGraph(taCode);
+            taCode.CreateBasicBlockList();
+
+            var op = new Operations(taCode);
+            var tf = new TransferFunction(taCode);
+
+            var algo = new GenericIterativeAlgorithm<HashSet<Guid>>()
+            {
+                Finish = (a, b) =>
+                {
+                    var (a1, a2) = a;
+                    var (b1, b2) = b;
+
+                    return !a2.Except(b2).Any();
+                },
+                Comparer = (x, y) => !x.Except(y).Any(),
+                Fill = () => (op.Lower, op.Lower),
+                DebugToString = (x) => x.Aggregate("", (s, y) => s + ", " + TACodeNameManager.Instance[y])
+            };
+            var inout = algo.Analyze(cfg, op, tf);
+            Assert.True(algo.CountOfDoneIterations == 3);
+            cfg.ReverseCFGNodes();
+            inout = algo.Analyze(cfg, op, tf);
+            Assert.True(algo.CountOfDoneIterations == 6);
+        }
+
+        [Test]
+        public void IterationCountTest2()
+        {
+            var taCode = new TACode();
+
+            var ass1 = new Assign
+            {
+                Left = new IntConst(10),
+                Operation = OpCode.Copy,
+                Result = new Var()
+            };
+            ass1.IsLabeled = true;
+
+            var ass2 = new Assign
+            {
+                Left = new IntConst(10),
+                Operation = OpCode.Mul,
+                Right = new IntConst(3),
+                Result = new Var()
+            };
+            ass2.IsLabeled = true;
+            var ass3 = new Assign
+            {
+                Left = ass2.Result,
+                Operation = OpCode.Plus,
+                Right = ass1.Result,
+                Result = new Var()
+            };
+            ass3.IsLabeled = true;
+            var ass4 = new Assign
+            {
+                Operation = OpCode.Copy,
+                Right = new IntConst(0),
+                Result = new Var()
+            };
+            ass4.IsLabeled = true;
+
+            var ass5 = new Assign
+            {
+                Operation = OpCode.Copy,
+                Right = new IntConst(14),
+                Result = ass4.Result
+            };
+            ass5.IsLabeled = true;
+
+            var ass6 = new Assign
+            {
+                Operation = OpCode.Minus,
+                Left = ass3.Result,
+                Right = ass2.Result,
+                Result = ass4.Result
+            };
+
+            ass6.IsLabeled = true;
+
+            var ass7 = new Assign
+            {
+                Operation = OpCode.Plus,
+                Right = new IntConst(1),
+                Left = ass1.Result,
+                Result = ass1.Result
+            };
+            ass7.IsLabeled = true;
+
+
+            var empty = new Empty { };
+            empty.IsLabeled = true;
+            taCode.AddNode(ass1);
+            taCode.AddNode(ass2);
+            taCode.AddNode(ass3);
+            taCode.AddNode(ass4);
+            taCode.AddNode(ass5);
+            taCode.AddNode(ass6);
+            taCode.AddNode(ass7);
+            taCode.AddNode(empty);
+
+            var cfg = new ControlFlowGraph(taCode);
+            taCode.CreateBasicBlockList();
+
+            var op = new Operations(taCode);
+            var tf = new TransferFunction(taCode);
+
+            var algo = new GenericIterativeAlgorithm<HashSet<Guid>>()
+            {
+                Finish = (a, b) =>
+                {
+                    var (a1, a2) = a;
+                    var (b1, b2) = b;
+
+                    return !a2.Except(b2).Any();
+                },
+                Comparer = (x, y) => !x.Except(y).Any(),
+                Fill = () => (op.Lower, op.Lower),
+                DebugToString = (x) => x.Aggregate("", (s, y) => s + ", " + TACodeNameManager.Instance[y])
+            };
+            var inout = algo.Analyze(cfg, op, tf);
+            Assert.True(algo.CountOfDoneIterations == 2);
+            cfg.ReverseCFGNodes();
+            inout = algo.Analyze(cfg, op, tf);
+            Assert.True(algo.CountOfDoneIterations == 8);
         }
     }
 }

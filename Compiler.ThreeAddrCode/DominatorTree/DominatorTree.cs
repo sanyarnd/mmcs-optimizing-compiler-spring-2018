@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Compiler.ThreeAddrCode.DominatorTree
+namespace Compiler.ThreeAddrCode
 {
     public class DominatorTree
     {
@@ -27,6 +27,7 @@ namespace Compiler.ThreeAddrCode.DominatorTree
         {
             // Инициализируем переменные
             int N = CFG.CFGNodes.Count;
+            bool changed = true;
 
             // Запонлняем матрицу смежности для дерева доминаторов единицами
             foreach (var bb in CFG.CFGNodes)
@@ -61,40 +62,58 @@ namespace Compiler.ThreeAddrCode.DominatorTree
             }
 
             // Считаем матрицу смежности для дерева доминаторов
-            for (int i = 1; i < N; i++)
+            while (changed)
             {
-                // Заполняем значение {x} в формуле. {x} является узел, который доминирует только сам над собой
-                List<DomCell> blockRow = new List<DomCell>(N);
-                foreach (var bb in CFG.CFGNodes)
+                changed = false;
+                for (int i = 1; i < N; i++)
                 {
-                    // Если id ББ-ка совпадает с текущим, ставим 1 в противном случае 0.
-                    blockRow.Add(new DomCell
+                    // Заполняем значение {x} в формуле. {x} является узел, который доминирует только сам над собой
+                    List<DomCell> blockRow = new List<DomCell>(N);
+                    foreach (var bb in CFG.CFGNodes)
                     {
-                        BasicBlock = bb,
-                        HasLine = bb.BlockId == CFG.CFGNodes[i].BlockId
-                    });
-                }
-
-                // Список = { dom(i_1) && dom(i_2) && ... && dom(i_k) }
-                List<bool> results = new List<bool>(N);
-                results.ForEach(x => x = true);
-
-                foreach (var parent in CFG.CFGNodes[i].Parents)
-                {
-                    // Находим dom каждого предка
-                    var domParent = _matrix.Single(row => row.BasicBlock.BlockId == parent.BlockId);
-                    for (int j = 0; j < N; j++)
-                    {
-                        // Поэлементно находим конъюнкцию всех предков
-                        results[j] &= domParent.ItemDoms[j].HasLine;
+                        // Если id ББ-ка совпадает с текущим, ставим 1 в противном случае 0.
+                        blockRow.Add(new DomCell
+                        {
+                            BasicBlock = bb,
+                            HasLine = bb.BlockId == CFG.CFGNodes[i].BlockId
+                        });
                     }
-                }
 
-                // Получили dom(i) = {i} || results. Следовательно выполняем поэлементную дизъюнкцию
-                for (var j = 0; j < N; j++)
-                {
-                    // Выбираем строку с текущим блоком, и меняем все его значения
-                    _matrix[i].ItemDoms[j].HasLine = blockRow[j].HasLine || results[j];
+                    // Список = { dom(i_1) && dom(i_2) && ... && dom(i_k) }
+                    List<bool> results = new List<bool>(N);
+                    results.ForEach(x => x = true);
+
+                    foreach (var parent in CFG.CFGNodes[i].Parents)
+                    {
+                        // Находим dom каждого предка
+                        var domParent = _matrix.Single(row => row.BasicBlock.BlockId == parent.BlockId);
+                        for (int j = 0; j < N; j++)
+                        {
+                            // Поэлементно находим конъюнкцию всех предков
+                            results[j] &= domParent.ItemDoms[j].HasLine;
+                        }
+                    }
+
+                    // Сохраняем строку до изменения
+                    var oldRow = new List<bool>();
+                    foreach(var item in _matrix[i].ItemDoms)
+                    {
+                        oldRow.Add(item.HasLine);
+                    }
+
+                    // Получили dom(i) = {i} || results. Следовательно выполняем поэлементную дизъюнкцию
+                    for (var j = 0; j < N; j++)
+                    {
+                        // Выбираем строку с текущим блоком, и меняем все его значения
+                        _matrix[i].ItemDoms[j].HasLine = blockRow[j].HasLine || results[j];
+                    }
+
+                    // Проверяем изменилась ли строка
+                    for (var j = 0; j < N; j++)
+                    {
+                        changed |= oldRow[j] != _matrix[i].ItemDoms[j].HasLine;
+                    }
+
                 }
             }
         }

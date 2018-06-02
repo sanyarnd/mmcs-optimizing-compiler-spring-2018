@@ -1,7 +1,7 @@
 ﻿using Compiler.ThreeAddrCode.CFG;
 using System.Collections.Generic;
 
-namespace Compiler.ThreeAddrCode.DominatorTree
+namespace Compiler.ThreeAddrCode
 {
     /// <summary>
     ///     Ячейка в матрице доминаторов

@@ -1,4 +1,5 @@
 ﻿using Compiler.ThreeAddrCode.Nodes;
+using Compiler.ThreeAddrCode.DominatorTree;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -115,6 +116,29 @@ namespace Compiler.ThreeAddrCode.CFG
         public BasicBlock GetRoot()
         {
             return (NumberOfVertices() > 0) ? CFGNodes.ElementAt(0) : null;
+        }
+
+
+        /// <summary>
+        /// Проверка CFG на приводимость
+        /// </summary>
+        /// <returns>Возвращает true, если CFG приводим, иначе - false</returns>
+        public bool isReducible()
+        {
+            //Отбираем все обратные дуги
+            var retreatiangEdges = EdgeTypes.Where(elem => elem.Value == EdgeType.Retreating).Select(pair => pair.Key);
+            //Если таковых нет - CFG приводим
+            if (retreatiangEdges.Count() == 0)
+                return true;
+            //Строим дерево доминанто
+            var dominatorTree = new DominatorTree.DominatorTree();
+            dominatorTree.CreateDomMatrix(this);
+            //Проверяем каждую обратную дугу на обратимость
+            foreach (var edge in retreatiangEdges)
+            {
+                dominatorTree.Matrix;
+            }
+            return true;
         }
     }
 }

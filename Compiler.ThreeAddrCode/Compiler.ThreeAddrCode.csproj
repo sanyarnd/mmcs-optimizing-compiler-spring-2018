@@ -103,6 +103,11 @@
     <Compile Include="CFG\EdgeType.cs" />
     <Compile Include="CFG\EdgeTypes.cs" />
     <Compile Include="CFG\GraphNumerator.cs" />
+    <Compile Include="DefUse\DefUseLists.cs" />
+    <Compile Include="DefUse\DefUseSets.cs" />
+    <Compile Include="DefUse\DefUseTestExample.cs" />
+    <Compile Include="DefUse\IterativeAlgorithmAV.cs" />
+    <Compile Include="DefUse\LiveAndDeadVariables.cs" />
     <Compile Include="DFA\ConstantPropagation\IterativeAlgorithm.cs" />
     <Compile Include="DFA\ConstantPropagation\Operations.cs" />
     <Compile Include="DFA\ConstantPropagation\TransferFunctions.cs" />

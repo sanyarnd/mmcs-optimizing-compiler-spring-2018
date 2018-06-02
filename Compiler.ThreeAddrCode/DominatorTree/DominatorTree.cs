@@ -19,11 +19,16 @@ namespace Compiler.ThreeAddrCode
 
         public DominatorTree() => _matrix = new List<DomRow>();
 
+        public DominatorTree(ControlFlowGraph cfg) 
+        {
+            _matrix = new List<DomRow>();
+            CreateDomMatrix(cfg);
+        }
 
-        /// <summary>
-        ///     Создаёт матрицу доминаторов. Возвращает матрицу, значения которой говорят нам, доминирует ли блок j над блоком i.
-        /// </summary>
-        public void CreateDomMatrix(ControlFlowGraph CFG)
+    /// <summary>
+    ///     Создаёт матрицу доминаторов. Возвращает матрицу, значения которой говорят нам, доминирует ли блок j над блоком i.
+    /// </summary>
+    public void CreateDomMatrix(ControlFlowGraph CFG)
         {
             // Инициализируем переменные
             int N = CFG.CFGNodes.Count;
@@ -46,6 +51,7 @@ namespace Compiler.ThreeAddrCode
                 }
                 _matrix.Add(item);
             }
+
 
             // По правилу все ячейки должны быть 1, кроме 1 строки в промежутке от 2ой до последней ячейки
             // Пример

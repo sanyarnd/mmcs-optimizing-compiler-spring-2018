@@ -1,5 +1,4 @@
 ﻿using Compiler.ThreeAddrCode.Nodes;
-using Compiler.ThreeAddrCode.DominatorTree;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -136,8 +135,10 @@ namespace Compiler.ThreeAddrCode.CFG
             if (retreatiangEdges.Count() == 0)
                 return true;
             //Строим дерево доминанто
-            var dominatorTree = new DominatorTree.DominatorTree();
+            var dominatorTree = new DominatorTree();
             dominatorTree.CreateDomMatrix(this);
+            var matrix = dominatorTree.Matrix;
+
             //Проверяем каждую обратную дугу на обратимость
             foreach (var edge in retreatiangEdges)
             {

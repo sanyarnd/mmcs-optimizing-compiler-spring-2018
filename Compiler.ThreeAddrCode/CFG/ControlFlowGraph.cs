@@ -122,7 +122,9 @@ namespace Compiler.ThreeAddrCode.CFG
             return (NumberOfVertices() > 0) ? CFGNodes.ElementAt(0) : null;
         }
 
-
+        /// <summary>
+        /// Возвращает true, если CFG приводим, иначе - fals
+        /// </summary>
         public bool IsReducible { get => isReducible(); }
 
         /// <summary>

@@ -145,8 +145,8 @@ namespace Compiler.ThreeAddrCode.CFG
             foreach (var edge in retreatiangEdges)
             {
                 //DominatorTree.matrix(i, j).HasLine <=> j dom i. (c) Max
-                var rowWithSource = domMatrix.FirstOrDefault(row => row.BasicBlock.BlockId == edge.Source.BlockId);
-                var edgeInDomTree = rowWithSource.ItemDoms.FirstOrDefault(cell => cell.BasicBlock.BlockId == edge.Target.BlockId);
+                var rowWithSource = domMatrix.First(row => row.BasicBlock.BlockId == edge.Source.BlockId);
+                var edgeInDomTree = rowWithSource.ItemDoms.First(cell => cell.BasicBlock.BlockId == edge.Target.BlockId);
                 if (!edgeInDomTree.HasLine)
                     return false;
             }

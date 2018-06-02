@@ -30,6 +30,9 @@ namespace Compiler
             //var sTest = new SubexprTest();
             //sTest.SubexpressionOptimizationTest();
 
+            //APC
+            //CFGReducibility_DominatorTree_PrettyPrinter_Demonstration();
+
             string fileName = @"..\..\sample.txt";
 
             astRoot = AST(fileName);
@@ -54,6 +57,42 @@ namespace Compiler
 
         private static BlockNode astRoot;
         private static TACode tacodeInstance;
+
+        private static void CFGReducibility_DominatorTree_PrettyPrinter_Demonstration()
+        {
+            string fpath = @"..\..\..\CodeSamples\reducibilityBadSample.txt";
+            astRoot = AST(fpath);
+            if (astRoot == null)
+                return;
+            var tacodeVisitor = new TACodeVisitor();
+            astRoot.Visit(tacodeVisitor);
+            var prettyPrinter = new PrettyPrintVisitor();
+            astRoot.Visit(prettyPrinter);
+            var cfg = new ControlFlowGraph(tacodeVisitor.Code);
+            Console.WriteLine(prettyPrinter.Text);
+            Console.WriteLine("###### CFG Reducibility(#59 by APC TEAM) based on DominatorTree(#56 by ДВП)");
+            Console.WriteLine("###### and PrettyPrinter(#5 by APC TEAM) DEMONSTARTION:");
+            Console.WriteLine("######       Sample 1:");
+            Console.WriteLine(prettyPrinter.Text);
+            Console.WriteLine($"###### CFG is reducible: {cfg.IsReducible}");
+
+            fpath = @"..\..\..\CodeSamples\reducibilityGoodSample.txt";
+            astRoot = AST(fpath);
+            if (astRoot == null)
+                return;
+            tacodeVisitor = new TACodeVisitor();
+            astRoot.Visit(tacodeVisitor);
+            prettyPrinter = new PrettyPrintVisitor();
+            astRoot.Visit(prettyPrinter);
+            cfg = new ControlFlowGraph(tacodeVisitor.Code);
+            Console.WriteLine(prettyPrinter.Text);
+            Console.WriteLine("###### CFG Reducibility(#59 by APC TEAM) based on DominatorTree(#56 by ДВП)");
+            Console.WriteLine("###### and PrettyPrinter(#5 by APC TEAM) DEMONSTARTION:");
+            Console.WriteLine("######       Sample 2:");
+            Console.WriteLine("###### Program text from PrettyPrinter:\n");
+            Console.WriteLine(prettyPrinter.Text);
+            Console.WriteLine($"###### CFG is reducible: {cfg.IsReducible}");
+        }
 
         private static BlockNode AST(string fileName)
         {

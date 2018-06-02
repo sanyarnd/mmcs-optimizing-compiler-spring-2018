@@ -31,8 +31,8 @@ namespace Compiler.ThreeAddrCode.Nodes
         public override string ToString()
         {
             if (Left == null)
-                return $"{Label} : {Result} = {Operation.GetSymbol()}{Right}";
-            return $"{Label} : {Result} = {Left} {Operation.GetSymbol()} {Right}";
+                return $"{TACodeNameManager.Instance[Label]} : {Result} = {Operation.GetSymbol()}{Right}";
+            return $"{TACodeNameManager.Instance[Label]} : {Result} = {Left} {Operation.GetSymbol()} {Right}";
         }
     }
 }

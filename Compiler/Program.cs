@@ -10,6 +10,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Compiler.Parser.AST;
+using Compiler.ILcodeGenerator;
+using System.Collections.Generic;
 
 namespace Compiler
 {
@@ -37,6 +39,17 @@ namespace Compiler
             var tacodeVisitor = new TACodeVisitor();
             astRoot.Visit(tacodeVisitor);
             tacodeInstance = tacodeVisitor.Code;
+
+            var allOpt = new AllOptimizations();
+            tacodeInstance = allOpt.ApplyAllOptimizations(tacodeInstance);
+
+            TAcode2ILcodeTranslator trans = new TAcode2ILcodeTranslator();
+
+            Console.WriteLine(tacodeInstance.ToString());
+
+            trans.Translate(tacodeInstance);
+            var temp = trans.PrintCommands();
+            trans.RunProgram();
         }
 
         private static BlockNode astRoot;
@@ -384,7 +397,7 @@ namespace Compiler
 
 			Console.WriteLine($"Testing All Optimizations Together.\n Three Adress Code:\n {taCodeAllOptimizations}");
 			var allOptimizations = new AllOptimizations();
-			allOptimizations.ApplyAllOptimizations(taCodeAllOptimizations.CodeList.ToList());
+			allOptimizations.ApplyAllOptimizations(taCodeAllOptimizations);
 			Console.WriteLine($"Three Adress Code Code\n: {taCodeAllOptimizations}");
 			Console.WriteLine("-----------------------------------------");
 		}

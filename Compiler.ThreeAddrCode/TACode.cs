@@ -78,7 +78,7 @@ namespace Compiler.ThreeAddrCode
                 var node = commands[i];
 
                 // если в узел есть переход по GoTo
-                if (node.IsLabeled)
+                if (node.IsLabeled && !leaders.Contains(i))
                     leaders.Add(i);
                 // если узел является переходом GoTo
                 if (node is Goto)

@@ -17,6 +17,7 @@ namespace Compiler.Optimizations
             node.Operation = OpCode.Copy;
             node.Left = value.HasValue ? new IntConst(value.Value) : node.Right;
             node.Right = null;
+            SwapLeftRight(node);
             return true;
         }
 
@@ -24,7 +25,15 @@ namespace Compiler.Optimizations
         {
             node.Operation = OpCode.Copy;
             node.Right = null;
+            SwapLeftRight(node);
             return true;
+        }
+
+        private void SwapLeftRight(Assign node)
+        {
+            var t = node.Left;
+            node.Left = node.Right;
+            node.Right = t;
         }
 
         public List<Node> Optimize(List<Node> nodes, out bool applied)
@@ -68,8 +77,8 @@ namespace Compiler.Optimizations
                             app = SetLeft(node, 1);
                         break;
                     
-                    default:
-                        throw new ArgumentOutOfRangeException();
+                    //default:
+                        //throw new ArgumentOutOfRangeException();
                 }
             }
 

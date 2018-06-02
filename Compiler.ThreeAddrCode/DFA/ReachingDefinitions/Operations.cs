@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Compiler.ThreeAddrCode.Nodes;
 
 namespace Compiler.ThreeAddrCode.DFA.ReachingDefinitions
 {
@@ -10,7 +11,7 @@ namespace Compiler.ThreeAddrCode.DFA.ReachingDefinitions
 
         public Operations(TACode code)
         {
-            upper = new HashSet<Guid>(code.CodeList.Select(x => (Guid)x.Label));
+            upper = new HashSet<Guid>(code.CodeList.Where(x => x is Assign).Select(x => x.Label));
         }
 
         public HashSet<Guid> Lower => new HashSet<Guid>();

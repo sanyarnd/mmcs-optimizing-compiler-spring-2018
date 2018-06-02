@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\NUnit.3.10.1\build\NUnit.props" Condition="Exists('..\packages\NUnit.3.10.1\build\NUnit.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -12,6 +13,8 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,7 +36,18 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'WithoutIDE|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\WithoutIDE</OutputPath>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NGitVersion, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NVisitor.1.1.0.73\lib\net45\NGitVersion.exe</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.10.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -49,18 +63,23 @@
   <ItemGroup>
     <Compile Include="CFG\BasicBlock.cs" />
     <Compile Include="CFG\ControlFlowGraph.cs" />
-    <Compile Include="DefUse\DefUseLists.cs" />
-    <Compile Include="DefUse\DefUseSets.cs" />
-    <Compile Include="DefUse\DefUseTestExample.cs" />
-    <Compile Include="DefUse\IterativeAlgorithmAV.cs" />
-    <Compile Include="DefUse\LiveAndDeadVariables.cs" />
+    <Compile Include="CFG\GraphNumerator.cs" />
+    <Compile Include="DFA\ConstantPropagation\IterativeAlgorithm.cs" />
+    <Compile Include="DFA\ConstantPropagation\Operations.cs" />
+    <Compile Include="DFA\ConstantPropagation\TransferFunctions.cs" />
+    <Compile Include="DFA\ConstantPropagation\VarValue.cs" />
+    <Compile Include="DFA\GenericIterativeAlgorithm.cs" />
     <Compile Include="DFA\ILatticeOperations.cs" />
     <Compile Include="DFA\IAlgorithm.cs" />
     <Compile Include="DFA\InOutData.cs" />
     <Compile Include="DFA\ITransferFunction.cs" />
+    <Compile Include="DFA\OptimizedGenericIterativeAlgorithm.cs" />
     <Compile Include="DFA\ReachingDefinitions\IterativeAlgorithm.cs" />
     <Compile Include="DFA\ReachingDefinitions\Operations.cs" />
     <Compile Include="DFA\ReachingDefinitions\TransferFunction.cs" />
+    <Compile Include="DFA\ReachingExpressionsAlgo\IterativeAlgorithm.cs" />
+    <Compile Include="DFA\ReachingExpressionsAlgo\Operations.cs" />
+    <Compile Include="DFA\ReachingExpressionsAlgo\TransferFunction.cs" />
     <Compile Include="Expressions\Expr.cs" />
     <Compile Include="Expressions\IntConst.cs" />
     <Compile Include="Expressions\Var.cs" />
@@ -75,12 +94,22 @@
     <Compile Include="Nodes\Node.cs" />
     <Compile Include="Nodes\Print.cs" />
     <Compile Include="TACode.cs" />
+    <Compile Include="DFA\TransferFunction\TransferFunctionUtils.cs" />
+    <Compile Include="TACodeNameManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Данный проект ссылается на пакеты NuGet, отсутствующие на этом компьютере. Используйте восстановление пакетов NuGet, чтобы скачать их.  Дополнительную информацию см. по адресу: http://go.microsoft.com/fwlink/?LinkID=322105. Отсутствует следующий файл: {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\NUnit.3.10.1\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.3.10.1\build\NUnit.props'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

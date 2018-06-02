@@ -14,7 +14,7 @@ namespace Compiler.ThreeAddrCode.Nodes
 
         public override string ToString()
         {
-            return $"{Label} : if {Condition} goto {TargetLabel}";
+            return $"{TACodeNameManager.Instance[Label]} : if {Condition} goto {TACodeNameManager.Instance[TargetLabel]}";
         }
     }
 }

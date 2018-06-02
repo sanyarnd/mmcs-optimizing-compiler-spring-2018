@@ -32,7 +32,24 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'WithoutIDE|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\WithoutIDE</OutputPath>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NCase.Core, Version=0.2.0.276, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NCase.NunitAdapter.0.2.0.276\lib\net45\NCase.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="NCase.NunitAdapter, Version=0.2.0.276, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NCase.NunitAdapter.0.2.0.276\lib\net45\NCase.NunitAdapter.dll</HintPath>
+    </Reference>
+    <Reference Include="NDsl.Core, Version=0.2.0.276, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NCase.NunitAdapter.0.2.0.276\lib\net45\NDsl.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="NUtil, Version=0.2.0.276, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUtil.0.2.0.276\lib\net45\NUtil.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,6 +58,19 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.4.8.1\lib\net45\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core">
+      <HintPath>..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="JetBrains.Annotations">
+      <HintPath>..\packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="NVisitor">
+      <HintPath>..\packages\NVisitor.1.1.0.74\lib\net45\NVisitor.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -48,8 +78,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Compiler.ILcodeGenerator\Compiler.ILcodeGenerator.csproj">
+      <Project>{6BE788EE-6B8B-40F8-9423-5D71D99BD024}</Project>
+      <Name>Compiler.ILcodeGenerator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Compiler.Optimizations\Compiler.Optimizations.csproj">
       <Project>{59559291-27b9-4124-8f46-50da03ed3e44}</Project>
       <Name>Compiler.Optimizations</Name>

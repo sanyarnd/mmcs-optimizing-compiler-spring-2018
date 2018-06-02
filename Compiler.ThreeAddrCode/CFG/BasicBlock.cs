@@ -48,6 +48,7 @@ namespace Compiler.ThreeAddrCode.CFG
 
             foreach (var node in codeList)
                 node.Block = this;
+            TACodeNameManager.Instance.Block(BlockId);
         }
 
         /// <summary>
@@ -91,6 +92,11 @@ namespace Compiler.ThreeAddrCode.CFG
         public static bool operator !=(BasicBlock left, BasicBlock right)
         {
             return !Equals(left, right);
+        }
+
+        public override string ToString()
+        {
+            return TACodeNameManager.Instance[BlockId];
         }
     }
 }

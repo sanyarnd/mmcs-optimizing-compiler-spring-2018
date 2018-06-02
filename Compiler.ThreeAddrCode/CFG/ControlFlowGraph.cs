@@ -1,21 +1,21 @@
 ﻿using Compiler.ThreeAddrCode.Nodes;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Compiler.ThreeAddrCode.CFG
 {
     public class ControlFlowGraph
     {
-        /// <summary>
-        ///     Программа в формате трехадресного кода
-        /// </summary>
-        private readonly TACode _code;
 
         /// <summary>
         ///     Список узлов потока управления;
         ///     <para>Первый узел -- входной</para>
         /// </summary>
-        public IEnumerable<BasicBlock> CFGNodes => _cfgNodes.AsReadOnly();
+        public ReadOnlyCollection<BasicBlock> CFGNodes => _cfgNodes.AsReadOnly();
+
+        public TACode Code { get; }
+
         private readonly List<BasicBlock> _cfgNodes;
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace Compiler.ThreeAddrCode.CFG
         /// <param name="code">экземпляр программы в формате трехадресного кода</param>
         public ControlFlowGraph(TACode code)
         {
-            _code = code;
+            Code = code;
             _cfgNodes = new List<BasicBlock>();
 
             CreateCFGNodes();
@@ -36,7 +36,7 @@ namespace Compiler.ThreeAddrCode.CFG
         private void CreateCFGNodes()
         {
             // оборачиваем ББ в CFG
-            foreach (var block in _code.CreateBasicBlockList())
+            foreach (var block in Code.CreateBasicBlockList())
                 _cfgNodes.Add(block);
 
             foreach (var cfgNode in _cfgNodes)
@@ -45,7 +45,7 @@ namespace Compiler.ThreeAddrCode.CFG
                 if (cfgNode.CodeList.Last() is Goto gt)
                 {
                     // ищем на какую строку идет переход
-                    var targetFirst = _code.LabeledCode[gt.TargetLabel];
+                    var targetFirst = Code.LabeledCode[gt.TargetLabel];
 
                     // забираем информацию о том, какому блоку принадлежит эта строка
                     var targetNode = _cfgNodes.First(n => n.Equals(targetFirst.Block));
@@ -62,6 +62,9 @@ namespace Compiler.ThreeAddrCode.CFG
             {
                 var cur = nodeList[i];
                 var next = nodeList[i + 1];
+
+                // если последняя строчка -- чистый goto (не if), то дуги быть не может
+                if (cur.CodeList.Last().GetType() == typeof(Goto)) continue;
 
                 cur.AddChild(next);
                 next.AddParent(cur);

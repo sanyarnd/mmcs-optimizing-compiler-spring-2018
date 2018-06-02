@@ -87,6 +87,9 @@ namespace Compiler.Parser.Visitors
 
         public override void VisitAssignNode(AssignNode a)
         {
+            var v = GetVarByName(a.Id.Name);
+            TACodeNameManager.Instance.Name(v.Id, a.Id.Name);
+
             var assign = new TACNodes.Assign
             {
                 Left = null,
@@ -363,13 +366,15 @@ namespace Compiler.Parser.Visitors
             }
         }
 
-        /// <summary>
-        ///     Создать новый пустой оператор - метку в ТА коде
-        /// </summary>
-        private TACNodes.Empty GetEmptyLabeledNode(string name = "")
+
+        private TACNodes.Empty GetEmptyLabeledNode(String name = "")
         {
-            var labeledNop = new TACNodes.Empty(name) { IsLabeled = true };
+            var labeledNop = new TACNodes.Empty { IsLabeled = true };
             code.AddNode(labeledNop);
+            if (name == "")
+                TACodeNameManager.Instance.Label(labeledNop.Label);
+            else
+                TACodeNameManager.Instance.Name(labeledNop.Label, name);
             return labeledNop;
         }
 

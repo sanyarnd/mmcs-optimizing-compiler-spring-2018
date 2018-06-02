@@ -7,7 +7,7 @@ using NUnit.Framework;
 using Compiler.ThreeAddrCode.Expressions;
 using Compiler.ThreeAddrCode.Nodes;
 using Compiler.ThreeAddrCode.CFG;
-using Compiler.ThreeAddrCode.DFA.ReachingExpressionsAlgo;
+using Compiler.ThreeAddrCode.DFA.ReachingExpressions;
 
 
 namespace Compiler.ThreeAddrCode.Tests

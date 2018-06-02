@@ -13,7 +13,7 @@ namespace Compiler.ThreeAddrCode.Nodes
 
         public override string ToString()
         {
-            return $"{Label} : print {Data} \"{Sep}\"";
+            return $"{TACodeNameManager.Instance[Label]} : print {Data} \"{Sep}\"";
         }
     }
 }

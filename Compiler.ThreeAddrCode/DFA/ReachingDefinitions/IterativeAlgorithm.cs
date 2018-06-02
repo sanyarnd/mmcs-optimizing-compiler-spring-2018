@@ -27,7 +27,7 @@ namespace Compiler.ThreeAddrCode.DFA.ReachingDefinitions
                     var inset = block.Parents.Aggregate(ops.Lower, (x, y) 
                         => ops.Operator(x, data[y].Item2));
                     var outset = f.Transfer(block, inset, ops);
-                    if (outset.Except(data[block].Item2).Count() != 0)
+                    if (outset.Except(data[block].Item2).Any())
                     {
                         outChanged = true;
                         data[block] = (inset, outset);

@@ -74,7 +74,7 @@ namespace Compiler.ThreeAddrCode
                 for (int i = 1; i < N; i++)
                 {
                     // Заполняем значение {x} в формуле. {x} является узел, который доминирует только сам над собой
-                    List<DomCell> blockRow = new List<DomCell>(N);
+                    List<DomCell> blockRow = new List<DomCell>();
                     foreach (var bb in CFG.CFGNodes)
                     {
                         // Если id ББ-ка совпадает с текущим, ставим 1 в противном случае 0.
@@ -120,6 +120,10 @@ namespace Compiler.ThreeAddrCode
                     for (var j = 0; j < N; j++)
                     {
                         changed |= oldRow[j] != _matrix[i].ItemDoms[j].HasLine;
+                        if (changed)
+                        {
+                            break;
+                        }
                     }
 
                 }

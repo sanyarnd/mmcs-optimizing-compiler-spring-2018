@@ -1,17 +1,16 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // Общие сведения об этой сборке предоставляются следующим набором
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
-[assembly: AssemblyTitle("Compiler.IDE")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("IDE")]
+[assembly: AssemblyDescription("Вспомогательная среда разработки для курса оптимизирующих компиляторов")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Compiler.IDE")]
-[assembly: AssemblyCopyright("Copyright ©  2018")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCompany("Институт ММиКН им. Воровича")]
+[assembly: AssemblyProduct("IDE")]
+[assembly: AssemblyCopyright("https://github.com/Lucky112/mmcs-optimizing-compiler-spring-2018 © 2018")]
+[assembly: AssemblyTrademark("Свободная лицензия MIT")]
 [assembly: AssemblyCulture("")]
 
 // Установка значения False для параметра ComVisible делает типы в этой сборке невидимыми

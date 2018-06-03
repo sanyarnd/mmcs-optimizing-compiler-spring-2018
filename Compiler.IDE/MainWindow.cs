@@ -11,6 +11,11 @@ namespace Compiler.IDE
     {
         private readonly OpenFileDialog _sourceDialog = new OpenFileDialog();
         private readonly SaveFileDialog _saveGraphDialog = new SaveFileDialog();
+        SaveFileDialog _saveFileDialog = new SaveFileDialog();
+
+        // from https://www.codeproject.com/Articles/7390/About-The-About-Box
+        AboutBox _aboutBox = new AboutBox();
+
         private Image _cfgImage;
         private Image _astImage;
 
@@ -89,6 +94,8 @@ namespace Compiler.IDE
             // open/exit
             exitToolStripMenuItem.Click += (o, e) => Application.Exit();
             openToolStripMenuItem.Click += (o, e) => OpenSourceFile();
+            saveToolStripMenuItem.Click += (o, e) => SaveSourceFile();
+            aboutToolStripMenuItem1.Click += (o, e) => _aboutBox.ShowDialog(this);
 
             // compile button
             compileButton.Click += (o, e) => _ilCodeHandler.Abort();
@@ -250,6 +257,19 @@ namespace Compiler.IDE
         private void ClearOutput()
         {
             outTextBox.Text = "";
+        }
+
+        private void SaveSourceFile()
+        {
+            _saveFileDialog.InitialDirectory = Directory.GetCurrentDirectory();
+            _saveFileDialog.Filter = @"txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            _saveFileDialog.FilterIndex = 2;
+            _saveFileDialog.RestoreDirectory = true;
+
+            if (_saveFileDialog.ShowDialog() != DialogResult.OK)
+                return;
+
+            File.WriteAllText(_saveFileDialog.FileName, inputTextBox.Text);
         }
 
         private void OpenSourceFile()

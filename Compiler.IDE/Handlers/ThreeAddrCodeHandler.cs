@@ -104,7 +104,10 @@ namespace Compiler.IDE.Handlers
                         newCode.AddNode(node);
                     }
                 }
+                foreach (var line in newCode.CodeList)
+                    newCode.LabeledCode[line.Label] = line;
             }
+
 
             return newCode;
         }

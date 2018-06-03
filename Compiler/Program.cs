@@ -69,14 +69,18 @@ namespace Compiler
             var prettyPrinter = new PrettyPrintVisitor();
             astRoot.Visit(prettyPrinter);
             var cfg = new ControlFlowGraph(tacodeVisitor.Code);
+            var domTree = new DominatorTree(cfg);
             Console.WriteLine(prettyPrinter.Text);
             Console.WriteLine("###### CFG Reducibility(#59 by APC TEAM) based on DominatorTree(#56 by ДВП)");
             Console.WriteLine("###### and PrettyPrinter(#5 by APC TEAM) DEMONSTARTION:");
             Console.WriteLine("######       Sample 1:");
             Console.WriteLine(prettyPrinter.Text);
+            Console.WriteLine("###### Dominator Tree Matrix:");
+            Console.WriteLine(domTree.ToString());
             Console.WriteLine($"###### CFG is reducible: {cfg.IsReducible}");
 
             fpath = @"..\..\..\CodeSamples\reducibilityGoodSample.txt";
+            astRoot = null;
             astRoot = AST(fpath);
             if (astRoot == null)
                 return;
@@ -85,12 +89,15 @@ namespace Compiler
             prettyPrinter = new PrettyPrintVisitor();
             astRoot.Visit(prettyPrinter);
             cfg = new ControlFlowGraph(tacodeVisitor.Code);
+            domTree = new DominatorTree(cfg);
             Console.WriteLine(prettyPrinter.Text);
             Console.WriteLine("###### CFG Reducibility(#59 by APC TEAM) based on DominatorTree(#56 by ДВП)");
             Console.WriteLine("###### and PrettyPrinter(#5 by APC TEAM) DEMONSTARTION:");
             Console.WriteLine("######       Sample 2:");
             Console.WriteLine("###### Program text from PrettyPrinter:\n");
             Console.WriteLine(prettyPrinter.Text);
+            Console.WriteLine("###### Dominator Tree Matrix:");
+            Console.WriteLine(domTree.ToString());
             Console.WriteLine($"###### CFG is reducible: {cfg.IsReducible}");
         }
 

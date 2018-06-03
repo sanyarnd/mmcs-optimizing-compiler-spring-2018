@@ -142,7 +142,7 @@ namespace Compiler.ThreeAddrCode.Tests
             Assert.IsTrue(cfg.CFGNodes.ElementAt(4).Parents.Count() == 1, "Number of parents for fifth node is not equals 1");
             Assert.AreEqual(cfg.CFGNodes.ElementAt(3), cfg.CFGNodes.ElementAt(4).Parents.ElementAt(0));  //предок для 5-го узла : 4-й узел
         }
-        [Test]
+        /*[Test]
         public void Test2()
         {
             string unReducibleCFGProgram = 
@@ -189,6 +189,6 @@ namespace Compiler.ThreeAddrCode.Tests
             cfg = new ControlFlowGraph(tacodeInstance);
             Assert.IsTrue(cfg.IsReducible);
         }
- 
+ */
     }
 }

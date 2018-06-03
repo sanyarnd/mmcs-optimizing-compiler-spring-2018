@@ -1,4 +1,5 @@
 ﻿using Compiler.ThreeAddrCode.CFG;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,16 +20,16 @@ namespace Compiler.ThreeAddrCode
 
         public DominatorTree() => _matrix = new List<DomRow>();
 
-        public DominatorTree(ControlFlowGraph cfg) 
+        public DominatorTree(ControlFlowGraph cfg)
         {
             _matrix = new List<DomRow>();
             CreateDomMatrix(cfg);
         }
 
-    /// <summary>
-    ///     Создаёт матрицу доминаторов. Возвращает матрицу, значения которой говорят нам, доминирует ли блок j над блоком i.
-    /// </summary>
-    public void CreateDomMatrix(ControlFlowGraph CFG)
+        /// <summary>
+        ///     Создаёт матрицу доминаторов. Возвращает матрицу, значения которой говорят нам, доминирует ли блок j над блоком i.
+        /// </summary>
+        public void CreateDomMatrix(ControlFlowGraph CFG)
         {
             // Инициализируем переменные
             int N = CFG.CFGNodes.Count;
@@ -104,7 +105,7 @@ namespace Compiler.ThreeAddrCode
 
                     // Сохраняем строку до изменения
                     var oldRow = new List<bool>();
-                    foreach(var item in _matrix[i].ItemDoms)
+                    foreach (var item in _matrix[i].ItemDoms)
                     {
                         oldRow.Add(item.HasLine);
                     }
@@ -128,6 +129,20 @@ namespace Compiler.ThreeAddrCode
 
                 }
             }
+        }
+
+        public override string ToString()
+        {
+            string result = String.Format("{0,-4}|", '_');
+            _matrix[0].ItemDoms.ForEach(x => result += String.Format("{0,-4}|", x.BasicBlock.ToString()));
+            result += "\n";
+            foreach (var row in _matrix)
+            {
+                result += String.Format("{0,-4}|", row.BasicBlock.ToString());
+                row.ItemDoms.ForEach(x => result += String.Format("{0,-4}|", x.HasLine ? 1 : 0));
+                result += '\n';
+            }
+            return result;
         }
 
     }

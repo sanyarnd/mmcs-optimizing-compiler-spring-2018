@@ -84,10 +84,10 @@ namespace Compiler.ThreeAddrCode.CFG
             }
 
             EdgeTypes = new EdgeTypes();
-            ClassificateEdges();
+            //ClassificateEdges();
         }
 
-        private void ClassificateEdges()
+        public void ClassificateEdges()
         {
             var depthTree = new DepthSpanningTree(this);
             foreach (var edge in CFGAuxiliary.Edges)

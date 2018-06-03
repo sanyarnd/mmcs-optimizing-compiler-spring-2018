@@ -9,7 +9,7 @@ namespace Compiler.Parser.Visitors
     /// Класс реализующий Pretty-print visitor
     /// Восстанавливает текст программы по AST
     /// </summary>
-    public class PrettyPrintVisitor : AutoVisitor
+    public class PrettyPrintVisitor : IVisitor
     {
         /// <summary>
         /// Текст программы.
@@ -49,7 +49,7 @@ namespace Compiler.Parser.Visitors
         /// Посещение IdNode
         /// </summary>
         /// <param name="id">Узел IdNode</param>
-        public override void VisitIdNode(IdNode id)
+        public virtual void VisitIdNode(IdNode id)
         {
             Text += id.Name;
         }
@@ -58,7 +58,7 @@ namespace Compiler.Parser.Visitors
         /// Посещение IntNumNode
         /// </summary>
         /// <param name="num">Узел IntNumNode</param>
-        public override void VisitIntNumNode(IntNumNode num)
+        public virtual void VisitIntNumNode(IntNumNode num)
         {
             Text += num.Num.ToString();
         }
@@ -67,7 +67,7 @@ namespace Compiler.Parser.Visitors
         /// Посещение узла с унарной операцией
         /// </summary>
         /// <param name="unop">Узел UnaryNode</param>
-        public override void VisitUnaryNode(UnaryNode unop) {
+        public virtual void VisitUnaryNode(UnaryNode unop) {
             Text += unop.Operation.ToSymbolString() + " ";
             unop.Num.Visit(this);
         }
@@ -76,7 +76,7 @@ namespace Compiler.Parser.Visitors
         /// Посещение узла с бинарной операцией
         /// </summary>
         /// <param name="binop">Узел BinaryNode</param>
-        public override void VisitBinaryNode(BinaryNode binop)
+        public virtual void VisitBinaryNode(BinaryNode binop)
         {
             Text += "(";
             binop.Left.Visit(this);
@@ -89,7 +89,7 @@ namespace Compiler.Parser.Visitors
         /// Посещение узла с операцией присвоения
         /// </summary>
         /// <param name="a">Узел AssignNode</param>
-        public override void VisitAssignNode(AssignNode a)
+        public virtual void VisitAssignNode(AssignNode a)
         {
             if (!Text.EndsWith("for("))
                 Text += IndentStr();
@@ -102,7 +102,7 @@ namespace Compiler.Parser.Visitors
         /// Посещение узла с циклом while
         /// </summary>
         /// <param name="c">Узел CycleNode</param>
-        public override void VisitCycleNode(CycleNode c)
+        public virtual void VisitCycleNode(CycleNode c)
         {
             Text += IndentStr() + "while(";
             c.Condition.Visit(this);
@@ -123,7 +123,7 @@ namespace Compiler.Parser.Visitors
         /// Посещение узла блока
         /// </summary>
         /// <param name="bl">Узел BlockNode</param>
-        public override void VisitBlockNode(BlockNode bl)
+        public virtual void VisitBlockNode(BlockNode bl)
         {
             bool isNotBeginOfProgram = Text != "";
             if (isNotBeginOfProgram)
@@ -147,7 +147,7 @@ namespace Compiler.Parser.Visitors
         /// Посещение узла с оператором печати
         /// </summary>
         /// <param name="p">Узел PrintNode</param>
-        public override void VisitPrintNode(PrintNode p)
+        public virtual void VisitPrintNode(PrintNode p)
         {
             Text += IndentStr() + "print(";
             p.ExprList.Visit(this);
@@ -158,7 +158,7 @@ namespace Compiler.Parser.Visitors
         /// Посещение узла с оператором goto
         /// </summary>
         /// <param name="g">Узел GoToNode</param>
-        public override void VisitGoToNode(GoToNode g)
+        public virtual void VisitGoToNode(GoToNode g)
         {
             Text += IndentStr() + "goto ";
             g.Label.Visit(this);
@@ -168,7 +168,7 @@ namespace Compiler.Parser.Visitors
         /// Посещение узла с меткой
         /// </summary>
         /// <param name="l">Узел LabeledNode</param>
-        public override void VisitLabeledNode(LabeledNode l)
+        public virtual void VisitLabeledNode(LabeledNode l)
         {
             Text += IndentStr();
             l.Label.Visit(this);
@@ -188,7 +188,7 @@ namespace Compiler.Parser.Visitors
         /// Посещение узла с меткой
         /// </summary>
         /// <param name="el">Узел LabeledNode</param>
-        public override void VisitExprListNode(ExprListNode el) {
+        public virtual void VisitExprListNode(ExprListNode el) {
             var last = el.ExprList.Last();
             el.ExprList.ForEach(expr => 
                 {
@@ -202,7 +202,7 @@ namespace Compiler.Parser.Visitors
         /// Посещение узла условного оператора
         /// </summary>
         /// <param name="iif">Узел IfNode</param>
-        public override void VisitIfNode(IfNode iif)
+        public virtual void VisitIfNode(IfNode iif)
         {
             Text += IndentStr() + "if (";
             iif.Conditon.Visit(this);
@@ -236,7 +236,7 @@ namespace Compiler.Parser.Visitors
         /// Посещение узла с циклом for
         /// </summary>
         /// <param name="w">Узел ForNode</param>
-        public override void VisitForNode(ForNode w)
+        public virtual void VisitForNode(ForNode w)
         {
             Text += IndentStr() + "for(";
             w.Assign.Visit(this);
@@ -264,13 +264,13 @@ namespace Compiler.Parser.Visitors
         /// Посещение узла с пустым оператором
         /// </summary>
         /// <param name="w">Узел EmptyNode</param>
-        public override void VisitEmptyNode(EmptyNode w) {}
+        public virtual void VisitEmptyNode(EmptyNode w) {}
 
         /// <summary>
         /// Посещение узла с выражением
         /// </summary>
         /// <param name="ы">Узел ExprNode</param>
-        public override void VisitExprNode(ExprNode s)
+        public virtual void VisitExprNode(ExprNode s)
         {
             s.Visit(this);
         }

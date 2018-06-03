@@ -89,7 +89,7 @@ namespace Compiler.ThreeAddrCode.CFG
             }
 
             EdgeTypes = new EdgeTypes();
-            ClassificateEdges();
+            //ClassificateEdges();
         }
 
         private void ClassificateEdges()
@@ -123,7 +123,7 @@ namespace Compiler.ThreeAddrCode.CFG
         }
 
         /// <summary>
-        /// Возвращает true, если CFG приводим, иначе - fals
+        /// Возвращает true, если CFG приводим, иначе - false
         /// </summary>
         public bool IsReducible { get => isReducible(); }
 
@@ -133,6 +133,9 @@ namespace Compiler.ThreeAddrCode.CFG
         /// <returns>Возвращает true, если CFG приводим, иначе - false</returns>
         private bool isReducible()
         {
+            //Если ребра не классифицированы
+            if (EdgeTypes.Count == 0)
+                this.ClassificateEdges();
             //Отбираем все обратные дуги
             var retreatiangEdges = EdgeTypes.Where(elem => elem.Value == EdgeType.Retreating).Select(pair => pair.Key);
             var count = retreatiangEdges.Count();

@@ -70,7 +70,6 @@ namespace Compiler
             astRoot.Visit(prettyPrinter);
             var cfg = new ControlFlowGraph(tacodeVisitor.Code);
             var domTree = new DominatorTree(cfg);
-            Console.WriteLine(prettyPrinter.Text);
             Console.WriteLine("###### CFG Reducibility(#59 by APC TEAM) based on DominatorTree(#56 by ДВП)");
             Console.WriteLine("###### and PrettyPrinter(#5 by APC TEAM) DEMONSTARTION:");
             Console.WriteLine("######       Sample 1:");
@@ -90,7 +89,6 @@ namespace Compiler
             astRoot.Visit(prettyPrinter);
             cfg = new ControlFlowGraph(tacodeVisitor.Code);
             domTree = new DominatorTree(cfg);
-            Console.WriteLine(prettyPrinter.Text);
             Console.WriteLine("###### CFG Reducibility(#59 by APC TEAM) based on DominatorTree(#56 by ДВП)");
             Console.WriteLine("###### and PrettyPrinter(#5 by APC TEAM) DEMONSTARTION:");
             Console.WriteLine("######       Sample 2:");

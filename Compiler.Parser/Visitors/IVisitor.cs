@@ -96,5 +96,6 @@ namespace Compiler.Parser.Visitors
         /// </summary>
         /// <param name="w"></param>
         void VisitEmptyNode(EmptyNode w);
+
     }
 }

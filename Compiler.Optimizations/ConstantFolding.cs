@@ -33,6 +33,7 @@ namespace Compiler.Optimizations
 					node.Operation = OpCode.Copy;
 					node.Left = null;
 					break;
+                default: return false;
 			}
 			return true;
 		}

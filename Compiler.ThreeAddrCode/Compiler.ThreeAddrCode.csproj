@@ -126,6 +126,8 @@
     <Compile Include="DFA\ReachingExpressionsAlgo\IterativeAlgorithm.cs" />
     <Compile Include="DFA\ReachingExpressionsAlgo\Operations.cs" />
     <Compile Include="DFA\ReachingExpressionsAlgo\TransferFunction.cs" />
+    <Compile Include="DominatorTree\DominatorTree.cs" />
+    <Compile Include="DominatorTree\ItemsDom.cs" />
     <Compile Include="Expressions\Expr.cs" />
     <Compile Include="Expressions\IntConst.cs" />
     <Compile Include="Expressions\Var.cs" />

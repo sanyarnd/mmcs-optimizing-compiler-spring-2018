@@ -24,6 +24,11 @@ namespace Compiler.ThreeAddrCode.CFG
 
         public EdgeTypes EdgeTypes { get; set; }
 
+
+        public void ReverseCFGNodes()
+        {
+            _cfgNodes.Reverse();
+        }
         /// <summary>
         ///     Конструктор
         /// </summary>
@@ -115,6 +120,40 @@ namespace Compiler.ThreeAddrCode.CFG
         public BasicBlock GetRoot()
         {
             return (NumberOfVertices() > 0) ? CFGNodes.ElementAt(0) : null;
+        }
+
+        /// <summary>
+        /// Возвращает true, если CFG приводим, иначе - false
+        /// </summary>
+        public bool IsReducible { get => isReducible(); }
+
+        /// <summary>
+        /// Проверка CFG на приводимость
+        /// </summary>
+        /// <returns>Возвращает true, если CFG приводим, иначе - false</returns>
+        private bool isReducible()
+        {
+            //Если ребра не классифицированы
+            if (EdgeTypes.Count == 0)
+                this.ClassificateEdges();
+            //Отбираем все обратные дуги
+            var retreatiangEdges = EdgeTypes.Where(elem => elem.Value == EdgeType.Retreating).Select(pair => pair.Key);
+            var count = retreatiangEdges.Count();
+            //Если таковых нет - CFG приводим
+            if (retreatiangEdges.Count() == 0)
+                return true;
+            //Строим дерево доминанто
+            var domMatrix = new DominatorTree(this).Matrix;
+            //Проверяем каждую обратную дугу на обратимость(target доминирует на source в DominatorTree)
+            foreach (var edge in retreatiangEdges)
+            {
+                //DominatorTree.matrix(i, j).HasLine <=> j dom i. (c) Max
+                var rowWithSource = domMatrix.First(row => row.BasicBlock.BlockId == edge.Source.BlockId);
+                var edgeInDomTree = rowWithSource.ItemDoms.First(cell => cell.BasicBlock.BlockId == edge.Target.BlockId);
+                if (!edgeInDomTree.HasLine)
+                    return false;
+            }
+            return true;
         }
     }
 }

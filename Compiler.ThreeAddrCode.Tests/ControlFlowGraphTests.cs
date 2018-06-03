@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using Compiler.Parser;
+using Compiler.Parser.Visitors;
 using Compiler.ThreeAddrCode.CFG;
 using Compiler.ThreeAddrCode.Expressions;
 using Compiler.ThreeAddrCode.Nodes;
@@ -140,5 +142,53 @@ namespace Compiler.ThreeAddrCode.Tests
             Assert.IsTrue(cfg.CFGNodes.ElementAt(4).Parents.Count() == 1, "Number of parents for fifth node is not equals 1");
             Assert.AreEqual(cfg.CFGNodes.ElementAt(3), cfg.CFGNodes.ElementAt(4).Parents.ElementAt(0));  //предок для 5-го узла : 4-й узел
         }
+        /*[Test]
+        public void Test2()
+        {
+            string unReducibleCFGProgram = 
+            @"a = 7;
+            goto h;
+            while (3)
+            {
+                a = c;
+                h: { c = a + b; }
+                c = !(1 == 4);
+            }
+            a = 8;";
+            var scanner = new Scanner();
+            scanner.SetSource(unReducibleCFGProgram, 0);
+            var parser = new Parser.Parser(scanner);
+            var b = parser.Parse();
+            var tacodeVisitor = new TACodeVisitor();
+            var astRoot = parser.root;
+            astRoot.Visit(tacodeVisitor);
+            var tacodeInstance = tacodeVisitor.Code;
+            var cfg = new ControlFlowGraph(tacodeInstance);
+            Assert.IsFalse(cfg.IsReducible);
+
+
+            string reducibleCFGProgram =
+@"a = 7;
+            goto h;
+            while (3)
+            {
+                a = c;
+                c = !(1 == 4);
+            }
+            h: { c = a + b; }
+            a = 8;";
+
+            scanner = new Scanner();
+            scanner.SetSource(reducibleCFGProgram, 0);
+            parser = new Parser.Parser(scanner);
+            b = parser.Parse();
+            tacodeVisitor = new TACodeVisitor();
+            astRoot = parser.root;
+            astRoot.Visit(tacodeVisitor);
+            tacodeInstance = tacodeVisitor.Code;
+            cfg = new ControlFlowGraph(tacodeInstance);
+            Assert.IsTrue(cfg.IsReducible);
+        }
+ */
     }
 }

@@ -65,9 +65,17 @@
     <Compile Include="ReachingExpressionsTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Compiler.Parser\Compiler.Parser.csproj">
+      <Project>{1A72E236-90D3-4729-9571-FDD1711E4CA7}</Project>
+      <Name>Compiler.Parser</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Compiler.ThreeAddrCode\Compiler.ThreeAddrCode.csproj">
       <Project>{db2c1bc7-72b2-429f-9aa1-f364e11de437}</Project>
       <Name>Compiler.ThreeAddrCode</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Compiler\Compiler.csproj">
+      <Project>{191c2752-3f31-4235-ad26-b7e1287293e8}</Project>
+      <Name>Compiler</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

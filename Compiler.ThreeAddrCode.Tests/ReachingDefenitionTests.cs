@@ -234,7 +234,7 @@ namespace Compiler.ThreeAddrCode.Tests
 
             var op = new Operations(taCode);
             var tf = new TransferFunction(taCode);
-            
+
 
             var (gen, kill) = tf.GetGenAndKill(cfg.CFGNodes.ElementAt(0), op);
             Assert.True(gen.SetEquals(new HashSet<Guid> { ass1.Label }));
@@ -242,19 +242,19 @@ namespace Compiler.ThreeAddrCode.Tests
 
             (gen, kill) = tf.GetGenAndKill(cfg.CFGNodes.ElementAt(1), op);
             var lName = TACodeNameManager.Instance[gen.ElementAt(0)];
-            Assert.True(gen.SetEquals(new HashSet<Guid> {  ass2.Label}));
+            Assert.True(gen.SetEquals(new HashSet<Guid> { ass2.Label }));
             Assert.True(kill.SetEquals(new HashSet<Guid> { }));
 
             (gen, kill) = tf.GetGenAndKill(cfg.CFGNodes.ElementAt(2), op);
-            Assert.True(gen.SetEquals(new HashSet<Guid> { ass3.Label  }));
-            Assert.True(kill.SetEquals(new HashSet<Guid> {  }));
+            Assert.True(gen.SetEquals(new HashSet<Guid> { ass3.Label }));
+            Assert.True(kill.SetEquals(new HashSet<Guid> { }));
 
             (gen, kill) = tf.GetGenAndKill(cfg.CFGNodes.ElementAt(3), op);
-            Assert.True(gen.SetEquals(new HashSet<Guid> { ass4.Label  }));
-            Assert.True(kill.SetEquals(new HashSet<Guid> {  }));
+            Assert.True(gen.SetEquals(new HashSet<Guid> { ass4.Label }));
+            Assert.True(kill.SetEquals(new HashSet<Guid> { }));
 
             (gen, kill) = tf.GetGenAndKill(cfg.CFGNodes.ElementAt(4), op);
-            Assert.True(gen.SetEquals(new HashSet<Guid> {  ass5.Label, ass6.Label }));
+            Assert.True(gen.SetEquals(new HashSet<Guid> { ass5.Label, ass6.Label }));
             Assert.True(kill.SetEquals(new HashSet<Guid> { }));
 
 
@@ -274,12 +274,12 @@ namespace Compiler.ThreeAddrCode.Tests
             }.Analyze(cfg, op, tf);
 
             var trueInOut = new DFA.InOutData<HashSet<System.Guid>>();
-            trueInOut.Add(cfg.CFGNodes.ElementAt(0), 
+            trueInOut.Add(cfg.CFGNodes.ElementAt(0),
                 (new HashSet<Guid>(),
                  new HashSet<Guid> { ass1.Label })
             );
-            trueInOut.Add(cfg.CFGNodes.ElementAt(1), 
-                (new HashSet<Guid> { ass1.Label , ass2.Label, ass3.Label, ass4.Label }, 
+            trueInOut.Add(cfg.CFGNodes.ElementAt(1),
+                (new HashSet<Guid> { ass1.Label, ass2.Label, ass3.Label, ass4.Label },
                 new HashSet<Guid> { ass1.Label, ass2.Label, ass3.Label, ass4.Label })
             );
             trueInOut.Add(cfg.CFGNodes.ElementAt(2),
@@ -307,6 +307,5 @@ namespace Compiler.ThreeAddrCode.Tests
                 Assert.True(inEq && outEq);
             }
         }
-
     }
 }

@@ -14,7 +14,6 @@ namespace Compiler.Optimizations
 		private List<IOptimization> BasicBlockOptimizationList()
 		{
 			List<IOptimization> optimizations = new List<IOptimization>();
-
             optimizations.Add(new CopyPropagation());
             optimizations.Add(new ConstantFolding());
             optimizations.Add(new ConstantPropagation());

@@ -5,36 +5,78 @@ using Compiler.Parser.AST;
 
 namespace Compiler.Parser.Visitors
 {
-    public class PrettyPrintVisitor : AutoVisitor
+    /// <summary>
+    /// Класс реализующий Pretty-print visitor
+    /// Восстанавливает текст программы по AST
+    /// </summary>
+    public class PrettyPrintVisitor : IVisitor
     {
+        /// <summary>
+        /// Текст программы.
+        /// </summary>
         public string Text = "";
+        /// <summary>
+        /// Текущий отступ.
+        /// </summary>
         private int Indent = 0;
 
+        /// <summary>
+        /// Возвращает строку с текущим отступом от ее начала.
+        /// </summary>
+        /// <returns></returns>
         private string IndentStr()
         {
             return new string(' ', Indent);
         }
+
+        /// <summary>
+        /// Увеличения текущего отступа
+        /// </summary>
         private void IndentPlus()
         {
             Indent += 2;
         }
+
+        /// <summary>
+        /// Уменьшение текущего отступа
+        /// </summary>
         private void IndentMinus()
         {
             Indent -= 2;
         }
-        public override void VisitIdNode(IdNode id)
+
+        /// <summary>
+        /// Посещение IdNode
+        /// </summary>
+        /// <param name="id">Узел IdNode</param>
+        public virtual void VisitIdNode(IdNode id)
         {
             Text += id.Name;
         }
-        public override void VisitIntNumNode(IntNumNode num)
+
+        /// <summary>
+        /// Посещение IntNumNode
+        /// </summary>
+        /// <param name="num">Узел IntNumNode</param>
+        public virtual void VisitIntNumNode(IntNumNode num)
         {
             Text += num.Num.ToString();
         }
-        public override void VisitUnaryNode(UnaryNode unop) {
+
+        /// <summary>
+        /// Посещение узла с унарной операцией
+        /// </summary>
+        /// <param name="unop">Узел UnaryNode</param>
+        public virtual void VisitUnaryNode(UnaryNode unop) {
             Text += unop.Operation.ToSymbolString() + " ";
             unop.Num.Visit(this);
         }
-        public override void VisitBinaryNode(BinaryNode binop)
+
+        /// <summary>
+        /// Посещение узла с бинарной операцией
+        /// </summary>
+        /// <param name="binop">Узел BinaryNode</param>
+        public virtual void VisitBinaryNode(BinaryNode binop)
         {
             Text += "(";
             binop.Left.Visit(this);
@@ -42,7 +84,12 @@ namespace Compiler.Parser.Visitors
             binop.Right.Visit(this);
             Text += ")";
         }
-        public override void VisitAssignNode(AssignNode a)
+
+        /// <summary>
+        /// Посещение узла с операцией присвоения
+        /// </summary>
+        /// <param name="a">Узел AssignNode</param>
+        public virtual void VisitAssignNode(AssignNode a)
         {
             if (!Text.EndsWith("for("))
                 Text += IndentStr();
@@ -50,7 +97,12 @@ namespace Compiler.Parser.Visitors
             Text += " = ";
             a.Expr.Visit(this);
         }
-        public override void VisitCycleNode(CycleNode c)
+
+        /// <summary>
+        /// Посещение узла с циклом while
+        /// </summary>
+        /// <param name="c">Узел CycleNode</param>
+        public virtual void VisitCycleNode(CycleNode c)
         {
             Text += IndentStr() + "while(";
             c.Condition.Visit(this);
@@ -66,7 +118,12 @@ namespace Compiler.Parser.Visitors
             else
                 c.Body.Visit(this);
         }
-        public override void VisitBlockNode(BlockNode bl)
+
+        /// <summary>
+        /// Посещение узла блока
+        /// </summary>
+        /// <param name="bl">Узел BlockNode</param>
+        public virtual void VisitBlockNode(BlockNode bl)
         {
             bool isNotBeginOfProgram = Text != "";
             if (isNotBeginOfProgram)
@@ -85,18 +142,33 @@ namespace Compiler.Parser.Visitors
             if (isNotBeginOfProgram)
                 Text += IndentStr() + "}" + Environment.NewLine;
         }
-        public override void VisitPrintNode(PrintNode p)
+
+        /// <summary>
+        /// Посещение узла с оператором печати
+        /// </summary>
+        /// <param name="p">Узел PrintNode</param>
+        public virtual void VisitPrintNode(PrintNode p)
         {
             Text += IndentStr() + "print(";
             p.ExprList.Visit(this);
             Text += ")";
         }
-        public override void VisitGoToNode(GoToNode g)
+
+        /// <summary>
+        /// Посещение узла с оператором goto
+        /// </summary>
+        /// <param name="g">Узел GoToNode</param>
+        public virtual void VisitGoToNode(GoToNode g)
         {
             Text += IndentStr() + "goto ";
             g.Label.Visit(this);
         }
-        public override void VisitLabeledNode(LabeledNode l)
+
+        /// <summary>
+        /// Посещение узла с меткой
+        /// </summary>
+        /// <param name="l">Узел LabeledNode</param>
+        public virtual void VisitLabeledNode(LabeledNode l)
         {
             Text += IndentStr();
             l.Label.Visit(this);
@@ -111,7 +183,12 @@ namespace Compiler.Parser.Visitors
             else
                 l.Stat.Visit(this);
         }
-        public override void VisitExprListNode(ExprListNode el) {
+
+        /// <summary>
+        /// Посещение узла с меткой
+        /// </summary>
+        /// <param name="el">Узел LabeledNode</param>
+        public virtual void VisitExprListNode(ExprListNode el) {
             var last = el.ExprList.Last();
             el.ExprList.ForEach(expr => 
                 {
@@ -120,7 +197,12 @@ namespace Compiler.Parser.Visitors
                         Text += ",";
                 });
         }
-        public override void VisitIfNode(IfNode iif)
+
+        /// <summary>
+        /// Посещение узла условного оператора
+        /// </summary>
+        /// <param name="iif">Узел IfNode</param>
+        public virtual void VisitIfNode(IfNode iif)
         {
             Text += IndentStr() + "if (";
             iif.Conditon.Visit(this);
@@ -150,7 +232,11 @@ namespace Compiler.Parser.Visitors
             }
         }
 
-        public override void VisitForNode(ForNode w)
+        /// <summary>
+        /// Посещение узла с циклом for
+        /// </summary>
+        /// <param name="w">Узел ForNode</param>
+        public virtual void VisitForNode(ForNode w)
         {
             Text += IndentStr() + "for(";
             w.Assign.Visit(this);
@@ -173,9 +259,18 @@ namespace Compiler.Parser.Visitors
             else
                 w.Body.Visit(this);
         }
-        public override void VisitEmptyNode(EmptyNode w) {}
 
-        public override void VisitExprNode(ExprNode s)
+        /// <summary>
+        /// Посещение узла с пустым оператором
+        /// </summary>
+        /// <param name="w">Узел EmptyNode</param>
+        public virtual void VisitEmptyNode(EmptyNode w) {}
+
+        /// <summary>
+        /// Посещение узла с выражением
+        /// </summary>
+        /// <param name="ы">Узел ExprNode</param>
+        public virtual void VisitExprNode(ExprNode s)
         {
             s.Visit(this);
         }

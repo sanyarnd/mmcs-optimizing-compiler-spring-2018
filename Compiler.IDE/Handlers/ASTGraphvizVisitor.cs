@@ -95,7 +95,7 @@ namespace Compiler.IDE.Handlers
         public void VisitForNode(ForNode a)
         {
             string label = Mark(a);
-            _nodes.AppendLine($"{label}  [label = \"For: {a.Assign.Id} = expr; border; inc; body\"]");
+            _nodes.AppendLine($"{label}  [label = \"For: {a.Assign.Id.Name} = expr; border; inc; body\"]");
 
             a.Assign.Visit(this);
             a.Border.Visit(this);

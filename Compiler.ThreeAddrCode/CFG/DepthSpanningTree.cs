@@ -8,21 +8,17 @@ namespace Compiler.ThreeAddrCode.CFG
     public class DepthSpanningTree
     {
         public HashSet<BasicBlock> Visited { get; }
-        public Dictionary<BasicBlock, int> Numbers { get; }
         public BidirectionalGraph<BasicBlock, Edge<BasicBlock>> SpanningTree { get; }
 
         public DepthSpanningTree(ControlFlowGraph controlFlowGraph)
         {
-            int numberOfVertices = controlFlowGraph.NumberOfVertices() - 1;
             Visited = new HashSet<BasicBlock>();
             SpanningTree = new BidirectionalGraph<BasicBlock, Edge<BasicBlock>>();
-            Numbers = new Dictionary<BasicBlock, int>();
-
             var rootBlock = controlFlowGraph.GetRoot();
-            BuildTree(rootBlock, ref numberOfVertices);
+            BuildTree(rootBlock);
         }
 
-        private void BuildTree(BasicBlock block, ref int currentNumber)
+        private void BuildTree(BasicBlock block)
         {
             if (block == null)
                 return;
@@ -31,7 +27,6 @@ namespace Compiler.ThreeAddrCode.CFG
 
             if (block.Children == null)
             {
-                Numbers[block] = currentNumber;
                 return;
             }
 
@@ -50,11 +45,8 @@ namespace Compiler.ThreeAddrCode.CFG
                         SpanningTree.AddVertex(child);
 
                     SpanningTree.AddEdge(new Edge<BasicBlock>(block, child));
-                    BuildTree(child, ref currentNumber);
+                    BuildTree(child);
                 }
-
-                Numbers[block] = currentNumber;
-                currentNumber -= 1;
             }
         }
 

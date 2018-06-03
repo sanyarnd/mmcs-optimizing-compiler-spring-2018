@@ -33,8 +33,6 @@ namespace Compiler.Optimizations
 					node.Operation = OpCode.Copy;
 					node.Left = null;
 					break;
-				default:
-					throw new ArgumentOutOfRangeException();
 			}
 			return true;
 		}

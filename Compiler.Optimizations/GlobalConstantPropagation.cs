@@ -49,6 +49,7 @@ namespace Compiler.Optimizations
 							node.Right = ioData[cfg.CFGNodes.ElementAt(i)].Item1[node.Result.Id].value;
 							node.Left = null;
 							node.Operation = OpCode.Copy;
+							taCode.CodeList[j] = node;
 						}
 					}
 				}

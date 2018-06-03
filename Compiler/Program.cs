@@ -40,16 +40,22 @@ namespace Compiler
             astRoot.Visit(tacodeVisitor);
             tacodeInstance = tacodeVisitor.Code;
 
-            var allOpt = new AllOptimizations();
-            tacodeInstance = allOpt.ApplyAllOptimizations(tacodeInstance);
+			Console.WriteLine(tacodeInstance.ToString());
 
-            TAcode2ILcodeTranslator trans = new TAcode2ILcodeTranslator();
+			var allOpt = new AllOptimizations();
+			tacodeInstance = allOpt.ApplyAllOptimizations(tacodeInstance);
+			tacodeInstance = allOpt.LabelCode(tacodeInstance);
+
+			var GlobConstProp = new GlobalConstantPropagation();
+			tacodeInstance = GlobConstProp.Optimize(tacodeInstance, out var appl);
+
+            //TAcode2ILcodeTranslator trans = new TAcode2ILcodeTranslator();
 
             Console.WriteLine(tacodeInstance.ToString());
 
-            trans.Translate(tacodeInstance);
-            var temp = trans.PrintCommands();
-            trans.RunProgram();
+            //trans.Translate(tacodeInstance);
+            //var temp = trans.PrintCommands();
+            //trans.RunProgram();
         }
 
         private static BlockNode astRoot;

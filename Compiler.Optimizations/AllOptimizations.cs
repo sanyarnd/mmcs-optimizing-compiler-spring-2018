@@ -25,11 +25,10 @@ namespace Compiler.Optimizations
 			return optimizations;
 		}
 
-        private List<IOptimization> O2OptimizationList()
-        {
-            return new List<IOptimization>();
-        }
-
+		private List<IOptimization> O2OptimizationList()
+		{
+			return new List<IOptimization>();
+		}
 
         public TACode ApplyAllOptimizations(TACode code)
 		{
@@ -56,6 +55,15 @@ namespace Compiler.Optimizations
                 code = new TACode();
                 code.CodeList = codeList;
             }
+
+			return code;
+		}
+		public TACode LabelCode(TACode code)
+		{
+			foreach (var l in code.CodeList.ToList())
+			{
+				code.LabeledCode[l.Label] = l;
+			}
 
 			return code;
 		}

@@ -20,6 +20,8 @@ namespace Compiler.IDE.Handlers
             {Optimizations.Subexpr, false},
         };
 
+        public bool RemoveDeadVariables = false;
+
         public event EventHandler<TACode> GenerationCompleted = delegate { };
         public event EventHandler<string> PrintableCodeGenerated = delegate { };
 
@@ -29,9 +31,9 @@ namespace Compiler.IDE.Handlers
             root.Visit(visitor);
 
             TACode code = ApplyOptimizations(visitor.Code);
-            GenerationCompleted(null, code);
 
-            PostProcess(visitor.Code);
+            GenerationCompleted(null, code);
+            PostProcess(code);
         }
 
         private List<IOptimization> BlockOptimizationList()
@@ -104,7 +106,16 @@ namespace Compiler.IDE.Handlers
                         newCode.AddNode(node);
                     }
                 }
+                foreach (var line in newCode.CodeList)
+                    newCode.LabeledCode[line.Label] = line;
             }
+
+            if (RemoveDeadVariables)
+            {
+                var rmOpt = new RemoveDeadVariablesCFG(newCode);
+                newCode = rmOpt.CodeNew;
+            }
+
 
             return newCode;
         }

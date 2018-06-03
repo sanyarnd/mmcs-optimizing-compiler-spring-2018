@@ -15,7 +15,8 @@ namespace Compiler.IDE.Handlers
         public event EventHandler RuntimeStarted = delegate { };
 
         private TAcode2ILcodeTranslator _ilProgram;
-        private Thread _runThread;
+        private CancellationTokenSource ts;
+        private Task _runTask;
 
         public void GenerateIlCode(TACode code)
         {
@@ -27,35 +28,33 @@ namespace Compiler.IDE.Handlers
 
         public void Run()
         {
-            if (_runThread != null)
+            if (_runTask != null && _runTask.Status == TaskStatus.Running)
             {
                 AlreadyRunningErrored(null, null);
                 return;
             }
 
             RuntimeStarted(null, null);
-            Task.Factory.StartNew(() =>
+
+            ts = new CancellationTokenSource();
+            
+            _runTask = Task.Factory.StartNew(() =>
             {
-                _runThread = Thread.CurrentThread;
-                try
+                Thread t = Thread.CurrentThread;
+                using (ts.Token.Register(t.Abort))
                 {
                     _ilProgram.RunProgram();
                 }
-                catch (ThreadAbortException)
-                {
-                    Aborted(null, null);
-                    _runThread = null;
-                }
-                catch (Exception ex)
-                {
-                    RuntimeErrored(null, ex);
-                }
-            });
+            }, ts.Token);
         }
 
         public void Abort()
         {
-            _runThread?.Abort();
+            if (_runTask != null && _runTask.Status == TaskStatus.Running)
+            {
+                ts?.Cancel();
+                Aborted(null, null);
+            }
         }
     }
 }

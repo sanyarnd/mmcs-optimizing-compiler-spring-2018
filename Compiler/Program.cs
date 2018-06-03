@@ -30,9 +30,6 @@ namespace Compiler
             //var sTest = new SubexprTest();
             //sTest.SubexpressionOptimizationTest();
 
-            //APC
-            //CFGReducibility_DominatorTree_PrettyPrinter_Demonstration();
-
             string fileName = @"..\..\sample.txt";
 
             astRoot = AST(fileName);
@@ -43,12 +40,35 @@ namespace Compiler
             astRoot.Visit(tacodeVisitor);
             tacodeInstance = tacodeVisitor.Code;
 
-            var allOpt = new AllOptimizations();
-            tacodeInstance = allOpt.ApplyAllOptimizations(tacodeInstance);
+			Console.WriteLine(tacodeInstance.ToString());
+
+			var allOpt = new AllOptimizations();
+			//tacodeInstance = allOpt.ApplyAllOptimizations(tacodeInstance);
+			//tacodeInstance = allOpt.LabelCode(tacodeInstance);
+
+            var cfg = new ControlFlowGraph(tacodeInstance);
+
+            //tacodeInstance = allOpt.ApplyAllOptimizations(tacodeInstance);
+            //tacodeInstance = AllOptimizations.LabelCode(tacodeInstance);
+
+            var opt = new GlobalConstantPropogationAlt(tacodeInstance);
+            tacodeInstance = opt.Optimize();
+
+            Console.WriteLine(tacodeInstance.ToString());
+
+            //var ops = new ThreeAddrCode.DFA.ConstantPropogationAlt.Operations(tacodeInstance);
+            //var tf = new Compiler.ThreeAddrCode.DFA.ConstantPropogationAlt.TransferFunction(tacodeInstance);
+            //var alg = new Compiler.ThreeAddrCode.DFA.ConstantPropogationAlt.IterativeAlgorithm(ops);
+
+            //Console.WriteLine("--------------");
+            //Console.WriteLine(tacodeInstance.ToString());
+            //Console.WriteLine("--------------");
+            //Console.WriteLine(alg.Analyze(cfg, ops, tf));
+            //Console.WriteLine("--------------");
 
             TAcode2ILcodeTranslator trans = new TAcode2ILcodeTranslator();
 
-            Console.WriteLine(tacodeInstance.ToString());
+            
 
             trans.Translate(tacodeInstance);
             var temp = trans.PrintCommands();

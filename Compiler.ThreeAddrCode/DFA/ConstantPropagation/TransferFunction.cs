@@ -9,11 +9,11 @@ using Compiler.ThreeAddrCode.Expressions;
 
 namespace Compiler.ThreeAddrCode.DFA.ConstantPropagation
 {
-    public class TransferFunctions : ITransferFunction<Dictionary<Guid, VarValue>>
+    public class TransferFunction : ITransferFunction<Dictionary<Guid, VarValue>>
     {
         public Dictionary<Guid, VarValue> Transfer(BasicBlock basicBlock, Dictionary<Guid, VarValue> input, ILatticeOperations<Dictionary<Guid, VarValue>> ops)
         {
-            Dictionary<Guid, VarValue> res = input;
+            var res = input.ToDictionary(entry => entry.Key, entry => entry.Value);
             foreach (var node in basicBlock.CodeList)
             {
                 if (node is Assign)

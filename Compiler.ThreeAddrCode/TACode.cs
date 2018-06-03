@@ -14,10 +14,22 @@ namespace Compiler.ThreeAddrCode
     /// </summary>
     public class TACode
     {
+        private List<Node> _codeList;
         /// <summary>
         ///     Список команд программы в трехадресном формате
         /// </summary>
-        public List<Node> CodeList { get; set; }
+        public List<Node> CodeList {
+            get
+            {
+                return _codeList;
+            }
+            set
+            {
+                _codeList = value;
+                foreach (var l in _codeList.ToList())
+                    LabeledCode[l.Label] = l;
+            }
+        }
 
         /// <summary>
         ///     Словарь соответствий меток и узлов

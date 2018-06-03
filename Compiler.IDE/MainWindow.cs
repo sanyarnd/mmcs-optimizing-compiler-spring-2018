@@ -54,6 +54,12 @@ namespace Compiler.IDE
                 var opt = (Optimizations) optsList.Items[e.Index];
                 _threeCodeHandler.OptimizationList[opt] = e.NewValue == CheckState.Checked;
             };
+
+            // remove dead variables
+            removeDeadVarsCheckBox.CheckedChanged += (o, e) =>
+            {
+                _threeCodeHandler.RemoveDeadVariables = removeDeadVarsCheckBox.Checked;
+            };
         }
 
         private void InitIterativeAlgorithms()
@@ -85,9 +91,10 @@ namespace Compiler.IDE
             openToolStripMenuItem.Click += (o, e) => OpenSourceFile();
 
             // compile button
+            compileButton.Click += (o, e) => _ilCodeHandler.Abort();
             compileButton.Click += (o, e) => ClearOutput();
             compileButton.Click += (o, e) => _parseHandler.Parse(inputTextBox.Text);
-
+            
             // toggle opts
             toggleOptsButton.Click += (o, e) =>
             {
@@ -157,7 +164,6 @@ namespace Compiler.IDE
                     {
                         MessageBox.Show(this, @"Запуск остановлен", @"Остановка", MessageBoxButtons.OK,
                             MessageBoxIcon.Information);
-                        outTextBox.AppendText($"{Environment.NewLine}ОСТАНОВКА");
                     }));
                 }
                 else

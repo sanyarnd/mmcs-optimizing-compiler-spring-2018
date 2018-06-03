@@ -86,6 +86,7 @@
     <Compile Include="DeclarationOptimization.cs" />
     <Compile Include="DeclarationTest.cs" />
     <Compile Include="GlobalConstantPropagation.cs" />
+    <Compile Include="GlobalConstantPropogationAlt.cs" />
     <Compile Include="IOptimization.cs" />
     <Compile Include="AllOptimizations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

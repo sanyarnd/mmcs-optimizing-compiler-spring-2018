@@ -78,15 +78,17 @@ namespace Compiler.ThreeAddrCode.DFA.ConstantPropagation
 
 		public Dictionary<Guid, VarValue> Operator(Dictionary<Guid, VarValue> a, Dictionary<Guid, VarValue> b)
 		{
+			var aCopy = a.ToDictionary(entry => entry.Key, entry => entry.Value);
+			var bCopy = b.ToDictionary(entry => entry.Key, entry => entry.Value);
 			Dictionary<Guid, VarValue> result = new Dictionary<Guid, VarValue>();
-			foreach (var key in a.Keys)
+			foreach (var key in aCopy.Keys)
 			{
 				result[key] = a[key].CollectionOperator(b[key]);
-				if (b.ContainsKey(key))
-					b.Remove(key);
+				if (bCopy.ContainsKey(key))
+					bCopy.Remove(key);
 			}
-			foreach (var key in b.Keys)
-				result.Add(key, b[key]);
+			foreach (var key in bCopy.Keys)
+				result.Add(key, bCopy[key]);
 			return result;
 		}
 	}

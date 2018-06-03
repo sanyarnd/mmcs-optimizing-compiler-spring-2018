@@ -17,7 +17,7 @@ namespace Compiler.Optimizations
 		public InOutData<Dictionary<Guid, VarValue>> TempFunc(TACode taCode, ControlFlowGraph cfg)
 		{
 			Operations ops = new Operations(taCode);
-			TransferFunctions f = new TransferFunctions();
+			TransferFunction f = new TransferFunction();
 
 			IterativeAlgorithm itAlg = new IterativeAlgorithm();
 			var result = itAlg.Analyze(cfg, ops, f);
@@ -49,6 +49,7 @@ namespace Compiler.Optimizations
 							node.Right = ioData[cfg.CFGNodes.ElementAt(i)].Item1[node.Result.Id].value;
 							node.Left = null;
 							node.Operation = OpCode.Copy;
+							taCode.CodeList[j] = node;
 						}
 					}
 				}

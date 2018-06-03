@@ -5,7 +5,8 @@ namespace Compiler.IDE
     internal enum IterativeAlgorithms
     {
         ReachingDefs = 0,
-        ReachingExprs = 1
+        ReachingExprs = 1,
+        ConstantPropagation = 2
     }
 
     internal static class IterativeAlgorithmsExt
@@ -18,6 +19,8 @@ namespace Compiler.IDE
                     return "Достигаемые определения";
                 case IterativeAlgorithms.ReachingExprs:
                     return "Достигаемые выражения";
+                case IterativeAlgorithms.ConstantPropagation:
+                    return "Протяжка констант";
                 default:
                     throw new NotImplementedException($"key {opt} is missing");
             }

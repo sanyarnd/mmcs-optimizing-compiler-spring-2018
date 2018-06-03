@@ -11,20 +11,17 @@ namespace Compiler.ThreeAddrCode.DFA.ReachingDefinitions
         {
             var data = new InOutData<HashSet<Guid>>
             {
-                [graph.CFGNodes.ElementAt(0)] = (
-                    ops.Lower, 
-                    f.Transfer(graph.CFGNodes.ElementAt(0), ops.Lower, ops)
-                )
+                [graph.CFGNodes.ElementAt(0)] = (ops.Lower, ops.Lower)
             };
-            foreach (var node in graph.CFGNodes.Skip(1))
+            foreach (var node in graph.CFGNodes)
                 data[node] = (ops.Lower, ops.Lower);
             var outChanged = true;
             while (outChanged)
             {
                 outChanged = false;
-                foreach (var block in graph.CFGNodes.Skip(1))
+                foreach (var block in graph.CFGNodes)
                 {
-                    var inset = block.Parents.Aggregate(ops.Lower, (x, y) 
+                    var inset = block.Parents.Aggregate(ops.Lower, (x, y)
                         => ops.Operator(x, data[y].Item2));
                     var outset = f.Transfer(block, inset, ops);
                     if (outset.Except(data[block].Item2).Any())

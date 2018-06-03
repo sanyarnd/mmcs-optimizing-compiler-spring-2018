@@ -14,22 +14,20 @@ namespace Compiler.Optimizations
 		private List<IOptimization> BasicBlockOptimizationList()
 		{
 			List<IOptimization> optimizations = new List<IOptimization>();
+            optimizations.Add(new CopyPropagation());
+            optimizations.Add(new ConstantFolding());
+            optimizations.Add(new ConstantPropagation());
+            optimizations.Add(new DeclarationOptimization());
+            optimizations.Add(new AlgebraicOptimization());
+            optimizations.Add(new SubexpressionOptimization());
 
-			optimizations.Add(new CopyPropagation());
-			optimizations.Add(new ConstantFolding());
-			optimizations.Add(new ConstantPropagation());
-			optimizations.Add(new DeclarationOptimization());
-			optimizations.Add(new AlgebraicOptimization());
-			//optimizations.Add(new SubexpressionOptimization());
-
-			return optimizations;
+            return optimizations;
 		}
 
-        private List<IOptimization> O2OptimizationList()
-        {
-            return new List<IOptimization>();
-        }
-
+		private List<IOptimization> O2OptimizationList()
+		{
+			return new List<IOptimization>();
+		}
 
         public TACode ApplyAllOptimizations(TACode code)
 		{
@@ -55,7 +53,20 @@ namespace Compiler.Optimizations
 
                 code = new TACode();
                 code.CodeList = codeList;
+
+
+                foreach (var line in code.CodeList)
+                    code.LabeledCode[line.Label] = line;
             }
+
+			return code;
+		}
+		public static TACode LabelCode(TACode code)
+		{
+			foreach (var l in code.CodeList.ToList())
+			{
+				code.LabeledCode[l.Label] = l;
+			}
 
 			return code;
 		}

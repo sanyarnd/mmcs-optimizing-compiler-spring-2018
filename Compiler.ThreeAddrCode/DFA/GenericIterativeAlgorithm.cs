@@ -34,10 +34,6 @@ namespace Compiler.ThreeAddrCode.DFA
                     var inset = block.Parents.Aggregate(ops.Lower, (x, y)
                         => ops.Operator(x, data[y].Item2));
                     var outset = f.Transfer(block, inset, ops);
-                    // Для отладки
-                    var outStr = DebugToString?.Invoke(outset);
-                    var inStr = DebugToString?.Invoke(inset);
-                    // ------
                     
                     if (!Finish((inset,outset), data[block]))
                     {

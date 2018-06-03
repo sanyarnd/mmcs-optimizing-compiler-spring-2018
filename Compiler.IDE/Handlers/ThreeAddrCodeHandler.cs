@@ -25,16 +25,23 @@ namespace Compiler.IDE.Handlers
 
         public event EventHandler<TACode> GenerationCompleted = delegate { };
         public event EventHandler<string> PrintableCodeGenerated = delegate { };
+        public event EventHandler<Exception> GenerationErrored = delegate { };
 
         public void GenerateThreeAddrCode(object sender, Parser.AST.BlockNode root)
         {
-            var visitor = new TACodeVisitor();
-            root.Visit(visitor);
+            try
+            {
+                var visitor = new TACodeVisitor();
+                root.Visit(visitor);
 
-            TACode code = ApplyOptimizations(visitor.Code);
-
-            GenerationCompleted(null, code);
-            PostProcess(code);
+                TACode code = ApplyOptimizations(visitor.Code);
+                GenerationCompleted(null, code);
+                PostProcess(code);
+            }
+            catch (Exception ex)
+            {
+                GenerationErrored(null, ex);
+            }
         }
 
         private List<IOptimization> BlockOptimizationList()

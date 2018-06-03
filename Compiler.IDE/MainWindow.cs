@@ -120,35 +120,47 @@ namespace Compiler.IDE
             // 3-addr code
             _parseHandler.ParsingCompleted += _threeCodeHandler.GenerateThreeAddrCode;
             _threeCodeHandler.PrintableCodeGenerated += (o, e) => threeAddrTextBox.Text = e;
+            _threeCodeHandler.GenerationErrored += (o, ex) =>
+            {
+                MessageBox.Show(this, $@"Построение трехадресного кода завершилось с ошибкой:{Environment.NewLine} {ex.Message}",
+                        @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            };
 
             // CFG
-            _threeCodeHandler.GenerationCompleted += (o, e) => _cfgHandler.GenerateCfgImage(e);
+            _threeCodeHandler.GenerationCompleted += (o, e) => _cfgHandler.GenerateCFG(e);
             _cfgHandler.GenerationCompleted += (o, e) =>
             {
                 _cfgImage = e;
                 CFGPictureBox.Image = _cfgImage;
                 cfgScaleBar.Value = cfgScaleBar.Maximum;
             };
+            _cfgHandler.GenerationErrored += (o, ex) =>
+            {
+                MessageBox.Show(this, $@"Построение CFG завершилось с ошибкой:{Environment.NewLine} {ex.Message}",
+                        @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            };
 
             // iterative algorithms
             _cfgHandler.CfgGenerated += (o, e) => _algoHandler.CollectInOutData(e);
             _algoHandler.PrintableInOutDataCollected += (o, e) => iterativeAlgoTextBox.Text = e;
+            _algoHandler.GenerationErrored += (o, ex) =>
+            {
+                MessageBox.Show(this, $@"Выполнение итеративных алгоритмов завершилось с ошибкой:{Environment.NewLine} {ex.Message}",
+                        @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            };
 
             // IL-code
-            _threeCodeHandler.GenerationCompleted += (o, e) =>
+            _threeCodeHandler.GenerationCompleted += (o, e) => _ilCodeHandler.GenerateIlCode(e);
+            _ilCodeHandler.GenerationCompleted += (o, e) => 
             {
-                try
-                {
-                    _ilCodeHandler.GenerateIlCode(e);
-                    runButton.Enabled = true;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(this, $@"Компиляция завершилась с ошибкой:{Environment.NewLine} {ex.Message}",
-                        @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                ILCodeTextBox.Text = e.PrintCommands();
+                runButton.Enabled = true;
             };
-            _ilCodeHandler.GenerationCompleted += (o, e) => { ILCodeTextBox.Text = e.PrintCommands(); };
+            _ilCodeHandler.GenerationErrored += (o, ex) =>
+            {
+                MessageBox.Show(this, $@"Генерация IL кода завершилась с ошибкой:{Environment.NewLine} {ex.Message}",
+                        @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            };
 
             // run and stop
             // no way to pass cancellation token inside DynMethod's Invoke, so doing it hard way =\

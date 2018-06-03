@@ -11,6 +11,7 @@ namespace Compiler.IDE.Handlers
     {
         //public event EventHandler<string> InOutDataCollected = delegate { };
         public event EventHandler<string> PrintableInOutDataCollected = delegate { };
+        public event EventHandler<Exception> GenerationErrored = delegate { };
 
         public readonly Dictionary<IterativeAlgorithms, bool> IterativeAlgoList =
             new Dictionary<IterativeAlgorithms, bool>
@@ -77,10 +78,17 @@ namespace Compiler.IDE.Handlers
 
         public void CollectInOutData(ControlFlowGraph cfg)
         {
-            var setResults = SetAlgorithmResults(cfg);
-            var dictResults = DictAlgorithmResults(cfg);
-            string output = ResultsToString(cfg, setResults, dictResults);
-            PrintableInOutDataCollected(null, output);
+            try
+            {
+                var setResults = SetAlgorithmResults(cfg);
+                var dictResults = DictAlgorithmResults(cfg);
+                string output = ResultsToString(cfg, setResults, dictResults);
+                PrintableInOutDataCollected(null, output);
+            }
+            catch (Exception ex)
+            {
+                GenerationErrored(null, ex);
+            }
         }
 
         private static string ResultsToString(ControlFlowGraph cfg,

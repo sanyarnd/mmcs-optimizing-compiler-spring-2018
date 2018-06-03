@@ -14,29 +14,38 @@ namespace Compiler.IDE.Handlers
     {
         public event EventHandler<Image> GenerationCompleted = delegate { };
         public event EventHandler<ControlFlowGraph> CfgGenerated = delegate { };
+        public event EventHandler<Exception> GenerationErrored = delegate { };
 
 
-        public void GenerateCfgImage(TACode code)
+        public void GenerateCFG(TACode code)
         {
-            var cfg = new ControlFlowGraph(code);
-            CfgGenerated(null, cfg);
-
-            string graph = BuildDotGraph(cfg);
-            File.WriteAllText(@"cfg_graph.txt", graph);
-
-            var processQuery = new GetStartProcessQuery();
-            var processStartInfoQuery = new GetProcessStartInfoQuery();
-            var registerLayout = new RegisterLayoutPluginCommand(processStartInfoQuery, processQuery);
-            var wrapper = new GraphGeneration(processQuery, processStartInfoQuery, registerLayout)
+            try
             {
-                RenderingEngine = Enums.RenderingEngine.Dot
-            };
-            byte[] output = wrapper.GenerateGraph(graph, Enums.GraphReturnType.Png);
+                var cfg = new ControlFlowGraph(code);
 
-            using (var stream = new MemoryStream(output))
+                string graph = BuildDotGraph(cfg);
+                File.WriteAllText(@"cfg_graph.txt", graph);
+
+                var processQuery = new GetStartProcessQuery();
+                var processStartInfoQuery = new GetProcessStartInfoQuery();
+                var registerLayout = new RegisterLayoutPluginCommand(processStartInfoQuery, processQuery);
+                var wrapper = new GraphGeneration(processQuery, processStartInfoQuery, registerLayout)
+                {
+                    RenderingEngine = Enums.RenderingEngine.Dot
+                };
+                byte[] output = wrapper.GenerateGraph(graph, Enums.GraphReturnType.Png);
+
+                using (var stream = new MemoryStream(output))
+                {
+                    var image = Image.FromStream(stream);
+                    GenerationCompleted(null, image);
+                }
+
+                CfgGenerated(null, cfg);
+            }
+            catch (Exception ex)
             {
-                var image = Image.FromStream(stream);
-                GenerationCompleted(null, image);
+                GenerationErrored(null, ex);
             }
         }
 

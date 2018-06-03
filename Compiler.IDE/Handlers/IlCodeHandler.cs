@@ -13,6 +13,7 @@ namespace Compiler.IDE.Handlers
         public event EventHandler<Exception> RuntimeErrored = delegate { };
         public event EventHandler AlreadyRunningErrored = delegate { };
         public event EventHandler RuntimeStarted = delegate { };
+        public event EventHandler<Exception> GenerationErrored = delegate { };
 
         private TAcode2ILcodeTranslator _ilProgram;
         private CancellationTokenSource ts;
@@ -20,10 +21,17 @@ namespace Compiler.IDE.Handlers
 
         public void GenerateIlCode(TACode code)
         {
-            var trans = new TAcode2ILcodeTranslator();
-            trans.Translate(code);
-            _ilProgram = trans;
-            GenerationCompleted(null, trans);
+            try
+            {
+                var trans = new TAcode2ILcodeTranslator();
+                trans.Translate(code);
+                _ilProgram = trans;
+                GenerationCompleted(null, trans);
+            }
+            catch (Exception ex)
+            {
+                GenerationErrored(null, ex);
+            }
         }
 
         public void Run()

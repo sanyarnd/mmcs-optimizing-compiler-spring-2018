@@ -37,6 +37,7 @@ namespace Compiler.ThreeAddrCode
         /// для каждого блока в CFG
         /// </summary>
         public Dictionary<Guid, ActiveVar> OUT;
+
         /// <summary>
         /// Def множество для каждого блока
         /// в CFG
@@ -56,6 +57,20 @@ namespace Compiler.ThreeAddrCode
         public IterativeAlgorithmAV(ControlFlowGraph CFG)
         {
             this.CFG = CFG;
+            StartSettings();
+            Algorithm();
+        }
+
+        /// <summary>
+        /// Класс для итеративного алгоритма 
+        /// активных переменных
+        /// </summary>
+        /// <param name="CFG"></param>
+        public IterativeAlgorithmAV(List<Node> listNode)
+        {
+            var TA = new TACode();
+            TA.CodeList = listNode;
+            this.CFG = new ControlFlowGraph(TA);
             StartSettings();
             Algorithm();
         }
@@ -88,7 +103,7 @@ namespace Compiler.ThreeAddrCode
         /// <param name="obj1"></param>
         /// <param name="obj2"></param>
         /// <returns></returns>
-		private bool EqualIN(Dictionary<Guid, ActiveVar> obj1, Dictionary<Guid, ActiveVar> obj2)
+		public bool EqualIN(Dictionary<Guid, ActiveVar> obj1, Dictionary<Guid, ActiveVar> obj2)
 		{
             var IsEqual = true;
 

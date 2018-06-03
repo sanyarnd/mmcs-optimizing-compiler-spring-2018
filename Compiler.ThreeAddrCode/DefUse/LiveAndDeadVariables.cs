@@ -21,9 +21,13 @@ namespace Compiler.ThreeAddrCode
     public class LiveAndDeadVariables
     {
         /// <summary>
-        /// Базовый блок
+        /// Базовый блок (исходный)
         /// </summary>
 		public BasicBlock Block { get; }
+        /// <summary>
+        /// Базовый блок без мертвого кода
+        /// </summary>
+		public BasicBlock BlockNew { get; }
         /// <summary>
         /// Список мертвых переменных
         /// </summary>

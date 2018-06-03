@@ -42,12 +42,12 @@ namespace Compiler.ThreeAddrCode
         /// <param name="Data"></param>
         /// <param name="Sep"></param>
         /// <returns></returns>
-        private Print PrintC(Var Data, string Sep = " ")
+        private Print PrintC(Var Data, string Sep = " ", bool IsLabeled = true)
         {
             var C = new Print();
             C.Data = Data;
             C.Sep = Sep;
-            C.IsLabeled = true;
+            C.IsLabeled = IsLabeled;
 
             return C;
         }
@@ -187,7 +187,7 @@ namespace Compiler.ThreeAddrCode
             // Тест для удаление мертвого кода
             // -------------------------------------------------------------------
 
-            var B1 = LDV.RemoveDeadCode();
+            var B1 = LDV.BlockNew;
 
             BasicBlock B2 = new BasicBlock(new List<Node> {
                 B.CodeList.ElementAt(3),                         // 0: x = 3
@@ -317,7 +317,7 @@ namespace Compiler.ThreeAddrCode
             // Тест для удаление мертвого кода
             // -------------------------------------------------------------------
 
-            var B1 = LDV.RemoveDeadCode();
+            var B1 = LDV.BlockNew;
 
             var IsEqBlocks = B1.CodeList.Count() == B.CodeList.Count();
             foreach (var command in B.CodeList)
@@ -403,6 +403,44 @@ namespace Compiler.ThreeAddrCode
             TA.CodeList = B.CodeList.ToList();
             var CFG = new ControlFlowGraph(TA);
             IterativeAlgorithmAV ItAV = new IterativeAlgorithmAV(CFG);
+
+            // Должна получиться истина
+            return true;
+        }
+
+        /// <summary>
+        /// ---- Test 5
+        /// </summary>
+        /// <returns></returns>
+        public bool Test5()
+        {
+            // -------------------------------------------------------------------
+            // Создание базового блока
+            // -------------------------------------------------------------------
+            var a = new Var("a");
+            var b = new Var("b");
+            var c = new Var("c");
+
+            BasicBlock B = new BasicBlock(new List<Node> {
+                AssignC(a, new IntConst(2), IsLabeled: false),   // 0:       a = 2
+                AssignC(b, new IntConst(3), IsLabeled: false),   // 1:       b = 3
+                AssignC(c, a, b, OpCode.Plus),                   // 2: (1) : c = a + b
+                AssignC(a, new IntConst(3)),                     // 3: (2) : a = 3
+                AssignC(b, new IntConst(4), IsLabeled: false),   // 4:       b = 4
+                AssignC(c, a),                                   // 5: (3) : c = a
+                PrintC(c, IsLabeled: false)                                        // 6:       print(c)
+            });
+
+            // -------------------------------------------------------------------
+            // Тест для удаления мертвого кода в CFG
+            // -------------------------------------------------------------------
+
+            var TA = new TACode();
+            TA.CodeList = B.CodeList.ToList();
+            var RCFG = new RemoveDeadVariablesCFG(TA);
+
+            // Результат
+            var newCode = RCFG.CodeNew;
 
             // Должна получиться истина
             return true;

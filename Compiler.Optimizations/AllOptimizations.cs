@@ -15,14 +15,14 @@ namespace Compiler.Optimizations
 		{
 			List<IOptimization> optimizations = new List<IOptimization>();
 
-			optimizations.Add(new CopyPropagation());
-			optimizations.Add(new ConstantFolding());
-			optimizations.Add(new ConstantPropagation());
-			optimizations.Add(new DeclarationOptimization());
-			optimizations.Add(new AlgebraicOptimization());
-			optimizations.Add(new SubexpressionOptimization());
+            optimizations.Add(new CopyPropagation());
+            optimizations.Add(new ConstantFolding());
+            optimizations.Add(new ConstantPropagation());
+            optimizations.Add(new DeclarationOptimization());
+            optimizations.Add(new AlgebraicOptimization());
+            optimizations.Add(new SubexpressionOptimization());
 
-			return optimizations;
+            return optimizations;
 		}
 
         private List<IOptimization> O2OptimizationList()
@@ -55,6 +55,10 @@ namespace Compiler.Optimizations
 
                 code = new TACode();
                 code.CodeList = codeList;
+
+
+                foreach (var line in code.CodeList)
+                    code.LabeledCode[line.Label] = line;
             }
 
 			return code;
